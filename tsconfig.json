@@ -1,0 +1,33 @@
+{
+	"transpileOnly": false,
+	"compilerOptions": {
+		"plugins": [{ "name": "typescript-plugin-css-modules" }],
+		"outDir": "./dist/",
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"module": "esnext",
+		"target": "ES2022",
+		"jsx": "react-jsx",
+		"allowJs": false,
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"alwaysStrict": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"strictFunctionTypes": true,
+		"noImplicitThis": true,
+		"strictBindCallApply": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"allowUnreachableCode": false,
+		"preserveConstEnums": false,
+		"baseUrl": "src",
+		"paths": {
+			"src/*": ["./*"]
+		}
+	},
+	"include": ["src", "plugins"]
+}

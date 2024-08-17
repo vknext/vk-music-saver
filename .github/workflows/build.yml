@@ -1,0 +1,28 @@
+name: Build VK Music Saver
+
+on: workflow_dispatch
+
+jobs:
+    build:
+        runs-on: ubuntu-20.04
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '22.2.0'
+                  cache: 'yarn'
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Build
+              run: yarn build:ext
+
+            - name: Upload ext to artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: build.zip
+                  path: build/*.zip
