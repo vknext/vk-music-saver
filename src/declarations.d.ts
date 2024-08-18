@@ -4,3 +4,10 @@ declare module '*.module.scss' {
 }
 
 declare module 'browser-id3-writer';
+
+declare module '*.svg' {
+	const svg: string;
+	export default svg;
+}
+
+declare module '*.scss';

@@ -174,6 +174,38 @@ const options: Configuration = {
 					{ loader: 'sass-loader', options: { sourceMap: true } },
 				],
 			},
+			{
+				test: /\.(scss|sass)$/,
+				exclude: /\.(module|file)\.(scss|sass)$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					{
+						loader: 'css-loader',
+						options: {
+							sourceMap: IS_DEV,
+							importLoaders: 3,
+							modules: {
+								mode: 'icss',
+							},
+						},
+					},
+					{
+						loader: 'postcss-loader',
+						options: {
+							sourceMap: true,
+							postcssOptions: {
+								plugins: [['postcss-preset-env']],
+							},
+						},
+					},
+					{ loader: 'sass-loader', options: { sourceMap: true } },
+				],
+				sideEffects: true,
+			},
+			{
+				test: /\.svg$/,
+				use: 'raw-loader',
+			},
 		],
 	},
 };

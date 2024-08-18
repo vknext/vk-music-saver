@@ -16,6 +16,10 @@ const onAddRow = async (row: HTMLElement) => {
 	const rowInfo = row.querySelector<HTMLElement>('.audio_row__info');
 	if (!rowInfo) return;
 
+	if (rowInfo.getElementsByClassName(styles.audioRow__bitrate).length) {
+		return;
+	}
+
 	const durationEl = rowInfo.querySelector<HTMLElement>('.audio_row__duration');
 
 	const bitrateEl = document.createElement('span');

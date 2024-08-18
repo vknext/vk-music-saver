@@ -43,6 +43,14 @@ export interface stManager {
 	add(statics: string | string[]): Promise<void>;
 }
 
+export interface NotifierEvent {
+	text?: string;
+}
+
+export interface Notifier {
+	showEvent(event: NotifierEvent): void;
+}
+
 export interface AudioObject {
 	hashes?: string;
 	id: number;
@@ -148,6 +156,7 @@ export interface Nav {
 
 declare global {
 	var vknext: VKNext;
+	var Notifier: Notifier;
 	var AudioUtils: AudioUtils;
 	var vk: VK;
 	var nav: Nav;

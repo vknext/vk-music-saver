@@ -1,10 +1,10 @@
 import delay from 'src/lib/delay';
-import waitRAF from 'src/lib/waitRAF';
 import waitRIC from 'src/lib/waitRIC';
 
 import waitAjax from 'src/globalVars/waitAjax';
 import waitNav from 'src/globalVars/waitNav';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';
+import waitRAF from 'src/lib/waitRAF';
 import InteractionListener from './InteractionListener';
 
 type CallbackFunc = (el: HTMLElement) => void;
@@ -25,12 +25,10 @@ const findAllAudioRows = async (isAjax?: boolean) => {
 	await waitRIC();
 	await waitRAF();
 
-	const rows = document.querySelectorAll<HTMLElement>('.audio_row:not([data-ioaar])');
+	const rows = document.querySelectorAll<HTMLElement>('.audio_row');
 
 	for (const row of rows) {
-		await waitRAF();
-		row.setAttribute('data-ioaar', '1');
-
+		await waitRIC();
 		onCallback(row);
 	}
 };
