@@ -42,5 +42,8 @@
 		"webpack-utf8-bom": "^1.4.0",
 		"yargs-parser": "^21.1.1"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@vknext/audio-utils": "^1.3.2",
+		"hls.js": "^1.5.14"
+	}
 }

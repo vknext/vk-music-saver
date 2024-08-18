@@ -1,3 +1,12 @@
-import * as styles from './injected.module.scss';
+import './public-path';
 
-console.log('injected script', styles.test);
+import initShowBitrateNearDuration from './modules/showBitrateNearDuration';
+
+// сообщаем VK Next, что нужно отключить отображение кнопок скачивания
+(window.vknext = window.vknext || {}).vms_installed = true;
+
+try {
+	initShowBitrateNearDuration();
+} catch (e) {
+	console.error('[VMS/initShowBitrateNearDuration]', e);
+}

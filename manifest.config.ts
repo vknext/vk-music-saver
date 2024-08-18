@@ -18,7 +18,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		// в VK Next эти скрипты генерируются автоматически. VMS максимально простое расширение, тут такого не нужно.
 		content_scripts: [
 			{
-				js: ['content.vms.js', 'injected.vms.js'],
+				js: ['content.vms.js'],
 				css: ['injected.vms.css'],
 				matches: ['https://vk.com/*', 'https://vk.ru/*'],
 				run_at: 'document_idle',
@@ -34,7 +34,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		},
 		web_accessible_resources: [
 			{
-				resources: ['injected.vms.js'],
+				resources: ['*'],
 				matches: ['https://vk.com/*', 'https://vk.ru/*'],
 			},
 		],
