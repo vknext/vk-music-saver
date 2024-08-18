@@ -5,6 +5,7 @@ import initShowBitrateNearDuration from './modules/showBitrateNearDuration';
 
 import './injected.scss';
 import initAudioPage from './modules/audioPage';
+import initVKNextBanner from './modules/vknextBanner';
 
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания
 (window.vknext = window.vknext || {}).vms_installed = true;
@@ -25,4 +26,12 @@ try {
 	initAudioPage();
 } catch (e) {
 	console.error('[VMS/initAudioPage]', e);
+}
+
+try {
+	if (!('webpack' in window.vknext)) {
+		initVKNextBanner();
+	}
+} catch (e) {
+	console.error('[VMS/initVKNextBanner]', e);
 }
