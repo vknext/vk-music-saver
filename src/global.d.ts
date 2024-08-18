@@ -154,20 +154,42 @@ export interface Nav {
 	addNavigationStartListener: (handler: (locStr: string) => unknown) => () => void;
 }
 
+export interface AudioLayer {
+	_initSection?: string;
+	_els?: {
+		layerPlace: HTMLElement;
+		topNotaBtn: HTMLElement;
+		topNotaBtnGroup: HTMLElement;
+		topPlayBtn: HTMLButtonElement;
+		container?: HTMLElement;
+
+		tooltip: {
+			show: () => void;
+		};
+	};
+}
+
+interface AudioPlayer {
+	getCurrentAudio: () => any[] | null;
+	on: (unk1: any, type: 'update' | any, callback: (event: any) => void) => () => void;
+}
+
 declare global {
 	var vknext: VKNext;
+
 	var Notifier: Notifier;
 	var AudioUtils: AudioUtils;
 	var vk: VK;
 	var nav: Nav;
 	var vkApi: IvkApi;
 	var ajax: Iajax;
-
+	var audioLayer: AudioLayer;
 	var getLang: (key: string, type?: string | number) => string;
-
 	var stManager: stManager;
 	var jsc: (module: string) => string;
 	var stDeps: { [script: string]: string[] };
+	var ap: AudioPlayer;
+	var getAudioPlayer: () => AudioPlayer;
 
 	namespace NodeJS {
 		interface ProcessEnv {

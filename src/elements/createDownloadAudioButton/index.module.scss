@@ -1,0 +1,105 @@
+.DownloadAudioButton {
+	appearance: none;
+	background: 0 0;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	cursor: pointer;
+	transition: background-color 0.15s ease-out;
+	border-radius: var(--vkui--size_border_radius--regular);
+	min-width: 63px;
+
+	&:hover {
+		background-color: var(--vkui--color_transparent--hover);
+	}
+}
+
+:global(.audio_numeric) {
+	.DownloadAudioButton {
+		gap: 4px;
+	}
+
+	.DownloadAudioButton__size {
+		font-size: 10px;
+		line-height: 12px;
+	}
+
+	.DownloadAudioButton__icons > svg {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+:global(.AudioPlayerBlock__root) {
+	.DownloadAudioButton {
+		transition: opacity 0.15s ease-out;
+		opacity: 1;
+		gap: 4px;
+		min-width: unset;
+
+		&:hover {
+			background-color: unset;
+			opacity: 0.8;
+		}
+	}
+
+	.DownloadAudioButton__size,
+	.DownloadAudioButton__icons {
+		color: var(--vkui--color_icon_secondary);
+	}
+
+	.DownloadAudioButton__size {
+		font-size: 10px;
+		line-height: 12px;
+	}
+}
+
+.DownloadAudioButton__icons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--vkui--color_icon_medium);
+}
+
+.DownloadAudioButton__icon--download {
+	display: block;
+}
+
+.DownloadAudioButton__icon--loading {
+	display: none;
+}
+
+.DownloadAudioButton--loading {
+	.DownloadAudioButton__icon--download {
+		display: none;
+	}
+
+	.DownloadAudioButton__icon--loading {
+		display: block;
+		animation: rotate-animation 0.7s linear infinite;
+		transform-origin: 12px 12px;
+	}
+}
+
+.DownloadAudioButton__size {
+	color: var(--vkui--color_text_subhead);
+	text-align: center;
+	font-size: 12px;
+	line-height: 14px;
+	font-weight: 400;
+	box-sizing: border-box;
+}
+
+@keyframes rotate-animation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}

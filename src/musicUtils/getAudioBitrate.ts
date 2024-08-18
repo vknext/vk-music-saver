@@ -1,5 +1,5 @@
 import type { GetTrackDetailsResult } from '@vknext/audio-utils';
-import { getTrackDetails } from '@vknext/audio-utils';
+import { audioUnmaskSource, getTrackDetails } from '@vknext/audio-utils';
 import type { AudioObject } from 'global';
 import createPromise from 'src/lib/createPromise';
 import { AudioAudio } from 'src/schemas/objects';
@@ -19,7 +19,7 @@ const processQueue = async () => {
 	activePromises--;
 
 	if (queue.length > 0) {
-		setTimeout(processQueue, 500); // задержка между вызовами
+		setTimeout(processQueue, 800); // задержка между вызовами
 	}
 };
 
@@ -28,15 +28,11 @@ const enqueueTask = (task: () => Promise<void>) => {
 	processQueue();
 };
 
-const getAudioBitrate = async (audioObj: AudioAudio | AudioObject): Promise<GetTrackDetailsResult | null> => {
+const getAudioBitrate = (audioObj: AudioAudio | AudioObject): Promise<GetTrackDetailsResult | null> => {
 	const audioKey = `${audioObj.owner_id}_${audioObj.id}`;
 
 	if (bitrateCache.has(audioKey)) {
 		return bitrateCache.get(audioKey)!;
-	}
-
-	if (bitrateCache.has(audioKey)) {
-		return await bitrateCache.get(audioKey)!;
 	}
 
 	const { promise, resolve } = createPromise<GetTrackDetailsResult | null>();
@@ -50,14 +46,20 @@ const getAudioBitrate = async (audioObj: AudioAudio | AudioObject): Promise<GetT
 			return;
 		}
 
-		const bitrateResult = await getTrackDetails({
-			url: audio.url!,
-		});
+		try {
+			const bitrateResult = await getTrackDetails({
+				url: audioUnmaskSource(audio.url),
+			});
 
-		resolve(bitrateResult);
+			resolve(bitrateResult);
+			return;
+		} catch (e) {
+			resolve(null);
+			bitrateCache.delete(audioKey);
+		}
 	});
 
-	return await promise;
+	return promise;
 };
 
 export default getAudioBitrate;

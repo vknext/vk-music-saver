@@ -1,4 +1,4 @@
-import { convertTrackToBlob } from '@vknext/audio-utils';
+import { audioUnmaskSource, convertTrackToBlob } from '@vknext/audio-utils';
 import { AudioObject } from 'src/global';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
@@ -24,7 +24,7 @@ export const getAudioBlob = async ({ audio, playlist }: GetAudioBlobParams) => {
 	}
 
 	const blob = await convertTrackToBlob({
-		url: audio.url,
+		url: audioUnmaskSource(audio.url),
 	});
 
 	if (!playlist) {

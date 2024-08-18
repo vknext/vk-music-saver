@@ -43,7 +43,8 @@ const initAjaxHook = async () => {
 
 		const isAudioUrl = url.startsWith('al_audio.php') || url.startsWith('/audio');
 		const isLoadCatalogSection = isAudioUrl && url.includes('load_catalog_section');
-		const isLoadDefaultSection = isAudioUrl && obj.act && ['section', 'load_catalog_section'].includes(obj.act);
+		const isLoadDefaultSection =
+			isAudioUrl && obj.act && ['section', 'load_catalog_section', 'load_block_playlist'].includes(obj.act);
 
 		if (process.env.NODE_ENV === 'development') {
 			console.log('[VMS/ajax/post]', {

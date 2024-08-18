@@ -1,11 +1,13 @@
 import downloadAudio from 'src/downloaders/downloadAudio';
-import getIcon24Spinner from 'src/icons/getIcon24Spinner';
+import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import cancelEvent from 'src/lib/cancelEvent';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
-import getIcon24DownloadOutline from '../../icons/getIcon24DownloadOutline';
-import * as styles from './index.module.scss';
+
+interface RowInnerElement extends HTMLElement {
+	_vms_inj?: boolean;
+}
 
 const onAddRow = async (row: HTMLElement) => {
 	const audio = row.dataset.audio;
@@ -18,50 +20,29 @@ const onAddRow = async (row: HTMLElement) => {
 		return;
 	}
 
-	const rowInnerEl = row.querySelector<HTMLElement>('.audio_row__inner');
+	const rowInnerEl = row.querySelector<RowInnerElement>('.audio_row__inner');
 	if (!rowInnerEl) return;
 
-	if (rowInnerEl.getElementsByClassName(styles.audioRowDownloadItem).length) {
+	if (rowInnerEl._vms_inj) {
 		return;
 	}
+	rowInnerEl._vms_inj = true;
 
-	const downloadItem = document.createElement('div');
-	downloadItem.className = styles.audioRowDownloadItem;
+	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton();
 
-	let isLoading = false;
-	downloadItem.addEventListener('click', (event) => {
+	element.addEventListener('click', (event) => {
 		cancelEvent(event);
 
-		if (isLoading) return;
-		isLoading = true;
+		if (getIsLoading()) return;
 
-		downloadItem.classList.add(styles['audioRowDownloadItem--loading']);
+		setIsLoading(true);
 
 		downloadAudio(audioObject).finally(() => {
-			downloadItem.classList.remove(styles['audioRowDownloadItem--loading']);
-			isLoading = false;
+			setIsLoading(false);
 		});
 	});
 
-	const sizeEl = document.createElement('span');
-	sizeEl.className = styles.audioRowDownloadItem__size;
-	sizeEl.innerText = window.getLang?.('box_loading') || 'Загрузка...';
-
-	const iconsEl = document.createElement('div');
-	iconsEl.className = styles.audioRowDownloadItem__icons;
-
-	const downloadIcon = getIcon24DownloadOutline();
-	// Cannot set property className of #<SVGElement> which has only a getter
-	downloadIcon.classList.add(styles['audioRowDownloadItem__icon--download']);
-
-	const loadingIcon = getIcon24Spinner();
-	loadingIcon.classList.add(styles['audioRowDownloadItem__icon--loading']);
-
-	iconsEl.append(downloadIcon, loadingIcon);
-
-	downloadItem.append(iconsEl, sizeEl);
-
-	rowInnerEl.appendChild(downloadItem);
+	rowInnerEl.appendChild(element);
 
 	const observer = new IntersectionObserver(
 		async (entries, observer) => {
@@ -70,9 +51,9 @@ const onAddRow = async (row: HTMLElement) => {
 					const result = await getAudioBitrate(audioObject);
 
 					if (result?.size) {
-						sizeEl.innerText = humanFileSize(result.size, 2);
+						setText(humanFileSize(result.size, 2));
 					} else {
-						sizeEl.innerText = '';
+						setText('');
 					}
 
 					observer.unobserve(row);
@@ -82,7 +63,7 @@ const onAddRow = async (row: HTMLElement) => {
 		{ threshold: 0.5 }
 	);
 
-	observer.observe(downloadItem);
+	observer.observe(element);
 };
 
 const injectDownloadButtonInAudioRow = () => {
