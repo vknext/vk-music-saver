@@ -17,6 +17,34 @@ const onCallback = (el: HTMLElement) => {
 	}
 };
 
+interface AudioListElement extends HTMLElement {
+	_vms_obs?: MutationObserver;
+}
+
+const findAudioList = () => {
+	const lists = document.querySelectorAll<AudioListElement>('.audio_pl_snippet__list');
+
+	for (const list of lists) {
+		if (list._vms_obs) continue;
+
+		list._vms_obs = new MutationObserver((mutations) => {
+			for (const mutation of mutations) {
+				if (mutation.type === 'childList' && mutation.addedNodes.length) {
+					for (const node of mutation.addedNodes) {
+						if (node instanceof HTMLElement && node.classList.contains('audio_row')) {
+							onCallback(node);
+						}
+					}
+				}
+			}
+		});
+
+		list._vms_obs.observe(list, {
+			childList: true,
+		});
+	}
+};
+
 const findAllAudioRows = async (isAjax?: boolean) => {
 	if (isAjax) {
 		await delay(1000);
@@ -31,46 +59,60 @@ const findAllAudioRows = async (isAjax?: boolean) => {
 		await waitRIC();
 		onCallback(row);
 	}
+
+	findAudioList();
 };
+
+const supportedActions = ['section', 'load_catalog_section', 'load_block_playlist', 'load_section'];
 
 const initAjaxHook = async () => {
 	await waitAjax();
 
-	const post = window.ajax.post;
+	const originalPost = window.ajax.post;
 
 	window.ajax.post = function (...args) {
-		const [url, obj, funcs] = args;
+		try {
+			const [url, requestData, callbackFunctions] = args;
 
-		const isAudioUrl = url.startsWith('al_audio.php') || url.startsWith('/audio');
-		const isLoadCatalogSection = isAudioUrl && url.includes('load_catalog_section');
-		const isLoadDefaultSection =
-			isAudioUrl && obj.act && ['section', 'load_catalog_section', 'load_block_playlist'].includes(obj.act);
+			const isAudioRequest = url.startsWith('al_audio.php') || url.startsWith('/audio');
 
-		if (process.env.NODE_ENV === 'development') {
-			console.log('[VMS/ajax/post]', {
-				url,
-				obj,
-				isAudioUrl,
-				isLoadCatalogSection,
-				isLoadDefaultSection,
-			});
+			let actParam: string | null = requestData.act;
+
+			if (isAudioRequest && !actParam) {
+				const parsedUrl = new URL(url, window.location.origin);
+				actParam = parsedUrl.searchParams.get('act');
+			}
+
+			const isLoadAudioBlocks = actParam && supportedActions.includes(actParam);
+
+			if (process.env.NODE_ENV === 'development') {
+				console.log('[VMS/ajax/post]', {
+					url,
+					requestData,
+					isAudioRequest,
+					actParam,
+					isLoadAudioBlocks,
+				});
+			}
+
+			if (isLoadAudioBlocks && callbackFunctions.onDone) {
+				const originalOnDone = callbackFunctions.onDone;
+
+				callbackFunctions.onDone = function (...onDoneArgs: any[]) {
+					const result = originalOnDone.apply(this, onDoneArgs);
+
+					if (result instanceof Promise) {
+						result.finally(() => findAllAudioRows(true));
+					} else {
+						findAllAudioRows(true).catch(console.error);
+					}
+				};
+			}
+		} catch (e) {
+			console.error('[VMS/ajax/post]', e);
 		}
 
-		if ((isLoadCatalogSection || isLoadDefaultSection) && funcs.onDone) {
-			const onDone = funcs.onDone;
-
-			funcs.onDone = function (...onDoneArgs: any[]) {
-				const r = onDone.apply(this, onDoneArgs);
-
-				if (r instanceof Promise) {
-					r.finally(() => findAllAudioRows(true));
-				} else {
-					findAllAudioRows(true).catch(console.error);
-				}
-			};
-		}
-
-		return post.apply(this, args);
+		return originalPost.apply(this, args);
 	};
 };
 
