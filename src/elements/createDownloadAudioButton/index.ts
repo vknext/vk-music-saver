@@ -1,4 +1,4 @@
-import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
+import getIcon20DownloadOutline from 'src/icons/getIcon20DownloadOutline';
 import getIcon24Spinner from 'src/icons/getIcon24Spinner';
 import * as styles from './index.module.scss';
 
@@ -22,7 +22,7 @@ const createDownloadAudioButton = (): DownloadAudioButtonResult => {
 	const iconsEl = document.createElement('div');
 	iconsEl.className = styles.DownloadAudioButton__icons;
 
-	const downloadIcon = getIcon24DownloadOutline();
+	const downloadIcon = getIcon20DownloadOutline();
 	downloadIcon.classList.add(styles['DownloadAudioButton__icon--download']);
 
 	const loadingIcon = getIcon24Spinner();
