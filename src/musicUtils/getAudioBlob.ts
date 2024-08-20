@@ -41,7 +41,7 @@ export const getAudioBlob = async ({ audio, playlist }: GetAudioBlobParams) => {
 
 	const thumbBuffer = getAlbumThumbnail(audio);
 
-	const { default: ID3Writer } = await import('browser-id3-writer');
+	const { ID3Writer } = await import('browser-id3-writer');
 
 	const writer = new ID3Writer(await convertBlobToUint8Array(blob));
 

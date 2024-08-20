@@ -1,6 +1,6 @@
-import { convertTrackToBlob } from '@vknext/audio-utils';
 import { AudioObject } from 'src/global';
 import saveFileAs from 'src/lib/saveFileAs';
+import { getAudioBlob } from 'src/musicUtils/getAudioBlob';
 import getAudioByObject from 'src/musicUtils/getAudioByObject';
 import { AudioArtist, AudioAudio } from 'src/schemas/objects';
 
@@ -44,9 +44,7 @@ const downloadAudio = async (audioObject: AudioObject) => {
 	}
 
 	try {
-		const blob = await convertTrackToBlob({
-			url: audio.url,
-		});
+		const blob = await getAudioBlob({ audio });
 
 		const blobUrl = URL.createObjectURL(blob);
 
