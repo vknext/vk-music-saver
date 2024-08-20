@@ -1,6 +1,9 @@
 import packageJson from './package.json';
 const { version } = packageJson;
 
+const CHROME_KEY =
+	'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1dt2cQbEmETmcM7gLtXmI+0SsaznQx/7mYwXqIong2grAcOHAq7rT74ps30stZYVIUiR8G0RAoT0AJSotIgiRxwWLa7ErUU6eHSg+gGTP9WAk1n22KsmywubXPCFpomYeUC8XQfq2qrbpuxoX/dd8Y/4D25jGnO66pace9aD1kCHfYi3zb+h/jpaP0xxvQWUiw9MO9zZSKanAJu5tyd+Uzf0JakXWdubZ1qHwt4UmMQFdhtiCBda6cHUSKCpawUJGDvHdTWVoTARg1HsqMs0nlHnoY4mm7vHWKdhu9nDudenuqwPdH2OVNS/lERWpxhxPy0WAC1DdoidNeJUDJ9P6QIDAQAB';
+
 interface GetManifestOptions {
 	isFirefox: boolean;
 	isDev: boolean;
@@ -56,6 +59,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		};
 	} else {
 		manifest.minimum_chrome_version = '101';
+		manifest.key = CHROME_KEY;
 	}
 
 	return manifest;
