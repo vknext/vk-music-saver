@@ -10,7 +10,7 @@
 	},
 	"author": "vknext",
 	"license": "MIT",
-	"description": "Расширение для скачивания музыки и плейлистов, создано на основе VK Next",
+	"description": "Расширение для скачивания музыки, создано на основе VK Next",
 	"devDependencies": {
 		"@types/archiver": "^6.0.2",
 		"@types/chrome": "^0.0.270",
