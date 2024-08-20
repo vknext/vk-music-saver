@@ -1,5 +1,5 @@
 import getIcon20DownloadOutline from 'src/icons/getIcon20DownloadOutline';
-import getIcon24Spinner from 'src/icons/getIcon24Spinner';
+import getIcon20Spinner from 'src/icons/getIcon20Spinner';
 import * as styles from './index.module.scss';
 
 interface DownloadAudioButtonResult {
@@ -25,7 +25,7 @@ const createDownloadAudioButton = (): DownloadAudioButtonResult => {
 	const downloadIcon = getIcon20DownloadOutline();
 	downloadIcon.classList.add(styles['DownloadAudioButton__icon--download']);
 
-	const loadingIcon = getIcon24Spinner();
+	const loadingIcon = getIcon20Spinner();
 	loadingIcon.classList.add(styles['DownloadAudioButton__icon--loading']);
 
 	iconsEl.append(downloadIcon, loadingIcon);
