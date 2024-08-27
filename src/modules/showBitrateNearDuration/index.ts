@@ -20,19 +20,12 @@ const onAddRow = async (row: HTMLElement) => {
 		return;
 	}
 
-	const durationEl = rowInfo.querySelector<HTMLElement>('.audio_row__duration');
-
 	const bitrateEl = document.createElement('span');
 	bitrateEl.className = styles.audioRow__bitrate;
 	bitrateEl.innerText = window.getLang?.('box_loading') || 'Загрузка...';
 
-	if (durationEl) {
-		durationEl.classList.add(styles['audioRow__info--withBitrate']);
-		durationEl.appendChild(bitrateEl);
-	} else {
-		rowInfo.classList.add(styles['audioRow__info--withBitrate']);
-		rowInfo.appendChild(bitrateEl);
-	}
+	rowInfo.classList.add(styles['audioRow__info--withBitrate']);
+	rowInfo.appendChild(bitrateEl);
 
 	// получаем битрейт только если элемент виден на экране на 10%
 	const observer = new IntersectionObserver(

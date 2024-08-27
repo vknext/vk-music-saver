@@ -3,14 +3,21 @@
 	flex-wrap: nowrap;
 	flex-direction: column;
 	align-items: flex-end;
-	gap: 3px;
-
+	gap: 6px;
+	justify-content: center;
 	min-width: 18px !important;
-	top: 6px !important;
 
-	&::before {
-		left: -25px !important;
-		top: 12px !important;
+	:global(.audio_row__duration) {
+		position: unset !important;
+		top: unset !important;
+	}
+}
+
+.audioRow__info--withBitrate:has(:global(.audio_row__duration[style*='visibility: hidden;'])) {
+	display: block;
+
+	.audioRow__bitrate {
+		display: none;
 	}
 }
 
@@ -31,10 +38,8 @@
 	font-weight: 400;
 	box-sizing: border-box;
 	margin: 0;
-	position: absolute;
-	top: 17px;
 }
 
-:global(.audio_row):hover .audioRow__bitrate {
-	visibility: hidden;
+:global(.audio_row.audio_row__current) .audioRow__bitrate {
+	background-color: var(--vkui--color_background_secondary--active);
 }
