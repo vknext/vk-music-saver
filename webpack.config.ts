@@ -137,7 +137,7 @@ const options: Configuration = {
 		new ESLintPlugin({}),
 		!IS_DEV &&
 			new ZipPlugin({
-				filename: `vsm${manifest.version}_${IS_FIREFOX ? 'firefox' : 'chrome'}.zip`,
+				filename: `vms${manifest.version}_${IS_FIREFOX ? 'firefox' : 'chrome'}.zip`,
 				path: path.resolve(`./build`),
 			}),
 	].filter(Boolean),
@@ -157,7 +157,7 @@ const options: Configuration = {
 						options: {
 							sourceMap: IS_DEV,
 							modules: {
-								localIdentName: 'vsm[local]--[hash:base64:5]',
+								localIdentName: 'vms[local]--[hash:base64:5]',
 								mode: 'local',
 							},
 						},
