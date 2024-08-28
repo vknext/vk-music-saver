@@ -9,6 +9,7 @@
 <p align="center">
 	<a href="https://chrome.google.com/webstore/detail/ijgkbcbalaekboipcmaefchfjpognmog?utm_source=github"><img src="https://img.shields.io/chrome-web-store/v/ijgkbcbalaekboipcmaefchfjpognmog?logo=chromewebstore&label=Chrome%20Web%20Store" alt="Chrome Web Store Version"></a>
 	<a href="https://addons.mozilla.org/ru/firefox/addon/vk-music-saver?utm_source=github"><img src="https://img.shields.io/amo/v/vk-music-saver?logo=firefoxbrowser&label=Firefox%20Add-ons" alt="Firefox Add-ons Version"></a>
+	<a href="https://github.com/vknext/vk-music-saver/releases/latest"><img src="https://img.shields.io/github/v/release/vknext/vk-music-saver?logo=github" alt="GitHub Release Version"></a>
 </p>
 <p align="center">
 Расширение для скачивания музыки и плейлистов, создано на основе VK Next.
