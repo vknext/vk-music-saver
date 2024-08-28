@@ -45,6 +45,7 @@ export interface stManager {
 
 export interface NotifierEvent {
 	text?: string;
+	title?: string;
 }
 
 export interface Notifier {
@@ -174,6 +175,151 @@ interface AudioPlayer {
 	on: (unk1: any, type: 'update' | any, callback: (event: any) => void) => () => void;
 }
 
+export type PVCurPhotoSizeArray = [string, number, number];
+
+export interface CUR {
+	viewAsBox?: () => void;
+	pid: number;
+	oid: number;
+	pvListId: string;
+	pvIndex: number;
+	pvShown: boolean;
+	pvPhoto: HTMLDivElement;
+	pvMoreActionsTooltip: {
+		_opts: {
+			delay: number;
+			offset: number[];
+			type: number;
+			id: string;
+			cls: string;
+			width: null | number;
+			appendToParent: boolean;
+			autoAdjustToViewport: boolean;
+			autoShow: boolean;
+			autoHide: boolean;
+			noHideOnClick: boolean;
+			arrowSize: string;
+			customShow: boolean;
+			align: string;
+			withCloseButton: boolean;
+			forceSide: string;
+			elClassWhenShown: string;
+			content: string;
+			defaultSide: string;
+		};
+		_arrowSize: number;
+		_visTO: boolean;
+		_sto: boolean;
+		_hto: boolean;
+		_reTimeout: boolean;
+		_isShown: boolean;
+	};
+	pvCurPhoto?: {
+		id: string;
+		base: string;
+		commcount: number;
+		commshown: number;
+		reply_form: string;
+		reply_options: {
+			rmedia_types: string[][];
+		};
+		date: string;
+		tags: number[];
+		album: string;
+		author: string;
+		author_photo: string;
+		author_href: string;
+		shares: number;
+		likes_tpl: string;
+		rotate_hash: string;
+		profile_data: {
+			useNewForm: string;
+			photo: string;
+		};
+		peType: number;
+		peHash: string;
+		actions: {
+			tag: 1 | 0;
+			edit: 1 | 0;
+			pe: boolean;
+			place: boolean;
+			del: 1 | 0;
+			rotate: 1 | 0;
+			comm: 1 | 0;
+			share: boolean;
+			prof: 1;
+			move: boolean;
+			cover: boolean;
+		};
+		desc: string;
+		hash: string;
+		attached_tags: {
+			max_tags_per_object: number;
+			hash: string;
+		};
+		x_src: string;
+		x_: PVCurPhotoSizeArray;
+		y_src: string;
+		y_: PVCurPhotoSizeArray;
+		z_src: string;
+		z_: PVCurPhotoSizeArray;
+	};
+	chooseMedia: (type: string, data: string, params: any) => void;
+	editing: string;
+	lastAddMedia: {
+		menu?: {
+			menuNode?: HTMLElement;
+		};
+		chooseMedia: (type: string, attach: string, options: any) => void;
+		checkURL: (url: string, maxCharacters: number, obj: object) => void;
+		onChange: any;
+	};
+	menuSettings: { [key: string]: { [key: string]: 1 | 0 } };
+	imClassicInterface: boolean;
+	module: string;
+	peer: number;
+	gid: number;
+	moreFrom?: string;
+	storyLayer?: {
+		activeStory: {
+			authorImg: HTMLImageElement;
+			contStickers: HTMLDivElement;
+			curPreviewUrl: string;
+			story: {
+				data: {
+					id: number;
+					owner_id: number;
+					raw_id: string;
+				} & ({ type: 'photo'; photo_url: string } | { type: 'video'; video_url: string });
+				photo?: HTMLElement;
+				video?: HTMLElement;
+			};
+			data: {
+				id: string;
+				authorId: string;
+				story: {
+					raw_id: string;
+				};
+			};
+			actionButtons: HTMLDivElement;
+		};
+		stories: HTMLElement;
+	};
+	pvBottomActions?: HTMLDivElement;
+	owner?: {
+		id: number;
+		name: string;
+		photo: string;
+	};
+	lang?: Record<string, any>;
+}
+
+interface UIActionsMenu {
+	show(element: HTMLElement, idk?: unknown, options?: { delay?: number }): void;
+	hide(element: HTMLElement, idk?: unknown, options?: { delay?: number }): void;
+	keyToggle(element: HTMLElement | undefined, event: Event): void;
+}
+
 declare global {
 	var vknext: VKNext;
 
@@ -190,6 +336,8 @@ declare global {
 	var stDeps: { [script: string]: string[] };
 	var ap: AudioPlayer;
 	var getAudioPlayer: () => AudioPlayer;
+	var cur: CUR;
+	var uiActionsMenu: UIActionsMenu;
 
 	namespace NodeJS {
 		interface ProcessEnv {

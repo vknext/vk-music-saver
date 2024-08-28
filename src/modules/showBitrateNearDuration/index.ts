@@ -22,7 +22,7 @@ const onAddRow = async (row: HTMLElement) => {
 
 	const bitrateEl = document.createElement('span');
 	bitrateEl.className = styles.audioRow__bitrate;
-	bitrateEl.innerText = window.getLang?.('box_loading') || 'Загрузка...';
+	bitrateEl.innerText = window.getLang?.('vms_loading') || 'Загрузка...';
 
 	rowInfo.classList.add(styles['audioRow__info--withBitrate']);
 	rowInfo.appendChild(bitrateEl);
@@ -37,7 +37,7 @@ const onAddRow = async (row: HTMLElement) => {
 					if (result?.bitrate) {
 						bitrateEl.innerText = `${result.bitrate}`;
 					} else {
-						bitrateEl.innerText = window.getLang?.('global_error') || 'Ошибка';
+						bitrateEl.innerText = window.getLang?.('vms_error') || 'Ошибка';
 					}
 
 					observer.unobserve(row);

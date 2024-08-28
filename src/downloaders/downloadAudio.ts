@@ -25,13 +25,13 @@ const getPerformer = (audio: AudioObject | AudioAudio) => {
 
 const downloadAudio = async (audioObject: AudioObject) => {
 	if (!audioObject) {
-		window.Notifier.showEvent({ text: 'Audio not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Audio not found' });
 		return;
 	}
 
 	const audio = await getAudioByObject(audioObject);
 	if (!audio.url) {
-		window.Notifier.showEvent({ text: 'Audio URL not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Audio URL not found' });
 		return;
 	}
 

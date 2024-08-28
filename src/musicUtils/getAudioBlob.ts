@@ -16,7 +16,7 @@ export interface GetAudioBlobParams {
 
 export const getAudioBlob = async ({ audio, playlist }: GetAudioBlobParams) => {
 	if (!audio.url) {
-		window.Notifier.showEvent({ text: 'Audio URL not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Audio URL not found' });
 
 		console.error('Audio URL not found', audio);
 

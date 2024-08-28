@@ -47,6 +47,7 @@
 		"@vknext/audio-utils": "^1.3.2",
 		"@vkontakte/icons": "^2.133.0",
 		"browser-id3-writer": "^6.1.0",
+		"client-zip": "^2.4.5",
 		"hls.js": "^1.5.14"
 	}
 }

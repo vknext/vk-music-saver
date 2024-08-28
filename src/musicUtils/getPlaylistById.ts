@@ -70,6 +70,7 @@ export const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promi
 			main_artists: playlist.authorName.split(',').map((name) => {
 				return { name: name.trim() };
 			}),
+			coverUrl_l: playlist.coverUrl,
 		};
 
 		return audioPlaylist;

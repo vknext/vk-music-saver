@@ -49,7 +49,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.web_accessible_resources[0].resources.push('*.map');
 	}
 
-	// TODO: протестировать на старых версиях браузеров
+	// TODO: протестировать на старых версиях Firefox
 	if (isFirefox) {
 		manifest.browser_specific_settings = {
 			gecko: {
@@ -58,7 +58,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 			},
 		};
 	} else {
-		manifest.minimum_chrome_version = '101';
+		manifest.minimum_chrome_version = '105';
 		manifest.key = CHROME_KEY;
 	}
 

@@ -58,7 +58,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 			return;
 		}
 
-		setText(window.getLang?.('box_loading') || 'Загрузка...');
+		setText(window.getLang?.('vms_loading') || 'Загрузка...');
 
 		const result = await getAudioBitrate(currentAudioObject);
 		if (result?.size) {

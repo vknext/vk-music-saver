@@ -17,7 +17,7 @@ const createDownloadAudioButton = (): DownloadAudioButtonResult => {
 
 	const sizeEl = document.createElement('span');
 	sizeEl.className = styles.DownloadAudioButton__size;
-	sizeEl.innerText = window.getLang?.('box_loading') || 'Загрузка...';
+	sizeEl.innerText = window.getLang?.('vms_loading') || 'Загрузка...';
 
 	const iconsEl = document.createElement('div');
 	iconsEl.className = styles.DownloadAudioButton__icons;

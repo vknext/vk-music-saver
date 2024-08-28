@@ -1,0 +1,72 @@
+.AudioPlaylistSnippet__actions {
+	display: flex;
+	flex-direction: row;
+	margin: 15px 0 0 0;
+}
+
+.AudioPlaylistSnippet__actionButton {
+	position: relative;
+	background-color: transparent;
+	border: 0;
+	outline: 0;
+	font-size: 14px;
+	font-family: var(
+		--palette-vk-font,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Roboto',
+		'Helvetica Neue',
+		Geneva,
+		'Noto Sans Armenian',
+		'Noto Sans Bengali',
+		'Noto Sans Cherokee',
+		'Noto Sans Devanagari',
+		'Noto Sans Ethiopic',
+		'Noto Sans Georgian',
+		'Noto Sans Hebrew',
+		'Noto Sans Kannada',
+		'Noto Sans Khmer',
+		'Noto Sans Lao',
+		'Noto Sans Osmanya',
+		'Noto Sans Tamil',
+		'Noto Sans Telugu',
+		'Noto Sans Thai',
+		arial,
+		Tahoma,
+		verdana,
+		sans-serif
+	);
+	font-weight: 500;
+	-webkit-font-smoothing: subpixel-antialiased;
+	-moz-osx-font-smoothing: auto;
+	line-height: 16px;
+	color: var(--vkui--color_text_subhead);
+	cursor: pointer;
+	margin: 0 24px 0 0;
+	padding: 0;
+
+	&:hover .ActionButton__icon {
+		opacity: 1;
+	}
+}
+
+[dir='rtl'] .AudioPlaylistSnippet__actionButton {
+	margin: 0 0 0 24px;
+}
+
+.ActionButton__text {
+	font-size: 14px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.ActionButton__icon {
+	display: inline-block;
+	vertical-align: middle;
+	content: '';
+	width: 24px;
+	height: 24px;
+	margin: 0 6px 0 0;
+	background-repeat: no-repeat;
+	opacity: 0.8;
+}
