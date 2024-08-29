@@ -1,0 +1,3 @@
+files:
+  - source: /src/langPack/default.ts
+    translation: /%original_path%/%language%.ts
