@@ -31,6 +31,7 @@ interface navGoLocProps extends navGoLoc {
 
 export interface VK {
 	id: number;
+	lang: number;
 }
 
 export interface Iajax {
