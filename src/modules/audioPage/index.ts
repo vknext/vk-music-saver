@@ -2,6 +2,7 @@ import downloadAudio from 'src/downloaders/downloadAudio';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
 import waitGlobalVariable from 'src/globalVars/utils/waitGlobalVariable';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
+import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
@@ -58,7 +59,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 			return;
 		}
 
-		setText(window.getLang?.('vms_loading') || 'Загрузка...');
+		setText(lang.use('vms_loading'));
 
 		const result = await getAudioBitrate(currentAudioObject);
 		if (result?.size) {

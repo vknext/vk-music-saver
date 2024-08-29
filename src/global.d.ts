@@ -330,7 +330,6 @@ declare global {
 	var vkApi: IvkApi;
 	var ajax: Iajax;
 	var audioLayer: AudioLayer;
-	var getLang: (key: string, type?: string | number) => string;
 	var stManager: stManager;
 	var jsc: (module: string) => string;
 	var stDeps: { [script: string]: string[] };

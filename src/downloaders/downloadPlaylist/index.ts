@@ -1,3 +1,4 @@
+import lang from 'src/lang';
 import arrayUnFlat from 'src/lib/arrayUnFlat';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
@@ -6,7 +7,7 @@ import { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
-	window.Notifier.showEvent({ title: 'VK Music Saver', text: window.getLang('vms_downloading') });
+	window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_downloading') });
 
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 
@@ -17,7 +18,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	});
 
 	if (!playlist) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Playlist not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
 		return;
 	}
 
@@ -27,7 +28,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	}
 
 	if (!playlist.audios?.length) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: window.getLang('vms_playlist_is_empty') });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_is_empty') });
 		return;
 	}
 

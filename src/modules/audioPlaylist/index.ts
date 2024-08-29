@@ -3,6 +3,7 @@ import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
 import waitNav from 'src/globalVars/waitNav';
 import waitUIActionsMenu from 'src/globalVars/waitUIActionsMenu';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
+import lang from 'src/lang';
 import { DownloadTargetElement } from 'src/types';
 import * as styles from './index.module.scss';
 
@@ -16,12 +17,12 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 
 	const item = document.createElement('div');
 	item.className = 'ui_actions_menu_item';
-	item.innerText = window.getLang('vms_download');
+	item.innerText = lang.use('vms_download');
 
 	item.addEventListener('click', async () => {
 		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
 		if (!snippet?.dataset?.playlistId) {
-			window.Notifier.showEvent({ title: 'VK Music Saver', text: 'playlist id not found' });
+			window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
 			return;
 		}
 
@@ -30,12 +31,12 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 
 	const itemDownCover = document.createElement('div');
 	itemDownCover.className = 'ui_actions_menu_item';
-	itemDownCover.innerText = window.getLang('vms_download_cover');
+	itemDownCover.innerText = lang.use('vms_download_cover');
 
 	itemDownCover.addEventListener('click', async () => {
 		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
 		if (!snippet?.dataset?.playlistId) {
-			window.Notifier.showEvent({ title: 'VK Music Saver', text: 'playlist id not found' });
+			window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
 			return;
 		}
 
@@ -85,7 +86,7 @@ const injectToSnipperPlaylistHeader = async () => {
 
 	const textEl = document.createElement('span');
 	textEl.className = styles.ActionButton__text;
-	textEl.innerText = window.getLang('vms_download_playlist');
+	textEl.innerText = lang.use('vms_download_playlist');
 
 	item.append(leftIcon, textEl);
 
@@ -109,13 +110,13 @@ const injectToAudioPlaylistPage = async () => {
 
 	const item = document.createElement('button');
 	item.className = 'ActionsMenu__item';
-	item.innerText = window.getLang('vms_download');
+	item.innerText = lang.use('vms_download');
 
 	item.addEventListener('click', async () => {
 		const snippet = uiMenu.closest<HTMLElement>('.AudioPlaylistSnippet');
 
 		if (!snippet?.dataset?.playlistId) {
-			window.Notifier.showEvent({ title: 'VK Music Saver', text: 'playlist id not found' });
+			window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
 			return;
 		}
 

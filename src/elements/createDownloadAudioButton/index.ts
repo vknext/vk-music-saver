@@ -1,5 +1,6 @@
 import getIcon20DownloadOutline from 'src/icons/getIcon20DownloadOutline';
 import getIcon20Spinner from 'src/icons/getIcon20Spinner';
+import lang from 'src/lang';
 import * as styles from './index.module.scss';
 
 interface DownloadAudioButtonResult {
@@ -17,7 +18,7 @@ const createDownloadAudioButton = (): DownloadAudioButtonResult => {
 
 	const sizeEl = document.createElement('span');
 	sizeEl.className = styles.DownloadAudioButton__size;
-	sizeEl.innerText = window.getLang?.('vms_loading') || 'Загрузка...';
+	sizeEl.innerText = lang.use('vms_loading');
 
 	const iconsEl = document.createElement('div');
 	iconsEl.className = styles.DownloadAudioButton__icons;

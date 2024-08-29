@@ -1,15 +1,12 @@
-import waitCur from 'src/globalVars/waitCur';
-import defaultLang from '../langPack/default';
+import type defaultLang from '../langPack/default';
+import getCurrentLangPack from './getCurrentLangPack';
 
-// TODO: добавить поддержку других языков. Другие языки нужно подключать динамически
-const initLang = async () => {
-	await waitCur();
+const lang = {
+	use(name: keyof typeof defaultLang): string {
+		const lang = getCurrentLangPack();
 
-	if (!window.cur.lang) {
-		window.cur.lang = {};
-	}
-
-	window.Object.assign(window.cur.lang, defaultLang);
+		return lang[name] || name;
+	},
 };
 
-export default initLang;
+export default lang;

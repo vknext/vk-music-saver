@@ -1,4 +1,5 @@
 import { AudioObject } from 'src/global';
+import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import { getAudioBlob } from 'src/musicUtils/getAudioBlob';
 import getAudioByObject from 'src/musicUtils/getAudioByObject';
@@ -25,13 +26,13 @@ const getPerformer = (audio: AudioObject | AudioAudio) => {
 
 const downloadAudio = async (audioObject: AudioObject) => {
 	if (!audioObject) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Audio not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_not_found') });
 		return;
 	}
 
 	const audio = await getAudioByObject(audioObject);
 	if (!audio.url) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Audio URL not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_url_not_found') });
 		return;
 	}
 

@@ -4,7 +4,7 @@ import injectDownloadButtonInAudioRow from './modules/injectDownloadButtonInAudi
 import initShowBitrateNearDuration from './modules/showBitrateNearDuration';
 
 import './injected.scss';
-import initLang from './lang';
+
 import initAudioPage from './modules/audioPage';
 import initAudioPlaylist from './modules/audioPlaylist';
 import initVKNextBanner from './modules/vknextBanner';
@@ -13,12 +13,6 @@ import initVKNextBanner from './modules/vknextBanner';
 (window.vknext = window.vknext || {}).vms_installed = true;
 
 const start = async () => {
-	try {
-		await initLang();
-	} catch (e) {
-		console.error('[VMS/initLang]', e);
-	}
-
 	try {
 		initShowBitrateNearDuration();
 	} catch (e) {

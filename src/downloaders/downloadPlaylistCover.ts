@@ -1,3 +1,4 @@
+import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
@@ -13,7 +14,7 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 	});
 
 	if (!playlist) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Playlist not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
 
 		return;
 	}
@@ -21,7 +22,7 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 	const albumThumbUrl = getAlbumThumbUrl(playlist);
 
 	if (!albumThumbUrl) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: 'Album cover not found' });
+		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_album_cover_not_found') });
 		return;
 	}
 

@@ -1,6 +1,7 @@
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import * as styles from './index.module.scss';
+import lang from 'src/lang';
 
 const onAddRow = async (row: HTMLElement) => {
 	const audio = row.dataset.audio;
@@ -22,7 +23,7 @@ const onAddRow = async (row: HTMLElement) => {
 
 	const bitrateEl = document.createElement('span');
 	bitrateEl.className = styles.audioRow__bitrate;
-	bitrateEl.innerText = window.getLang?.('vms_loading') || 'Загрузка...';
+	bitrateEl.innerText = lang.use('vms_loading');
 
 	rowInfo.classList.add(styles['audioRow__info--withBitrate']);
 	rowInfo.appendChild(bitrateEl);
@@ -37,7 +38,7 @@ const onAddRow = async (row: HTMLElement) => {
 					if (result?.bitrate) {
 						bitrateEl.innerText = `${result.bitrate}`;
 					} else {
-						bitrateEl.innerText = window.getLang?.('vms_error') || 'Ошибка';
+						bitrateEl.innerText = lang.use('vms_error');
 					}
 
 					observer.unobserve(row);
