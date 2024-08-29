@@ -15,7 +15,7 @@ import ZipPlugin from './plugins/ZipPlugin';
 
 const argv = yargsParser(process.argv.slice(2));
 
-const files = ['.svg', '.ttf', '.ts', '.tsx', '.css', '.scss'];
+const files = ['.svg', '.ttf', '.ts', '.tsx', '.css', '.scss', '.json'];
 const DEFAULT_PUBLIC_PATH = '/';
 
 if (!argv.noclear) {
@@ -128,7 +128,19 @@ const options: Configuration = {
 					to: path.join(BUILD_PATH, '_locales'),
 					force: true,
 				},
-			].filter(Boolean),
+				{
+					from: path.resolve('./', 'src', 'dnr_rules.json'),
+					to: path.join(BUILD_PATH, 'dnr_rules.vms.json'),
+					// бюджетная минификация .json
+					transform(content, absoluteFrom) {
+						if (IS_DEV) return content.toString();
+
+						const json = JSON.parse(content.toString());
+
+						return JSON.stringify(json);
+					},
+				},
+			],
 		}),
 		new WebpackExtensionManifestPlugin({
 			config: manifest,
@@ -143,6 +155,10 @@ const options: Configuration = {
 	].filter(Boolean),
 	module: {
 		rules: [
+			{
+				test: /\.json$/i,
+				type: 'asset/resource',
+			},
 			{
 				test: /\.[jt]sx?$/,
 				loader: 'ts-loader',

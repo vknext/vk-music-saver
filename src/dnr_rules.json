@@ -1,0 +1,47 @@
+[
+	{
+		"id": 1,
+		"priority": 1,
+		"action": {
+			"requestHeaders": [
+				{
+					"header": "User-Agent",
+					"operation": "set",
+					"value": "Genius/4.2.1 (Android; Android 13; Pixel 6)"
+				},
+				{
+					"header": "x-genius-android-version",
+					"operation": "set",
+					"value": "4.2.1"
+				}
+			],
+			"type": "modifyHeaders"
+		},
+		"condition": { "initiatorDomains": ["vk.com", "vk.ru"], "urlFilter": "https://api.genius.com" }
+	},
+	{
+		"id": 2,
+		"priority": 1,
+		"action": {
+			"responseHeaders": [
+				{
+					"header": "Access-Control-Allow-Origin",
+					"operation": "set",
+					"value": "*"
+				},
+				{
+					"header": "Access-Control-Allow-Methods",
+					"operation": "set",
+					"value": "PUT, GET, HEAD, POST, DELETE, OPTIONS"
+				},
+				{
+					"header": "Access-Control-Allow-Headers",
+					"operation": "set",
+					"value": "*"
+				}
+			],
+			"type": "modifyHeaders"
+		},
+		"condition": { "initiatorDomains": ["vk.com", "vk.ru"], "regexFilter": "^https?://api\\.genius\\.com/" }
+	}
+]

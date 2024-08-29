@@ -43,6 +43,17 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		],
 		// в Firefox не поддерживается `split`. О боже какой крутой браузер!!! базовые свойства не может поддерживать.
 		incognito: isFirefox ? 'not_allowed' : 'split',
+		permissions: ['declarativeNetRequestWithHostAccess'],
+		declarative_net_request: {
+			rule_resources: [
+				{
+					id: 'ruleset',
+					enabled: true,
+					path: 'dnr_rules.vms.json',
+				},
+			],
+		},
+		host_permissions: ['https://api.genius.com/*', 'https://vk.com/*', 'https://vk.ru/*'],
 	};
 
 	if (isDev) {
