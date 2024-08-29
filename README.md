@@ -1,8 +1,8 @@
 <h1 align="center">
   <a href="https://vknext.net">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://static.vknext.net/github/vknext-logo-dark.svg">
-      <img src="https://static.vknext.net/github/vknext-logo-light.svg" height="150" alt="VK Next Logo" />
+      <source media="(prefers-color-scheme: dark)" srcset="https://static.vknext.net/github/vms-logo-dark.svg">
+      <img src="https://static.vknext.net/github/vms-logo-light.svg" height="150" alt="VK Music Saver Logo" />
     </picture>
   </a>
 </h1>
