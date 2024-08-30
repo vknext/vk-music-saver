@@ -51,6 +51,7 @@ export const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promi
 			owner_id: playlist.ownerId,
 			playlist_id: playlist.id,
 			access_key: params.access_key,
+			count: 10000,
 		});
 
 		const audioPlaylist: AudioPlaylist = {
