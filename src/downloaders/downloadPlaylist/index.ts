@@ -1,13 +1,37 @@
+import type { NotifierEvent } from 'src/global';
 import lang from 'src/lang';
 import arrayUnFlat from 'src/lib/arrayUnFlat';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
-import { ClientZipFile } from 'src/types';
+import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
-	window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_downloading') });
+	const event: NotifierEvent = {
+		title: 'VK Music Saver',
+		text: lang.use('vms_downloading'),
+	};
+
+	try {
+		window.Notifier.showEvent(event);
+	} catch (e) {
+		console.error(e);
+	}
+	// отменяем скрытие элемента
+	clearTimeout(event.closeTO);
+	clearTimeout(event.fadeTO);
+	delete event.startFading;
+
+	const setText = (text: string) => {
+		if (!event.baloonEl) return;
+		if (!event.baloonEl.closest('body')) return;
+
+		const msg = event.baloonEl.getElementsByClassName('notifier_baloon_msg')[0] as HTMLElement;
+		if (!msg) return;
+
+		msg.innerText = text;
+	};
 
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 
@@ -50,23 +74,40 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		nameChunks.push('playlist');
 	}
 
+	const filename = unescapeHTML(`${nameChunks.join('')}.zip`);
+
 	const promises: Promise<ClientZipFile | null>[] = [];
 
 	let audioIndex = 1;
+
+	let progress = 0;
+	const totalAudios = playlist.audios.length;
+
+	setText(`${filename} (${progress}/${totalAudios})`);
+
+	const updateProgress = () => {
+		progress++;
+
+		setText(`${filename} (${progress}/${totalAudios})`);
+	};
 
 	for (const audios of arrayUnFlat(playlist.audios, 10)) {
 		if (signal.aborted) return;
 
 		for (const audio of audios) {
-			promises.push(
-				getBlobAudioFromPlaylist({
-					audio,
-					lastModified,
-					signal,
-					audioIndex: audioIndex++,
-					playlist,
-				})
-			);
+			const promiseBlob = getBlobAudioFromPlaylist({
+				audio,
+				lastModified,
+				signal,
+				audioIndex: audioIndex++,
+				playlist,
+			});
+
+			promiseBlob.then(() => {
+				updateProgress();
+			});
+
+			promises.push(promiseBlob);
 		}
 
 		await Promise.all(promises);
@@ -78,13 +119,21 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	if (signal.aborted) return;
 
+	setText(`${filename} - ${lang.use('vms_archivation')}`);
+
 	const { downloadZip } = await import('client-zip');
 
 	const blob = await downloadZip(files).blob();
 
 	const blobUrl = URL.createObjectURL(blob);
 
-	await saveFileAs(blobUrl, unescapeHTML(`${nameChunks.join('')}.zip`));
+	try {
+		window.Notifier.hideEvent(event);
+	} catch (e) {
+		console.error(e);
+	}
+
+	await saveFileAs(blobUrl, filename);
 
 	URL.revokeObjectURL(blobUrl);
 };

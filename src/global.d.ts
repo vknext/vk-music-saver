@@ -47,10 +47,15 @@ export interface stManager {
 export interface NotifierEvent {
 	text?: string;
 	title?: string;
+	baloonEl?: HTMLElement;
+	closeTO?: number;
+	fadeTO?: number;
+	startFading?: () => void;
 }
 
 export interface Notifier {
 	showEvent(event: NotifierEvent): void;
+	hideEvent(event: NotifierEvent): void;
 }
 
 export interface AudioObject {
