@@ -9,6 +9,7 @@ const lang = {
   vms_playlist_not_found: "Плейлист не знайдено",
   vms_audio_not_found: "Трек не знайдено",
   vms_audio_url_not_found: "Відсутнє посилання на трек",
-  vms_album_cover_not_found: "У цього альбому немає обкладинки"
+  vms_album_cover_not_found: "У цього альбому немає обкладинки",
+  vms_archivation: 'архивация...'
 };
 export default lang;
