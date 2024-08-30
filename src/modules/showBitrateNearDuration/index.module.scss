@@ -3,7 +3,7 @@
 	flex-wrap: nowrap;
 	flex-direction: column;
 	align-items: flex-end;
-	gap: 6px;
+	gap: 0px;
 	justify-content: center;
 	min-width: 18px !important;
 
@@ -11,6 +11,18 @@
 		position: unset !important;
 		top: unset !important;
 	}
+}
+
+:global(.audio_row.audio_explicit) .audioRow__info--withBitrate {
+	position: relative;
+
+	:global(.audio_row__duration)::before {
+		top: 18px;
+	}
+}
+
+:global(.audio_w_covers .audio_row .audio_row__inner) .audioRow__info--withBitrate {
+	gap: 6px;
 }
 
 .audioRow__info--withBitrate:has(:global(.audio_row__duration[style*='visibility: hidden;'])) {
