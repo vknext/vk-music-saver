@@ -9,6 +9,7 @@ const lang = {
   vms_playlist_not_found: 'Плейлист не найден',
   vms_audio_not_found: 'Трек не найден',
   vms_audio_url_not_found: 'Отсутствует ссылка на трек',
-  vms_album_cover_not_found: 'У этого альбома нет обложки'
+  vms_album_cover_not_found: 'У этого альбома нет обложки',
+  vms_archivation: 'архивация...'
 };
 export default lang;
