@@ -41,8 +41,6 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 				matches: ['https://vk.com/*', 'https://vk.ru/*'],
 			},
 		],
-		// в Firefox не поддерживается `split`. О боже какой крутой браузер!!! базовые свойства не может поддерживать.
-		incognito: isFirefox ? 'not_allowed' : 'split',
 		permissions: ['declarativeNetRequestWithHostAccess'],
 		declarative_net_request: {
 			rule_resources: [
@@ -62,15 +60,35 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 
 	// TODO: протестировать на старых версиях Firefox
 	if (isFirefox) {
+		manifest.manifest_version = 2;
+
 		manifest.browser_specific_settings = {
 			gecko: {
 				id: 'vknext-vms@vknext.net',
 				strict_min_version: '113.0',
 			},
 		};
+
+		if (manifest.web_accessible_resources) {
+			const resources = manifest.web_accessible_resources.map((e) => {
+				if (typeof e === 'string') {
+					return e;
+				}
+
+				return e.resources;
+			});
+
+			manifest.web_accessible_resources = resources.flat();
+		}
+
+		if (manifest.host_permissions) {
+			manifest.permissions = Array.from(new Set([...(manifest.permissions || []), ...manifest.host_permissions]));
+			delete manifest.host_permissions;
+		}
 	} else {
 		manifest.minimum_chrome_version = '105';
 		manifest.key = CHROME_KEY;
+		manifest.incognito = 'split';
 	}
 
 	return manifest;
