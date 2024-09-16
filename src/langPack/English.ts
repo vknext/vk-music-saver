@@ -10,6 +10,6 @@ const lang = {
   vms_audio_not_found: "Track not found",
   vms_audio_url_not_found: "Missing track link",
   vms_album_cover_not_found: "This album doesn't have a cover",
-  vms_archivation: 'архивация...'
+  vms_archivation: "archiving..."
 };
 export default lang;
