@@ -4,6 +4,7 @@ import waitGlobalVariable from 'src/globalVars/utils/waitGlobalVariable';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
+import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import getAudioPlayerUserControlsContainer from './getAudioPlayerUserControlsContainer';
@@ -46,9 +47,16 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 		if (!audioObject) return;
 
 		setIsLoading(true);
+		setText(lang.use('vms_loading'));
 
-		downloadAudio(audioObject).finally(() => {
+		downloadAudio({
+			audioObject,
+			onProgress: (progress) => {
+				setText(formatFFMpegProgress(progress));
+			},
+		}).finally(() => {
 			setIsLoading(false);
+			updateText().catch(console.error);
 		});
 	});
 

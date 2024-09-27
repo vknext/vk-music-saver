@@ -1,7 +1,9 @@
 import downloadAudio from 'src/downloaders/downloadAudio';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
+import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
+import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 
@@ -30,15 +32,32 @@ const onAddRow = async (row: HTMLElement) => {
 
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton();
 
+	const updateBitrate = async () => {
+		const result = await getAudioBitrate(audioObject);
+		if (result?.size) {
+			setText(humanFileSize(result.size, 2));
+		} else {
+			setText('');
+		}
+	};
+
 	element.addEventListener('click', (event) => {
 		cancelEvent(event);
 
 		if (getIsLoading()) return;
 
 		setIsLoading(true);
+		setText(lang.use('vms_loading'));
 
-		downloadAudio(audioObject).finally(() => {
+		downloadAudio({
+			audioObject,
+			onProgress: async (progress) => {
+				setText(formatFFMpegProgress(progress));
+			},
+		}).finally(() => {
 			setIsLoading(false);
+
+			updateBitrate().catch(console.error);
 		});
 	});
 
@@ -48,13 +67,7 @@ const onAddRow = async (row: HTMLElement) => {
 		async (entries, observer) => {
 			entries.forEach(async (entry) => {
 				if (entry.isIntersecting) {
-					const result = await getAudioBitrate(audioObject);
-
-					if (result?.size) {
-						setText(humanFileSize(result.size, 2));
-					} else {
-						setText('');
-					}
+					await updateBitrate();
 
 					observer.unobserve(row);
 				}

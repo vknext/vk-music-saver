@@ -1,5 +1,6 @@
-import { audioUnmaskSource, convertTrackToBlob } from '@vknext/audio-utils';
+import { audioUnmaskSource, convertTrackToBlob, type ConvertTrackToBlobOptions } from '@vknext/audio-utils';
 import { AudioObject } from 'src/global';
+import lang from 'src/lang';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
 import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
@@ -7,15 +8,14 @@ import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
 import getAlbumThumbnail from './getAlbumThumbnail';
 import getPlaylistById from './getPlaylistById';
-import lang from 'src/lang';
 
-export interface GetAudioBlobParams {
+export interface GetAudioBlobParams extends Pick<ConvertTrackToBlobOptions, 'onProgress'> {
 	audio: AudioObject | AudioAudio;
 	playlist?: AudioPlaylist | null;
 	signal?: AbortSignal;
 }
 
-export const getAudioBlob = async ({ audio, playlist }: GetAudioBlobParams) => {
+export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlobParams) => {
 	if (!audio.url) {
 		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_url_not_found') });
 
@@ -26,6 +26,7 @@ export const getAudioBlob = async ({ audio, playlist }: GetAudioBlobParams) => {
 
 	const blob = await convertTrackToBlob({
 		url: audioUnmaskSource(audio.url),
+		onProgress,
 	});
 
 	if (!playlist) {

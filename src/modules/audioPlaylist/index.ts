@@ -78,7 +78,7 @@ const injectToSnipperPlaylistHeader = async () => {
 
 	const item = document.createElement('button');
 	item.className = styles.AudioPlaylistSnippet__actionButton;
-	item.addEventListener('click', () => downloadPlaylist(playlistId.replace('playlist_', '')));
+	item.addEventListener('click', () => downloadPlaylist(playlistId.replace('playlist_', '')).catch(console.error));
 
 	const leftIcon = document.createElement('div');
 	leftIcon.className = styles.ActionButton__icon;

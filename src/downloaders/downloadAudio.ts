@@ -1,7 +1,7 @@
 import { AudioObject } from 'src/global';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
-import { getAudioBlob } from 'src/musicUtils/getAudioBlob';
+import { getAudioBlob, type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';
 import getAudioByObject from 'src/musicUtils/getAudioByObject';
 import { AudioArtist, AudioAudio } from 'src/schemas/objects';
 
@@ -24,7 +24,11 @@ const getPerformer = (audio: AudioObject | AudioAudio) => {
 	return artistTitle;
 };
 
-const downloadAudio = async (audioObject: AudioObject) => {
+interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
+	audioObject: AudioObject | AudioAudio;
+}
+
+const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) => {
 	if (!audioObject) {
 		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_not_found') });
 		return;
@@ -45,7 +49,7 @@ const downloadAudio = async (audioObject: AudioObject) => {
 	}
 
 	try {
-		const blob = await getAudioBlob({ audio });
+		const blob = await getAudioBlob({ audio, onProgress });
 
 		const blobUrl = URL.createObjectURL(blob);
 
