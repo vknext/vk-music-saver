@@ -133,25 +133,25 @@ export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlob
 			// album artist
 			writer.setFrame('TPE2', albumArtists);
 		}
+	}
 
-		if (typeof audio.title === 'string') {
-			try {
-				const lyrics = await getGeniusLyrics({
-					title: audio.title,
-					performer: audio.performer || '',
-					mainArtists: audioArtists,
+	if (typeof audio.title === 'string') {
+		try {
+			const lyrics = await getGeniusLyrics({
+				title: audio.title,
+				performer: audio.performer || '',
+				mainArtists: audioArtists,
+			});
+
+			if (lyrics?.length) {
+				writer.setFrame('USLT', {
+					description: 'vknext.net',
+					lyrics: lyrics,
+					language: '',
 				});
-
-				if (lyrics?.length) {
-					writer.setFrame('USLT', {
-						description: 'vknext.net',
-						lyrics: lyrics,
-						language: '',
-					});
-				}
-			} catch (e) {
-				console.error('error add lyrics to audio', e);
 			}
+		} catch (e) {
+			console.error('error add lyrics to audio', e);
 		}
 	}
 
