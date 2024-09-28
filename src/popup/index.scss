@@ -1,0 +1,149 @@
+:root {
+	--color_text_primary: #000;
+	--color_background: #ebedf0;
+
+	--page_primary_glow: conic-gradient(
+		from 180deg at 50% 50%,
+		#16abff33 0deg,
+		#0885ff33 55deg,
+		#54d6ff33 120deg,
+		#0071ff33 160deg,
+		transparent 360deg
+	);
+	--page_secondary_glow: radial-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+
+	--card_background: #b4b9bc1a;
+	--card_background--hover: #b4b9bc2e;
+	--card_border: #83868726;
+	--card_border--hover: #8386872e;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color_text_primary: #e1e3e6;
+		--color_background: #0a0a0a;
+
+		--page_primary_glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
+		--page_secondary_glow: linear-gradient(
+			to bottom right,
+			rgba(1, 65, 255, 0),
+			rgba(1, 65, 255, 0),
+			rgba(1, 65, 255, 0.3)
+		);
+
+		--card_background: #6464641a;
+		--card_background--hover: #6464642e;
+		--card_border: #c8c8c826;
+		--card_border--hover: #c8c8c82e;
+	}
+
+	html {
+		color-scheme: dark;
+	}
+}
+
+html,
+body {
+	min-height: 500px;
+	min-width: 500px;
+	height: 100vh;
+	max-width: 100vw;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: var(--color_background);
+	color: var(--color_text_primary);
+	font-family: -apple-system, system-ui, 'Helvetica Neue', Roboto, sans-serif;
+	font-size: 16px;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	position: relative;
+	height: 100%;
+	gap: 12px;
+
+	&::after {
+		background: var(--page_primary_glow);
+		width: 240px;
+		height: 180px;
+		z-index: -1;
+	}
+
+	&::before {
+		background: var(--page_secondary_glow);
+		border-radius: 50%;
+		width: 480px;
+		height: 360px;
+		margin-left: -400px;
+	}
+
+	&::before,
+	&::after {
+		content: '';
+		left: 50%;
+		position: absolute;
+		filter: blur(45px);
+		transform: translateZ(0);
+		z-index: -1;
+	}
+}
+
+.logo {
+	min-height: 100px;
+	max-width: 395px;
+	position: relative;
+}
+
+.card {
+	padding: 1rem 1.2rem;
+	border-radius: 12px;
+	background: var(--card_background);
+	border: 1px solid var(--card_border);
+	transition: background 200ms, border 200ms;
+	text-align: center;
+}
+
+.card span {
+	display: inline-block;
+}
+
+.card h2 {
+	font-weight: 600;
+	user-select: none;
+	padding: 0;
+	margin: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.card:hover {
+		background-color: var(--card_background--hover);
+		border: 1px solid var(--card_background--hover);
+	}
+}
+
+.emoji {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: -3px;
+	margin: 0 1px;
+	pointer-events: none;
+	color: inherit;
+}
+
+.cardGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}

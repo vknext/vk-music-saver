@@ -4,5 +4,14 @@
 	},
 	"extDescription": {
 		"message": "Download tracks and playlists in one click. Based on VK Next."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Support the project"
+	},
+	"popup_feedback": {
+		"message": "Report an issue"
 	}
 }

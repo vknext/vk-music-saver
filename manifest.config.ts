@@ -9,6 +9,11 @@ interface GetManifestOptions {
 	isDev: boolean;
 }
 
+const browser_action = {
+	default_title: '__MSG_popup_title__',
+	default_popup: 'popup.html',
+};
+
 const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 	const manifest: Record<string, any> = {
 		manifest_version: 3,
@@ -73,6 +78,8 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 			},
 		};
 
+		manifest.browser_action = browser_action;
+
 		if (manifest.web_accessible_resources) {
 			const resources = manifest.web_accessible_resources.map((e) => {
 				if (typeof e === 'string') {
@@ -93,6 +100,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.minimum_chrome_version = '105';
 		manifest.key = CHROME_KEY;
 		manifest.incognito = 'split';
+		manifest.action = browser_action;
 
 		manifest.background = {
 			service_worker: 'background.vms.js',

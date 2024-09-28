@@ -4,5 +4,14 @@
 	},
 	"extDescription": {
 		"message": "Завантажуйте треки та плейлисти в один клік. Створено на основі VK Next"
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Підтримати проєкт"
+	},
+	"popup_feedback": {
+		"message": "Повідомити про помилку"
 	}
 }
