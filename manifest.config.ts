@@ -62,6 +62,10 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 	if (isFirefox) {
 		manifest.manifest_version = 2;
 
+		manifest.background = {
+			scripts: ['background.vms.js'],
+		};
+
 		manifest.browser_specific_settings = {
 			gecko: {
 				id: 'vknext-vms@vknext.net',
@@ -89,6 +93,10 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.minimum_chrome_version = '105';
 		manifest.key = CHROME_KEY;
 		manifest.incognito = 'split';
+
+		manifest.background = {
+			service_worker: 'background.vms.js',
+		};
 	}
 
 	return manifest;

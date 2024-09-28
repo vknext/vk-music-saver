@@ -43,6 +43,11 @@ const options: Configuration = {
 			publicPath: './',
 			runtime: false,
 		},
+		background: {
+			import: path.resolve('./', 'src', 'background', 'index.ts'),
+			runtime: false,
+			chunkLoading: false,
+		},
 	},
 	mode: IS_DEV ? 'development' : 'production',
 	devtool: IS_DEV ? 'source-map' : false,

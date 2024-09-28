@@ -327,6 +327,8 @@ interface UIActionsMenu {
 }
 
 declare global {
+	var browser: typeof globalThis.chrome;
+
 	var vknext: VKNext;
 
 	var Notifier: Notifier;
