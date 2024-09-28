@@ -41,7 +41,7 @@ const onAddRow = async (row: HTMLElement) => {
 						bitrateEl.innerText = lang.use('vms_error');
 					}
 
-					observer.unobserve(row);
+					observer.unobserve(bitrateEl);
 				}
 			});
 		},

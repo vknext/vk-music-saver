@@ -69,7 +69,7 @@ const onAddRow = async (row: HTMLElement) => {
 				if (entry.isIntersecting) {
 					await updateBitrate();
 
-					observer.unobserve(row);
+					observer.unobserve(element);
 				}
 			});
 		},
