@@ -8,6 +8,7 @@ import './injected.scss';
 import initAudioPage from './modules/audioPage';
 import initAudioPlaylist from './modules/audioPlaylist';
 import initVKNextBanner from './modules/vknextBanner';
+import initFeed from './modules/feed';
 
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания
 (window.vknext = window.vknext || {}).vms_installed = true;
@@ -32,9 +33,15 @@ const start = async () => {
 	}
 
 	try {
-		initAudioPlaylist();
+		await initAudioPlaylist();
 	} catch (e) {
 		console.error('[VMS/initAudioPlaylist]', e);
+	}
+
+	try {
+		initFeed();
+	} catch (e) {
+		console.error('[VMS/initFeed]', e);
 	}
 
 	try {

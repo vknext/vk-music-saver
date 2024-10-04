@@ -1,4 +1,6 @@
 .DownloadAudioButton {
+	--icon-size: 20px;
+
 	appearance: none;
 	background: 0 0;
 	border: 0;
@@ -20,6 +22,7 @@
 	}
 }
 
+// плеер музыки
 :global(.AudioPlayerBlock__root) {
 	.DownloadAudioButton {
 		transition: opacity 0.15s ease-out;
@@ -41,6 +44,30 @@
 	.DownloadAudioButton__size {
 		font-size: 10px;
 		line-height: 12px;
+	}
+}
+
+// трек во вложении
+:global(.SecondaryAttachment__after) {
+	.DownloadAudioButton {
+		display: flex;
+		flex-direction: row-reverse;
+		min-width: var(--secondary-attachment-icon-button-size, 36px);
+		min-height: var(--secondary-attachment-icon-button-size, 36px);
+		margin: 0 8px;
+		transition: none;
+		opacity: 1;
+		gap: 8px;
+
+		&:hover {
+			background-color: unset;
+			opacity: 0.7;
+		}
+	}
+
+	.DownloadAudioButton__size,
+	.DownloadAudioButton__icons {
+		color: var(--vkui--color_icon_secondary);
 	}
 }
 
@@ -67,7 +94,7 @@
 	.DownloadAudioButton__icon--loading {
 		display: block;
 		animation: rotate-animation 0.7s linear infinite;
-		transform-origin: 10px 10px;
+		transform-origin: calc(var(--icon-size) / 2) calc(var(--icon-size) / 2);
 	}
 }
 

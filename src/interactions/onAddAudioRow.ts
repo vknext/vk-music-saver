@@ -85,16 +85,6 @@ const initAjaxHook = async () => {
 
 			const isLoadAudioBlocks = actParam && supportedActions.includes(actParam);
 
-			if (process.env.NODE_ENV === 'development') {
-				console.log('[VMS/ajax/post]', {
-					url,
-					requestData,
-					isAudioRequest,
-					actParam,
-					isLoadAudioBlocks,
-				});
-			}
-
 			if (isLoadAudioBlocks && callbackFunctions.onDone) {
 				const originalOnDone = callbackFunctions.onDone;
 
