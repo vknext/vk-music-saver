@@ -5,13 +5,14 @@ import initShowBitrateNearDuration from './modules/showBitrateNearDuration';
 
 import './injected.scss';
 
+import getGlobalVKNext from './getGlobalVKNext';
 import initAudioPage from './modules/audioPage';
 import initAudioPlaylist from './modules/audioPlaylist';
-import initVKNextBanner from './modules/vknextBanner';
 import initFeed from './modules/feed';
+import initVKNextBanner from './modules/vknextBanner';
 
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания
-(window.vknext = window.vknext || {}).vms_installed = true;
+getGlobalVKNext().vms_installed = true;
 
 const start = async () => {
 	try {
@@ -45,7 +46,7 @@ const start = async () => {
 	}
 
 	try {
-		if (!('webpack' in window.vknext)) {
+		if (!('webpack' in getGlobalVKNext())) {
 			initVKNextBanner();
 		}
 	} catch (e) {
