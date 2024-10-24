@@ -5,6 +5,7 @@ import waitAjax from 'src/globalVars/waitAjax';
 import waitNav from 'src/globalVars/waitNav';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';
 import waitRAF from 'src/lib/waitRAF';
+import type { ObservedHTMLElement } from 'src/types';
 import InteractionListener from './InteractionListener';
 
 type CallbackFunc = (el: HTMLElement) => void;
@@ -17,17 +18,13 @@ const onCallback = (el: HTMLElement) => {
 	}
 };
 
-interface AudioListElement extends HTMLElement {
-	_vms_obs?: MutationObserver;
-}
-
 const findAudioList = () => {
-	const lists = document.querySelectorAll<AudioListElement>('.audio_pl_snippet__list');
+	const lists = document.querySelectorAll<ObservedHTMLElement>('.audio_pl_snippet__list');
 
 	for (const list of lists) {
-		if (list._vms_obs) continue;
+		if (list._vms_mbs) continue;
 
-		list._vms_obs = new MutationObserver((mutations) => {
+		list._vms_mbs = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
 				if (mutation.type === 'childList' && mutation.addedNodes.length) {
 					for (const node of mutation.addedNodes) {
@@ -39,7 +36,7 @@ const findAudioList = () => {
 			}
 		});
 
-		list._vms_obs.observe(list, {
+		list._vms_mbs.observe(list, {
 			childList: true,
 		});
 	}

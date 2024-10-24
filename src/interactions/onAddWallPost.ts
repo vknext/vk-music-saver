@@ -4,6 +4,7 @@ import delay from 'src/lib/delay';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';
 import waitRAF from 'src/lib/waitRAF';
 import waitRIC from 'src/lib/waitRIC';
+import type { ObservedHTMLElement } from 'src/types';
 import InteractionListener from './InteractionListener';
 
 type CallbackFunc = (node: HTMLElement) => void;
@@ -12,11 +13,6 @@ const POST_SELECTOR = ['.Post--redesign', '.post', '._post:not(.reply)', '.Post'
 const WALL_MODULE_SELECTOR = ['.wall_module', '#public_wall'].join(',');
 const PAGE_WALL_POSTS_SELECTOR = ['#page_wall_posts', '.page_wall_posts', '#page_donut_posts'].join(',');
 const FEED_ROWS_SELECTOR = ['#feed_rows', '._feed_rows'].join(',');
-
-interface MutationObserverElement extends HTMLElement {
-	vms_obs?: MutationObserver;
-	vms_obsNew?: IntersectionObserver;
-}
 
 const interaction = new InteractionListener<CallbackFunc>();
 
@@ -31,10 +27,10 @@ const onCallback = async (el: HTMLElement) => {
 	}
 };
 
-const onAddPost = (el: MutationObserverElement) => {
-	if (el.vms_obsNew) return;
+const onAddPost = (el: ObservedHTMLElement) => {
+	if (el._vms_ibs) return;
 
-	el.vms_obsNew = new IntersectionObserver(
+	el._vms_ibs = new IntersectionObserver(
 		async (entries) => {
 			for (const entry of entries) {
 				if (entry.isIntersecting) {
@@ -45,7 +41,7 @@ const onAddPost = (el: MutationObserverElement) => {
 		{ threshold: 0.05 } // 5% элемента должно быть видно
 	);
 
-	el.vms_obsNew.observe(el);
+	el._vms_ibs.observe(el);
 };
 
 const getDocumentPosts = async () => {
@@ -77,12 +73,12 @@ const initObserver = async () => {
 	for (const row of wallModule) {
 		await waitRIC();
 
-		const feedRows = row.querySelector<MutationObserverElement>(FEED_ROWS_SELECTOR);
+		const feedRows = row.querySelector<ObservedHTMLElement>(FEED_ROWS_SELECTOR);
 
 		if (feedRows) {
-			if (feedRows.vms_obs) continue;
+			if (feedRows._vms_mbs) continue;
 
-			feedRows.vms_obs = new MutationObserver(async (mutations) => {
+			feedRows._vms_mbs = new MutationObserver(async (mutations) => {
 				for (const mutation of mutations) {
 					if (!mutation.addedNodes.length) continue;
 
@@ -97,20 +93,20 @@ const initObserver = async () => {
 				}
 			});
 
-			feedRows.vms_obs.observe(feedRows, {
+			feedRows._vms_mbs.observe(feedRows, {
 				childList: true,
 			});
 		}
 	}
 
-	const pageWallPosts = document.querySelectorAll<MutationObserverElement>(PAGE_WALL_POSTS_SELECTOR);
+	const pageWallPosts = document.querySelectorAll<ObservedHTMLElement>(PAGE_WALL_POSTS_SELECTOR);
 
 	for (const wrapper of pageWallPosts) {
-		if (wrapper.vms_obs) continue;
+		if (wrapper._vms_mbs) continue;
 
 		await waitRIC();
 
-		wrapper.vms_obs = new MutationObserver(async (mutations) => {
+		wrapper._vms_mbs = new MutationObserver(async (mutations) => {
 			for (const mutation of mutations) {
 				if (!mutation.addedNodes.length) continue;
 
@@ -122,7 +118,7 @@ const initObserver = async () => {
 			}
 		});
 
-		wrapper.vms_obs.observe(wrapper, {
+		wrapper._vms_mbs.observe(wrapper, {
 			childList: true,
 		});
 	}

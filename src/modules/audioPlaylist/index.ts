@@ -1,9 +1,12 @@
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
-import waitNav from 'src/globalVars/waitNav';
+import createVKUIButton from 'src/elements/createVKUIButton';
 import waitUIActionsMenu from 'src/globalVars/waitUIActionsMenu';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
+import onOpenPlaylistModal from 'src/interactions/onOpenPlaylistModal';
+import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
+import delay from 'src/lib/delay';
 import { DownloadTargetElement } from 'src/types';
 import * as styles from './index.module.scss';
 
@@ -126,20 +129,104 @@ const injectToAudioPlaylistPage = async () => {
 	uiMenu.prepend(item);
 };
 
+const injectToAudioPlaylistPageNew = async (retry = 0) => {
+	if (retry > 10) {
+		throw new Error('[VK Next/audioPlaylist] Failed to inject');
+	}
+
+	const spaRoot = document.getElementById('spa_root');
+	if (!spaRoot) return;
+
+	if (spaRoot.querySelector(`[class*="Skeleton-module__skeleton"]`)) {
+		await delay(1000);
+		return injectToAudioPlaylistPageNew(retry + 1);
+	}
+
+	const actions = spaRoot.querySelector<DownloadTargetElement>('[class*="AudioListHeader-module__actions--"]');
+	if (!actions) return;
+	if (actions.vms_down_inj) return;
+	actions.vms_down_inj = true;
+
+	const { element, setIsLoading, setText, getIsLoading } = createVKUIButton({
+		mode: 'secondary',
+		appearance: 'neutral',
+		size: 'm',
+	});
+
+	setText(lang.use('vms_download'));
+
+	element.addEventListener('click', async () => {
+		if (getIsLoading()) return;
+		setIsLoading(true);
+
+		try {
+			const playlistFullId = location.pathname.split('/').at(-1);
+
+			if (!playlistFullId) {
+				window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
+				return;
+			}
+
+			await downloadPlaylist(playlistFullId);
+		} catch (error) {
+			console.error(error);
+		}
+
+		setIsLoading(false);
+	});
+
+	actions.appendChild(element);
+};
+
+const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) => {
+	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton-module__skeleton"]`)) {
+		await delay(1000);
+		return injectToAudioPlaylistModalNew(playlistFullId, retry + 1);
+	}
+
+	for (const actions of document.querySelectorAll<DownloadTargetElement>(
+		'[class*="AudioListModalHeader-module__actions--"]'
+	)) {
+		if (!actions) return;
+		if (actions.vms_down_inj) return;
+		actions.vms_down_inj = true;
+
+		const vkuiFlex = actions.querySelector<HTMLElement>('.vkuiFlex');
+
+		const { element, setIsLoading, setText, getIsLoading } = createVKUIButton({
+			mode: 'primary',
+			appearance: 'overlay',
+			size: 'm',
+		});
+
+		setText(lang.use('vms_download'));
+
+		element.addEventListener('click', async () => {
+			if (getIsLoading()) return;
+			setIsLoading(true);
+
+			try {
+				await downloadPlaylist(playlistFullId);
+			} catch (error) {
+				console.error(error);
+			}
+
+			setIsLoading(false);
+		});
+
+		(vkuiFlex || actions).appendChild(element);
+	}
+};
+
 const initAudioPlaylist = async () => {
 	injectToAudioPlaylistModal().catch(console.error);
 
-	if (window.location.pathname.startsWith('/music/album') || window.location.pathname.startsWith('/music/playlist')) {
+	onOpenPlaylistPage(() => {
 		injectToAudioPlaylistPage().catch(console.error);
-	}
-
-	await waitNav();
-
-	window.nav.onLocationChange((locStr) => {
-		if (locStr.startsWith('music/album') || locStr.startsWith('music/playlist')) {
-			injectToAudioPlaylistPage().catch(console.error);
-		}
+		injectToAudioPlaylistPageNew().catch(console.error);
 	});
+
+	onOpenPlaylistModal(injectToAudioPlaylistModalNew);
 };
 
 export default initAudioPlaylist;

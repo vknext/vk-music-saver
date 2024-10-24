@@ -22,7 +22,7 @@ const DownloadOutlineIcons = {
 	24: getIcon24DownloadOutline,
 };
 
-interface CreateDownloadAudioButtonParams {
+export interface CreateDownloadAudioButtonParams {
 	iconSize?: keyof typeof SpinnerIcons;
 	enableDefaultText?: boolean;
 }

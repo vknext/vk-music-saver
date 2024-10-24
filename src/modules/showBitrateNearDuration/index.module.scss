@@ -55,3 +55,11 @@
 :global(.audio_row.audio_row__current) .audioRow__bitrate {
 	background-color: var(--vkui--color_background_secondary--active);
 }
+
+.audioRowReact--withBitrate {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 2px;
+}

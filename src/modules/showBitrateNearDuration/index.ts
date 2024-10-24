@@ -1,7 +1,39 @@
+import type { AudioObject } from 'src/global';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
-import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
-import * as styles from './index.module.scss';
+import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
+import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
+import type { AudioAudio } from 'src/schemas/objects';
+import * as styles from './index.module.scss';
+
+const createBitrateElement = (audio: AudioAudio | AudioObject) => {
+	const bitrateEl = document.createElement('span');
+	bitrateEl.className = styles.audioRow__bitrate;
+	bitrateEl.innerText = lang.use('vms_loading');
+
+	const observer = new IntersectionObserver(
+		async (entries, observer) => {
+			entries.forEach(async (entry) => {
+				if (entry.isIntersecting) {
+					const result = await getAudioBitrate(audio);
+
+					if (result?.bitrate) {
+						bitrateEl.innerText = `${result.bitrate}`;
+					} else {
+						bitrateEl.innerText = lang.use('vms_error');
+					}
+
+					observer.unobserve(bitrateEl);
+				}
+			});
+		},
+		{ threshold: 0.1 }
+	);
+
+	observer.observe(bitrateEl);
+
+	return bitrateEl;
+};
 
 const onAddRow = async (row: HTMLElement) => {
 	const audio = row.dataset.audio;
@@ -21,38 +53,31 @@ const onAddRow = async (row: HTMLElement) => {
 		return;
 	}
 
-	const bitrateEl = document.createElement('span');
-	bitrateEl.className = styles.audioRow__bitrate;
-	bitrateEl.innerText = lang.use('vms_loading');
+	const bitrateEl = createBitrateElement(audioObject);
 
 	rowInfo.classList.add(styles['audioRow__info--withBitrate']);
 	rowInfo.appendChild(bitrateEl);
+};
 
-	// получаем битрейт только если элемент виден на экране на 10%
-	const observer = new IntersectionObserver(
-		async (entries, observer) => {
-			entries.forEach(async (entry) => {
-				if (entry.isIntersecting) {
-					const result = await getAudioBitrate(audioObject);
+const onAddRowReact = async (row: HTMLElement, audio: AudioAudio | null) => {
+	if (!audio) return;
 
-					if (result?.bitrate) {
-						bitrateEl.innerText = `${result.bitrate}`;
-					} else {
-						bitrateEl.innerText = lang.use('vms_error');
-					}
+	const rowAfter = row.querySelector<HTMLElement>(`[class*="AudioRow-module__after--"]`);
+	if (!rowAfter) return;
 
-					observer.unobserve(bitrateEl);
-				}
-			});
-		},
-		{ threshold: 0.1 }
-	);
+	if (rowAfter.getElementsByClassName(styles.audioRow__bitrate).length) {
+		return;
+	}
 
-	observer.observe(bitrateEl);
+	const bitrateEl = createBitrateElement(audio);
+
+	rowAfter.classList.add(styles['audioRowReact--withBitrate']);
+	rowAfter.appendChild(bitrateEl);
 };
 
 const initShowBitrateNearDuration = () => {
 	onAddAudioRow(onAddRow);
+	onAddAudioRowReact(onAddRowReact);
 };
 
 export default initShowBitrateNearDuration;

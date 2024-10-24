@@ -1161,10 +1161,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vknext/audio-utils@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@vknext/audio-utils/-/audio-utils-1.4.1.tgz#33ca0e34a9b88e0722acee2b4136f259e14c3548"
-  integrity sha512-tJT+LcFTz696cWmj3NhJqn1QS5T4qHnsQGvpJZNXMIhn47d0/B05Cw6fbfG322vME1ze57LZCgo642GIMlWH9A==
+"@vknext/audio-utils@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@vknext/audio-utils/-/audio-utils-1.4.2.tgz#c94ff16c2cc87431bc23a6bfa726eb3c7f082646"
+  integrity sha512-ZZ7CHob0pmhQ225Rk0OEiQlleIOCqAFxLSPNshzd9U9wJfNrbpMPwky7kS5ChFBlObQZjTumxDvF7xPs9Yv7YA==
 
 "@vkontakte/icons-sprite@2.3.0":
   version "2.3.0"
@@ -1173,10 +1173,10 @@
   dependencies:
     "@swc/helpers" "^0.5.12"
 
-"@vkontakte/icons@^2.133.0":
-  version "2.133.0"
-  resolved "https://registry.yarnpkg.com/@vkontakte/icons/-/icons-2.133.0.tgz#08cf17c76adae22cf70a36083dbf795e691d34a5"
-  integrity sha512-ZK/6drA2aY6SxntWWizcmT810y7LH5OjppnONbUbuNXeWkED9xv9C4cEYci1cJsF2K6LcUcfPvDmZ8Rx2yJF6Q==
+"@vkontakte/icons@^2.150.0":
+  version "2.150.0"
+  resolved "https://registry.yarnpkg.com/@vkontakte/icons/-/icons-2.150.0.tgz#5d5820df1cf5b3f837d3905c8c5be17712fcf2ce"
+  integrity sha512-KxwSXTMJ3Snkiu6/0Q/L9BMUjCA2vYaYsmPb/L5Sk1laADjU/u8v30S0knziUTrcISSQgnLGQ1IzJpZCahi52A==
   dependencies:
     "@vkontakte/icons-sprite" "2.3.0"
 
@@ -1763,6 +1763,11 @@ clone-deep@^4.0.1:
     is-plain-object "^2.0.4"
     kind-of "^6.0.2"
     shallow-clone "^3.0.0"
+
+clsx@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
+  integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -2831,10 +2836,10 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-hls.js@^1.5.14:
-  version "1.5.14"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.5.14.tgz#1d52be309a06aab25fee667c4969d8abf9f8fe59"
-  integrity sha512-5wLiQ2kWJMui6oUslaq8PnPOv1vjuee5gTxjJD0DSsccY12OXtDT0h137UuqjczNeHzeEYR0ROZQibKNMr7Mzg==
+hls.js@^1.5.17:
+  version "1.5.17"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.5.17.tgz#8a4a9bae2df4dab23168156f5f7d0f39a71026fd"
+  integrity sha512-wA66nnYFvQa1o4DO/BFgLNRKnBTVXpNeldGRBJ2Y0SvFtdwvFKCbqa9zhHoZLoxHhZ+jYsj3aIBkWQQCPNOhMw==
 
 hpack.js@^2.1.6:
   version "2.1.6"

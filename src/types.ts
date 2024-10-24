@@ -7,3 +7,8 @@ export interface ClientZipFile {
 	lastModified: Date;
 	input: Blob;
 }
+
+export interface ObservedHTMLElement extends HTMLElement {
+	_vms_mbs?: MutationObserver;
+	_vms_ibs?: IntersectionObserver;
+}

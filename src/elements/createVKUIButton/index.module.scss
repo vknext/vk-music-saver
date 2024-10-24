@@ -1,0 +1,11 @@
+.vkuiButton {
+	transition: background-color 0.15s ease-in;
+
+	&:hover {
+		background-color: var(--vkui--color_background_secondary_alpha--hover);
+	}
+
+	&:global(.vkuiButton--mode-primary.vkuiButton--appearance-overlay):hover {
+		background-color: var(--vkui--color_background_contrast--hover);
+	}
+}

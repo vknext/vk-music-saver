@@ -23,7 +23,8 @@
 }
 
 // плеер музыки
-:global(.AudioPlayerBlock__root) {
+:global(.AudioPlayerBlock__root),
+:global([class^='AudioPlayerUserControlsContainer-module__userButtonsContainer--']) {
 	.DownloadAudioButton {
 		transition: opacity 0.15s ease-out;
 		opacity: 1;
@@ -113,5 +114,31 @@
 	}
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+:global([class*='AudioRow-module__root']) {
+	.DownloadAudioButton {
+		display: flex;
+		flex-direction: row-reverse;
+		margin: 0 var(--vkui--size_button_group_gap_medium--regular);
+		transition: opacity 0.15s ease-out;
+		opacity: 1;
+		gap: 8px;
+
+		&:hover {
+			background-color: unset;
+			opacity: 0.8;
+		}
+	}
+
+	.DownloadAudioButton__size,
+	.DownloadAudioButton__icons {
+		color: var(--vkui--color_icon_secondary);
+	}
+
+	.DownloadAudioButton__size {
+		font-size: 12px;
+		line-height: 14px;
 	}
 }

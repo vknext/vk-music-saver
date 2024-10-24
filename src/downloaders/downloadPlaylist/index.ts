@@ -91,7 +91,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		setText(`${filename} (${progress}/${totalAudios})`);
 	};
 
-	for (const audios of arrayUnFlat(playlist.audios, 10)) {
+	for (const audios of arrayUnFlat(playlist.audios, 8)) {
 		if (signal.aborted) return;
 
 		for (const audio of audios) {

@@ -2,6 +2,7 @@ import downloadAudio from 'src/downloaders/downloadAudio';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
 import waitGlobalVariable from 'src/globalVars/utils/waitGlobalVariable';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
+import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
 import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
@@ -21,14 +22,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 	if (playerWrap._vms_inj) return;
 	playerWrap._vms_inj = true;
 
-	// текущий трек из плеера
-	const audioPlayerBlockRoot = playerWrap.classList.contains('AudioPlayerBlock__root')
-		? playerWrap
-		: playerWrap.querySelector<HTMLElement>('.AudioPlayerBlock__root');
-
-	if (!audioPlayerBlockRoot) return;
-
-	const container = await getAudioPlayerUserControlsContainer(audioPlayerBlockRoot);
+	const container = await getAudioPlayerUserControlsContainer(playerWrap);
 
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton();
 
@@ -88,6 +82,14 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 const initAudioPage = () => {
 	onAddAudioPagePlayerWrap(onAddPlayer);
+
+	onOpenPlaylistPage(() => {
+		for (const wrap of document.querySelectorAll<HTMLElement>(
+			'[data-testid="audioplayerblocksectionslayout"],[class*="AudioPlayerBlockSectionsLayout-module__root"]'
+		)) {
+			onAddPlayer(wrap);
+		}
+	});
 };
 
 export default initAudioPage;
