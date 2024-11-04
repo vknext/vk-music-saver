@@ -24,7 +24,7 @@
 
 // плеер музыки
 :global(.AudioPlayerBlock__root),
-:global([class^='AudioPlayerUserControlsContainer-module__userButtonsContainer--']) {
+:global([class*='AudioPlayerUserControlsContainer__userButtonsContainer--']) {
 	.DownloadAudioButton {
 		transition: opacity 0.15s ease-out;
 		opacity: 1;
@@ -117,7 +117,7 @@
 	}
 }
 
-:global([class*='AudioRow-module__root']) {
+:global([class*='AudioRow__root']) {
 	.DownloadAudioButton {
 		display: flex;
 		flex-direction: row-reverse;

@@ -137,12 +137,12 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 	const spaRoot = document.getElementById('spa_root');
 	if (!spaRoot) return;
 
-	if (spaRoot.querySelector(`[class*="Skeleton-module__skeleton"]`)) {
+	if (spaRoot.querySelector(`[class*="Skeleton__skeleton"]`)) {
 		await delay(1000);
 		return injectToAudioPlaylistPageNew(retry + 1);
 	}
 
-	const actions = spaRoot.querySelector<DownloadTargetElement>('[class*="AudioListHeader-module__actions--"]');
+	const actions = spaRoot.querySelector<DownloadTargetElement>('[class*="AudioListHeader__actions--"]');
 	if (!actions) return;
 	if (actions.vms_down_inj) return;
 	actions.vms_down_inj = true;
@@ -179,13 +179,13 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 };
 
 const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) => {
-	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton-module__skeleton"]`)) {
+	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton__skeleton"]`)) {
 		await delay(1000);
 		return injectToAudioPlaylistModalNew(playlistFullId, retry + 1);
 	}
 
 	for (const actions of document.querySelectorAll<DownloadTargetElement>(
-		'[class*="AudioListModalHeader-module__actions--"]'
+		'[class*="AudioListModalHeader__actions--"]'
 	)) {
 		if (!actions) return;
 		if (actions.vms_down_inj) return;

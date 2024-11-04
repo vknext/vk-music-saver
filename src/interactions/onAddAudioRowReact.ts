@@ -13,7 +13,7 @@ type CallbackFunc = (el: HTMLElement, audio: AudioAudio | null) => void;
 
 const interaction = new InteractionListener<CallbackFunc>();
 
-const AUDIO_ROW_SELECTOR = '[class*="AudioRow-module__root"]';
+const AUDIO_ROW_SELECTOR = '[class*="AudioRow__root"]';
 
 const findApiAudio = (el: HTMLElement): AudioAudio | null => {
 	const { props: audioRowProps } = getReactAttrs(el);
@@ -50,9 +50,7 @@ const onCallback = (el: HTMLElement) => {
 };
 
 const findAudioList = async () => {
-	for (const items of document.querySelectorAll<ObservedHTMLElement>(
-		'[class*="AudioListItems-module__root--"] > div'
-	)) {
+	for (const items of document.querySelectorAll<ObservedHTMLElement>('[class*="AudioListItems__root--"] > div')) {
 		if (items._vms_mbs) continue;
 
 		items._vms_mbs = new MutationObserver((mutations) => {
@@ -79,7 +77,7 @@ const findAudioList = async () => {
 };
 
 const findAllAudioRows = async (retry = 0) => {
-	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton-module__skeleton"]`)) {
+	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton__skeleton"]`)) {
 		await delay(1000);
 		return findAllAudioRows(retry + 1);
 	}

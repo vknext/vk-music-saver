@@ -85,7 +85,7 @@ const initAudioPage = () => {
 
 	onOpenPlaylistPage(() => {
 		for (const wrap of document.querySelectorAll<HTMLElement>(
-			'[data-testid="audioplayerblocksectionslayout"],[class*="AudioPlayerBlockSectionsLayout-module__root"]'
+			'[data-testid="audioplayerblocksectionslayout"],[class*="AudioPlayerBlockSectionsLayout__root"]'
 		)) {
 			onAddPlayer(wrap);
 		}

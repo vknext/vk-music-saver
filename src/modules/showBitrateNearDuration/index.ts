@@ -62,7 +62,7 @@ const onAddRow = async (row: HTMLElement) => {
 const onAddRowReact = async (row: HTMLElement, audio: AudioAudio | null) => {
 	if (!audio) return;
 
-	const rowAfter = row.querySelector<HTMLElement>(`[class*="AudioRow-module__after--"]`);
+	const rowAfter = row.querySelector<HTMLElement>(`[class*="AudioRow__after--"]`);
 	if (!rowAfter) return;
 
 	if (rowAfter.getElementsByClassName(styles.audioRow__bitrate).length) {

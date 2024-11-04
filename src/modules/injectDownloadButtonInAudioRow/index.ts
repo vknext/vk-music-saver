@@ -97,7 +97,7 @@ const onAddReactRow = async (audioRow: HTMLElement, audio: AudioAudio | null) =>
 		return;
 	}
 
-	const actions = audioRow.querySelector<RowInnerElement>('[class*="AudioRow-module__actions--"]');
+	const actions = audioRow.querySelector<RowInnerElement>('[class*="AudioRow__actions--"]');
 	if (!actions) return;
 	if (actions._vms_inj) return;
 	actions._vms_inj = true;

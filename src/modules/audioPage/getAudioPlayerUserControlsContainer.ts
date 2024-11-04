@@ -6,7 +6,7 @@ const getAudioPlayerUserControlsContainer = async (root: HTMLElement, retryCount
 	}
 
 	const container = root.querySelector<HTMLElement>(
-		'[class^="AudioPlayerUserControlsContainer-module__userButtonsContainer--"]'
+		'[class*="AudioPlayerUserControlsContainer__userButtonsContainer--"]'
 	);
 
 	if (!container) {
