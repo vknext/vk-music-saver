@@ -6,12 +6,17 @@ import { AudioGetByIdParams } from 'src/schemas/params';
 import { AudioGetByIdResponse } from 'src/schemas/responses';
 
 const getAudioByObject = async (audioObject: AudioAudio | AudioObject): Promise<AudioAudio | AudioObject> => {
-	const audios = `${audioObject.owner_id}_${audioObject.id}`;
+	const audio = [audioObject.owner_id, audioObject.id];
+	if (audioObject.access_key) {
+		audio.push(audioObject.access_key);
+	} else if (audioObject.accessKey) {
+		audio.push(audioObject.accessKey);
+	}
 
 	await waitVkApi();
 
 	const items = await window.vkApi.api<AudioGetByIdParams, AudioGetByIdResponse>('audio.getById', {
-		audios,
+		audios: audio.join('_'),
 		v: '5.204',
 	});
 
@@ -38,7 +43,7 @@ const getAudioByObject = async (audioObject: AudioAudio | AudioObject): Promise<
 	// всегда возвращает m3u8
 	const [response] = await window.ajax.promisifiedPost<any[]>('al_audio.php', {
 		act: 'reload_audio',
-		ids: `${audios}_${actionHash}_${urlHash}`,
+		ids: [audioObject.owner_id, audioObject.id, actionHash, urlHash].join('_'),
 		al: 1,
 	});
 
