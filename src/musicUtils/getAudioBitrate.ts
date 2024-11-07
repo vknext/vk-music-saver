@@ -1,5 +1,5 @@
-import type { GetTrackDetailsResult } from '@vknext/audio-utils';
-import { audioUnmaskSource, getTrackDetails } from '@vknext/audio-utils';
+import { audioUnmaskSource } from '@vknext/audio-utils/audioUnmaskSource';
+import { getTrackDetails, type GetTrackDetailsResult } from '@vknext/audio-utils/getTrackDetails';
 import type { AudioObject } from 'global';
 import createPromise from 'src/lib/createPromise';
 import { AudioAudio } from 'src/schemas/objects';

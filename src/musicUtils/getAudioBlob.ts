@@ -1,4 +1,5 @@
-import { audioUnmaskSource, convertTrackToBlob, type ConvertTrackToBlobOptions } from '@vknext/audio-utils';
+import { audioUnmaskSource } from '@vknext/audio-utils/audioUnmaskSource';
+import { convertTrackToBlob, type ConvertTrackToBlobOptions } from '@vknext/audio-utils/convertTrackToBlob';
 import { AudioObject } from 'src/global';
 import lang from 'src/lang';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';

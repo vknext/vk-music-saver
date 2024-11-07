@@ -1,4 +1,4 @@
-import { audioUnmaskSource } from '@vknext/audio-utils';
+import { audioUnmaskSource } from '@vknext/audio-utils/audioUnmaskSource';
 import type { AudioObject } from 'global';
 import waitVkApi from 'src/globalVars/waitVkApi';
 import { AudioAudio } from 'src/schemas/objects';

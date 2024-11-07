@@ -45,7 +45,7 @@
 		"yargs-parser": "^21.1.1"
 	},
 	"dependencies": {
-		"@vknext/audio-utils": "^1.4.2",
+		"@vknext/audio-utils": "^1.6.0",
 		"@vkontakte/icons": "^2.150.0",
 		"browser-id3-writer": "^6.1.0",
 		"client-zip": "^2.4.5",

@@ -1161,10 +1161,12 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vknext/audio-utils@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@vknext/audio-utils/-/audio-utils-1.4.2.tgz#c94ff16c2cc87431bc23a6bfa726eb3c7f082646"
-  integrity sha512-ZZ7CHob0pmhQ225Rk0OEiQlleIOCqAFxLSPNshzd9U9wJfNrbpMPwky7kS5ChFBlObQZjTumxDvF7xPs9Yv7YA==
+"@vknext/audio-utils@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@vknext/audio-utils/-/audio-utils-1.6.0.tgz#3e08f0b069cbdf92b2d9b2788b6c868a88f7d197"
+  integrity sha512-RN0t5qsyj9sxaS74yMs66po60VciA25nUtJZCbEjNXhPTHSLoyZDsH0jtvHa09EuFj2DEJ4bhbQPEsLMVIMRGw==
+  dependencies:
+    iframe-message-bridge "^1.1.1"
 
 "@vkontakte/icons-sprite@2.3.0":
   version "2.3.0"
@@ -2476,7 +2478,7 @@ event-target-shim@^5.0.0:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
-eventemitter3@^4.0.0:
+eventemitter3@^4.0.0, eventemitter3@^4.0.7:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
@@ -2969,6 +2971,13 @@ ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
+
+iframe-message-bridge@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/iframe-message-bridge/-/iframe-message-bridge-1.1.1.tgz#e282cec21915a61a0f9a615e9cb6e6e900181ffe"
+  integrity sha512-jKGzSqRGwPBvI61VL6hWh3zaSo9OnT8xkxgNC+8boZv855R+oCD8MSqQ3ffdJlQaxn/IPEWJPx1emasxhAIFSg==
+  dependencies:
+    eventemitter3 "^4.0.7"
 
 ignore@^5.2.0, ignore@^5.2.4:
   version "5.3.2"
