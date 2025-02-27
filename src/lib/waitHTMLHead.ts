@@ -1,13 +1,22 @@
-let savePromise: Promise<HTMLHeadElement> | null = null;
+export interface HTMLHeadTaskQueueS {
+	_handlers: Record<string | symbol, any>;
+	[key: string | symbol]: any;
+}
 
-const waitHTMLHead = async (forcePromise?: boolean): Promise<HTMLHeadElement> => {
+interface ExtendedHTMLHeadElement extends HTMLHeadElement {
+	_tqs?: HTMLHeadTaskQueueS;
+}
+
+let savePromise: Promise<ExtendedHTMLHeadElement> | null = null;
+
+const waitHTMLHead = async (forcePromise?: boolean): Promise<ExtendedHTMLHeadElement> => {
 	if (document?.head) return document.head;
 
 	if (savePromise && !forcePromise) {
 		return savePromise;
 	}
 
-	savePromise = new Promise<HTMLHeadElement>((resolve) => {
+	savePromise = new Promise<ExtendedHTMLHeadElement>((resolve) => {
 		if (document?.head) return resolve(document.head);
 
 		const obs = new MutationObserver(() => {

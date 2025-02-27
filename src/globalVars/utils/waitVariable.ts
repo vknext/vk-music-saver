@@ -1,18 +1,26 @@
-import waitStaticManager from '../waitStaticManager';
-import waitGlobalVariable, { WindowVariables } from './waitGlobalVariable';
+import createPromise from 'src/lib/createPromise';
+import watchGlobalProperty, { type WindowVariables } from './watchGlobalProperty';
 
-const waitVariable = async <T extends WindowVariables>(variable: T, module?: string): Promise<(typeof window)[T]> => {
-	if (module) {
-		try {
-			await waitStaticManager();
+const waitVariable = async <T extends WindowVariables>(
+	variable: T,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	_modulePath?: string
+): Promise<(typeof window)[T]> => {
+	const variableValue = window[variable];
 
-			await window.stManager.add([window.jsc(module)]);
-		} catch (e) {
-			console.error(e);
-		}
+	if (variableValue) {
+		return Promise.resolve(variableValue);
 	}
 
-	return waitGlobalVariable(variable);
+	const { promise, resolve } = createPromise<(typeof window)[T]>();
+
+	const removeListener = watchGlobalProperty(variable, (value) => {
+		resolve(value);
+
+		removeListener();
+	});
+
+	return promise;
 };
 
 export default waitVariable;

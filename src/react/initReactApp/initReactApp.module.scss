@@ -1,0 +1,36 @@
+.ReactAppConfig--disableAnchorTextDecoration {
+	a:hover {
+		text-decoration: none;
+	}
+}
+
+.ReactAppConfig {
+	--vkui--z_index_modal: 121;
+	background: none !important;
+	height: auto !important;
+	overflow: hidden !important;
+
+	h4[class*='Placeholder__text--'] {
+		margin: 0;
+		padding: 0;
+		border-bottom: none;
+		color: var(--vkui--color_text_secondary);
+	}
+
+	.ReactAppConfig__AppRoot {
+		overflow: hidden !important;
+	}
+
+	[class*='vkuiTabsItem--selected--'][class*='vkuiTabsItem--mode-accent--'] {
+		background-color: var(--vkui--color_background_secondary);
+	}
+
+	[class*='vkuiSnackbar__body--'],
+	[class*='vkuiScreenSpinner__container--'] {
+		background-color: var(--vkui--color_background_secondary);
+	}
+
+	[class*='vkuiTextTooltip--']:not([class*='vkuiTextTooltip--appearance--']) {
+		--vkui--color_background_modal: var(--modal_card_background);
+	}
+}

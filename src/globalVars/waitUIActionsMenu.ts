@@ -1,5 +1,5 @@
-import waitGlobalVariable from './utils/waitGlobalVariable';
+import waitVariable from './utils/waitVariable';
 
-const waitUIActionsMenu = () => waitGlobalVariable('uiActionsMenu');
+const waitUIActionsMenu = () => waitVariable('uiActionsMenu');
 
 export default waitUIActionsMenu;

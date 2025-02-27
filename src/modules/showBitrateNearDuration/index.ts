@@ -4,7 +4,7 @@ import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
-import * as styles from './index.module.scss';
+import styles from './index.module.scss';
 
 const createBitrateElement = (audio: AudioAudio | AudioObject) => {
 	const bitrateEl = document.createElement('span');

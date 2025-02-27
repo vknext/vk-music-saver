@@ -28,6 +28,7 @@ export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlob
 	const blob = await convertTrackToBlob({
 		url: audioUnmaskSource(audio.url),
 		onProgress,
+		forceHls: !/firefox|fxios/i.test(globalThis.navigator.userAgent),
 	});
 
 	if (!playlist) {

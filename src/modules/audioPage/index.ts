@@ -1,6 +1,6 @@
 import downloadAudio from 'src/downloaders/downloadAudio';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import waitGlobalVariable from 'src/globalVars/utils/waitGlobalVariable';
+import waitVariable from 'src/globalVars/utils/waitVariable';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
@@ -73,7 +73,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 	updateText().catch(console.error);
 
-	await waitGlobalVariable('ap');
+	await waitVariable('ap');
 
 	window.ap.on(null, 'curr', () => {
 		updateText();

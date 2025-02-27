@@ -318,12 +318,36 @@ export interface CUR {
 		photo: string;
 	};
 	lang?: Record<string, any>;
+	_back?: {
+		hide?: (() => void)[];
+		show?: (() => void)[];
+	};
 }
 
 interface UIActionsMenu {
 	show(element: HTMLElement, idk?: unknown, options?: { delay?: number }): void;
 	hide(element: HTMLElement, idk?: unknown, options?: { delay?: number }): void;
 	keyToggle(element: HTMLElement | undefined, event: Event): void;
+}
+
+export type ColorSchemeMode = 'dark' | 'light' | 'auto';
+
+export interface IcolorScheme {
+	subscribe(callback: () => void): () => void;
+	setScheme(isDark: boolean): void;
+	currentMode: ColorSchemeMode;
+	isExecuted: boolean;
+	isModeSavingAllowed: boolean;
+	isSchemeSavingAllowed: boolean;
+	schemesMap: {
+		bright_light: string;
+		space_gray: string;
+	};
+	currentIsDark: boolean;
+	setMode(mode: IcolorScheme['currentMode'], isVkn?: boolean): void;
+	_setMode(mode: IcolorScheme['currentMode'], isVkn?: boolean): void;
+	applyScheme(element: HTMLElement, mode: 'space_gray' | 'vkcom_light'): void;
+	_applyScheme(element: HTMLElement, mode: 'space_gray' | 'vkcom_light'): void;
 }
 
 declare global {
@@ -345,10 +369,19 @@ declare global {
 	var getAudioPlayer: () => AudioPlayer;
 	var cur: CUR;
 	var uiActionsMenu: UIActionsMenu;
+	var colorScheme: IcolorScheme;
 
 	namespace NodeJS {
 		interface ProcessEnv {
 			NODE_ENV: 'development' | 'production';
 		}
 	}
+}
+
+export interface ObservedHTMLElement extends HTMLElement {
+	_vms_mbs?: MutationObserver;
+	_vms_ibs?: IntersectionObserver;
+	[key: `_vms_mbs_${string}`]: MutationObserver;
+	[key: `_vms_ibs_${string}`]: IntersectionObserver;
+	[key: `_vms_${string}`]: unknown;
 }

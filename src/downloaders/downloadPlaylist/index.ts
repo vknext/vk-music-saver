@@ -1,13 +1,21 @@
 import type { NotifierEvent } from 'src/global';
 import lang from 'src/lang';
 import arrayUnFlat from 'src/lib/arrayUnFlat';
+import delay from 'src/lib/delay';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
+import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
+import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
 import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
+	const fsDirHandle = await getFSDirectoryHandle({
+		id: 'playlist_music',
+		startIn: 'music',
+	});
+
 	const event: NotifierEvent = {
 		title: 'VK Music Saver',
 		text: lang.use('vms_downloading'),
@@ -74,9 +82,10 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		nameChunks.push('playlist');
 	}
 
-	const filename = unescapeHTML(`${nameChunks.join('')}.zip`);
+	const playlistFolderName = unescapeHTML(nameChunks.join(''));
+	const filename = `${playlistFolderName}.zip`;
 
-	const promises: Promise<ClientZipFile | null>[] = [];
+	const promises: Promise<ClientZipFile | null | void>[] = [];
 
 	let audioIndex = 1;
 
@@ -95,7 +104,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		if (signal.aborted) return;
 
 		for (const audio of audios) {
-			const promiseBlob = getBlobAudioFromPlaylist({
+			const zipFilePromise = getBlobAudioFromPlaylist({
 				audio,
 				lastModified,
 				signal,
@@ -103,11 +112,21 @@ const downloadPlaylist = async (playlistFullId: string) => {
 				playlist,
 			});
 
-			promiseBlob.then(() => {
+			zipFilePromise.then(() => {
 				updateProgress();
 			});
 
-			promises.push(promiseBlob);
+			if (fsDirHandle) {
+				promises.push(
+					createFileInDirectory({
+						zipFilePromise,
+						dirHandle: fsDirHandle,
+						subFolderName: playlistFolderName,
+					})
+				);
+			} else {
+				promises.push(zipFilePromise);
+			}
 		}
 
 		await Promise.all(promises);
@@ -118,6 +137,26 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	const files = results.filter((f) => !!f);
 
 	if (signal.aborted) return;
+
+	if (fsDirHandle) {
+		await Promise.all(promises);
+
+		setText(
+			lang.use('vkcom_download_fs_music_playlist_done', {
+				folderName: playlist.title,
+			})
+		);
+
+		await delay(4000);
+
+		try {
+			window.Notifier.hideEvent(event);
+		} catch (e) {
+			console.error(e);
+		}
+
+		return;
+	}
 
 	setText(`${filename} - ${lang.use('vms_archivation')}`);
 

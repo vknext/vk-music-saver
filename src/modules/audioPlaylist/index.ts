@@ -8,7 +8,7 @@ import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
 import delay from 'src/lib/delay';
 import { DownloadTargetElement } from 'src/types';
-import * as styles from './index.module.scss';
+import styles from './index.module.scss';
 
 const injectPopupDownloadCell = async (el: HTMLElement) => {
 	if (!el.classList.contains('audio_pl_snippet__action_btn')) return;
@@ -131,7 +131,7 @@ const injectToAudioPlaylistPage = async () => {
 
 const injectToAudioPlaylistPageNew = async (retry = 0) => {
 	if (retry > 10) {
-		throw new Error('[VK Next/audioPlaylist] Failed to inject');
+		throw new Error('[VMS/audioPlaylist] Failed to inject');
 	}
 
 	const spaRoot = document.getElementById('spa_root');

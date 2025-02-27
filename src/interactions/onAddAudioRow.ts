@@ -1,44 +1,76 @@
-import delay from 'src/lib/delay';
-import waitRIC from 'src/lib/waitRIC';
-
-import waitAjax from 'src/globalVars/waitAjax';
+import ListenerRegistry from 'src/common/ListenerRegistry';
+import observedElementsCleaner from 'src/common/observedElementsCleaner';
+import {
+	generateObservedElementIBSKey,
+	generateObservedElementMBSKey,
+} from 'src/common/observedHTMLElements/generateKeys';
+import type { ObservedHTMLElement } from 'src/global';
 import waitNav from 'src/globalVars/waitNav';
+import hookAjaxPost from 'src/interceptors/hookAjaxPost';
+import delay from 'src/lib/delay';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';
 import waitRAF from 'src/lib/waitRAF';
-import type { ObservedHTMLElement } from 'src/types';
-import InteractionListener from './InteractionListener';
+import waitRIC from 'src/lib/waitRIC';
 
 type CallbackFunc = (el: HTMLElement) => void;
 
-const interaction = new InteractionListener<CallbackFunc>();
+const registry = new ListenerRegistry<CallbackFunc>();
 
-const onCallback = (el: HTMLElement) => {
-	for (const callback of interaction.listeners) {
+const PL_SNIPPET_MBS_KEY = generateObservedElementMBSKey();
+const AUDIO_ROW_IBS_KEY = generateObservedElementIBSKey();
+
+const onCallback = async (el: HTMLElement) => {
+	await waitRAF();
+
+	for (const callback of registry.listeners) {
 		callback(el);
 	}
+};
+
+const onAddRow = async (el: ObservedHTMLElement) => {
+	await waitRIC();
+
+	if (el[AUDIO_ROW_IBS_KEY]) return;
+
+	el[AUDIO_ROW_IBS_KEY] = new IntersectionObserver(
+		async (entries) => {
+			for (const entry of entries) {
+				if (entry.isIntersecting) {
+					await onCallback(el);
+				}
+			}
+		},
+		{ threshold: 0, rootMargin: '50px 0% 50px 0%' }
+	);
+
+	el[AUDIO_ROW_IBS_KEY].observe(el);
+
+	observedElementsCleaner.add(el);
 };
 
 const findAudioList = () => {
 	const lists = document.querySelectorAll<ObservedHTMLElement>('.audio_pl_snippet__list');
 
 	for (const list of lists) {
-		if (list._vms_mbs) continue;
+		if (list[PL_SNIPPET_MBS_KEY]) continue;
 
-		list._vms_mbs = new MutationObserver((mutations) => {
+		list[PL_SNIPPET_MBS_KEY] = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
 				if (mutation.type === 'childList' && mutation.addedNodes.length) {
 					for (const node of mutation.addedNodes) {
 						if (node instanceof HTMLElement && node.classList.contains('audio_row')) {
-							onCallback(node);
+							onAddRow(node as ObservedHTMLElement);
 						}
 					}
 				}
 			}
 		});
 
-		list._vms_mbs.observe(list, {
+		list[PL_SNIPPET_MBS_KEY].observe(list, {
 			childList: true,
 		});
+
+		observedElementsCleaner.add(list);
 	}
 };
 
@@ -50,11 +82,11 @@ const findAllAudioRows = async (isAjax?: boolean) => {
 	await waitRIC();
 	await waitRAF();
 
-	const rows = document.querySelectorAll<HTMLElement>('.audio_row');
+	const rows = document.querySelectorAll<ObservedHTMLElement>('.audio_row');
 
 	for (const row of rows) {
 		await waitRIC();
-		onCallback(row);
+		onAddRow(row);
 	}
 
 	findAudioList();
@@ -62,53 +94,53 @@ const findAllAudioRows = async (isAjax?: boolean) => {
 
 const supportedActions = ['section', 'load_catalog_section', 'load_block_playlist', 'load_section'];
 
-const initAjaxHook = async () => {
-	await waitAjax();
+const initAjaxHook = () => {
+	hookAjaxPost((args) => {
+		const [url, requestData, callbackFunctions] = args;
 
-	const originalPost = window.ajax.post;
+		const isAudioRequest = url.startsWith('al_audio.php') || url.startsWith('/audio');
 
-	window.ajax.post = function (...args) {
-		try {
-			const [url, requestData, callbackFunctions] = args;
+		let actParam: string | null = requestData.act;
 
-			const isAudioRequest = url.startsWith('al_audio.php') || url.startsWith('/audio');
-
-			let actParam: string | null = requestData.act;
-
-			if (isAudioRequest && !actParam) {
-				const parsedUrl = new URL(url, window.location.origin);
-				actParam = parsedUrl.searchParams.get('act');
-			}
-
-			const isLoadAudioBlocks = actParam && supportedActions.includes(actParam);
-
-			if (isLoadAudioBlocks && callbackFunctions.onDone) {
-				const originalOnDone = callbackFunctions.onDone;
-
-				callbackFunctions.onDone = function (...onDoneArgs: any[]) {
-					const result = originalOnDone.apply(this, onDoneArgs);
-
-					if (result instanceof Promise) {
-						result.finally(() => findAllAudioRows(true));
-					} else {
-						findAllAudioRows(true).catch(console.error);
-					}
-				};
-			}
-		} catch (e) {
-			console.error('[VMS/ajax/post]', e);
+		if (isAudioRequest && !actParam) {
+			const parsedUrl = new URL(url, window.location.origin);
+			actParam = parsedUrl.searchParams.get('act');
 		}
 
-		return originalPost.apply(this, args);
-	};
+		const isLoadAudioBlocks = actParam && supportedActions.includes(actParam);
+
+		if (process.env.NODE_ENV === 'development') {
+			console.log('[VKN/ajax/post]', {
+				url,
+				requestData,
+				isAudioRequest,
+				actParam,
+				isLoadAudioBlocks,
+			});
+		}
+
+		if (isLoadAudioBlocks && callbackFunctions.onDone) {
+			const originalOnDone = callbackFunctions.onDone;
+
+			callbackFunctions.onDone = function (...onDoneArgs: any[]) {
+				const result = Reflect.apply(originalOnDone, this, onDoneArgs);
+
+				if (result instanceof Promise) {
+					result.finally(() => findAllAudioRows(true));
+				} else {
+					findAllAudioRows(true).catch(console.error);
+				}
+			};
+		}
+	});
 };
 
 let inited = false;
 const onAddAudioRow = (callback: CallbackFunc) => {
-	const listener = interaction.addListener(callback);
+	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddAudioRow] count: ${interaction.listeners.length}`, interaction);
+		console.info(`[VMS/interactions/onAddAudioRow] count: ${registry.listeners.length}`, registry);
 	}
 
 	DOMContentLoaded(findAllAudioRows);
@@ -118,8 +150,8 @@ const onAddAudioRow = (callback: CallbackFunc) => {
 
 		initAjaxHook();
 
-		waitNav().then(() => {
-			window.nav.onLocationChange((locStr) => {
+		waitNav().then((nav) => {
+			nav.onLocationChange((locStr) => {
 				if (locStr.startsWith('audio') || locStr.startsWith('music')) {
 					findAllAudioRows();
 				}

@@ -1,0 +1,3 @@
+.ReactModal__zIndex :global(.vkui__root) {
+	--vkui--z_index_modal: var(--vknext--z_index_modal) !important;
+}

@@ -8,16 +8,18 @@ import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import webpack, { type Configuration, type EntryObject } from 'webpack';
 import 'webpack-dev-server'; // для исправления типов
 import WebpackExtensionManifestPlugin from 'webpack-extension-manifest-plugin';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import BomPlugin from 'webpack-utf8-bom';
 import yargsParser from 'yargs-parser';
 
 import getManifest from './manifest.config';
 import packageJson from './package.json';
+import UpdateManifestPlugin from './plugins/UpdateManifestPlugin';
 import ZipPlugin from './plugins/ZipPlugin';
 
 const argv = yargsParser(process.argv.slice(2));
 
-const files = ['.svg', '.ttf', '.ts', '.css', '.scss', '.json', '.js'];
+const files = ['.svg', '.ttf', '.ts', '.tsx', '.css', '.scss', '.json', '.js'];
 const DEFAULT_PUBLIC_PATH = '/';
 
 if (!argv.noclear) {
@@ -98,6 +100,10 @@ const getEntry = () => {
 	return { ...defaultEntries, ...entryConfig };
 };
 
+const postcssOptions = {
+	plugins: [['postcss-preset-env']],
+};
+
 const options: Configuration = {
 	entry: getEntry(),
 	mode: IS_DEV ? 'development' : 'production',
@@ -147,6 +153,9 @@ const options: Configuration = {
 				extensions: files,
 			}),
 		],
+		alias: {
+			'@vkontakte/vkui$': '@vkontakte/vkui/dist/cssm',
+		},
 	},
 	optimization: {
 		runtimeChunk: 'single',
@@ -167,6 +176,10 @@ const options: Configuration = {
 		allowCollectingMemory: true,
 	},
 	plugins: [
+		new UpdateManifestPlugin({
+			buildPath: BUILD_PATH,
+			isFirefox: IS_FIREFOX,
+		}),
 		new MiniCssExtractPlugin({
 			filename: '[name].vms.css',
 			chunkFilename: '[name].vms.css',
@@ -217,6 +230,32 @@ const options: Configuration = {
 				path: path.resolve(`./build`),
 			}),
 		IS_DEV && new webpack.HotModuleReplacementPlugin(),
+		new WebpackManifestPlugin({
+			fileName: 'entrypoints.json',
+			generate: (seed, files, entrypoints) => {
+				for (const file of files) {
+					let runtime = new Set([file.chunk?.runtime]);
+					const chunks = file.chunk?.files;
+
+					if (!chunks) continue;
+
+					// @ts-ignore _groups is private
+					for (const item of file.chunk._groups) {
+						for (const entry of item._parents) {
+							runtime.add(entry.options?.name);
+						}
+					}
+
+					const rtArray = [...runtime];
+
+					if (rtArray.includes('vkcom_content')) {
+						entrypoints.vkcom_content.unshift(...chunks);
+					}
+				}
+
+				return entrypoints;
+			},
+		}),
 	].filter(Boolean),
 	module: {
 		rules: [
@@ -280,6 +319,52 @@ const options: Configuration = {
 						},
 					},
 					{ loader: 'sass-loader', options: { sourceMap: true } },
+				],
+				sideEffects: true,
+			},
+			{
+				test: /\.module\.css$/,
+				use: [
+					{
+						loader: 'style-loader',
+						options: {
+							insert: (element, options) => {
+								const parent = options?.target || document.head || document.documentElement;
+
+								parent.appendChild(element);
+							},
+						},
+					},
+					{
+						loader: 'css-loader',
+						options: {
+							sourceMap: IS_DEV,
+							modules: {
+								localIdentName: 'vkui[local]--[hash:base64:5]',
+								mode: 'local',
+							},
+						},
+					},
+					{ loader: 'postcss-loader', options: { sourceMap: true, postcssOptions } },
+					{ loader: 'sass-loader', options: { sourceMap: true } },
+				],
+			},
+			{
+				test: /\.css$/,
+				exclude: /\.(module)\.css$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					{
+						loader: 'css-loader',
+						options: {
+							sourceMap: IS_DEV,
+							importLoaders: 2,
+							modules: {
+								mode: 'icss',
+							},
+						},
+					},
+					{ loader: 'postcss-loader', options: { sourceMap: true, postcssOptions } },
 				],
 				sideEffects: true,
 			},
