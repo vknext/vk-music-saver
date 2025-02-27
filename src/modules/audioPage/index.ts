@@ -84,6 +84,8 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton();
 
+	if (container.getElementsByClassName(element.className).length) return;
+
 	const wrapper = document.createElement('div');
 	wrapper.style.paddingRight = '12px';
 	wrapper.appendChild(element);

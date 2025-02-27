@@ -110,7 +110,7 @@ const initAjaxHook = () => {
 		const isLoadAudioBlocks = actParam && supportedActions.includes(actParam);
 
 		if (process.env.NODE_ENV === 'development') {
-			console.log('[VKN/ajax/post]', {
+			console.log('[VMS/ajax/post]', {
 				url,
 				requestData,
 				isAudioRequest,

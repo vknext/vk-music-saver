@@ -36,7 +36,7 @@ const IBS_POST_KEY = generateObservedElementIBSKey();
 const registry = new ListenerRegistry<CallbackFunc>();
 
 const onCallback = async (el: HTMLElement) => {
-	if (process.env.NODE_ENV) {
+	if (process.env.NODE_ENV === 'development') {
 		console.info('[VMS/interactions/onAddWallPost]', el);
 	}
 

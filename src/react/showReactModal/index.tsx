@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 import { disableBodyScroll, enableBodyScroll } from './scroll';
 import type { ShowReactModalFunc } from './types';
 
-const Z_INDEX_PROPERTY = '--vknext--z_index_modal';
+const Z_INDEX_PROPERTY = '--vms--z_index_modal';
 
 const showReactModal: ShowReactModalFunc = async (Modal, { zIndex } = {}) => {
 	const appRoot = document.createElement('div');
