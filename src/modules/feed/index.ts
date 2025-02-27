@@ -1,20 +1,24 @@
 import downloadAudio from 'src/downloaders/downloadAudio';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
+import type { AudioObject } from 'src/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
 import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
+import getReactAttrs from 'src/lib/getReactAttrs';
 import humanFileSize from 'src/lib/humanFileSize';
 import waitRAF from 'src/lib/waitRAF';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { DownloadTargetElement } from 'src/types';
 
-const onAddAttachAudio = async (attach: DownloadTargetElement) => {
-	const audio = attach.dataset.audio;
-	if (!audio) return;
+const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: AudioObject) => {
+	if (!audioObject) {
+		const audio = attach.dataset.audio;
+		if (!audio) return;
 
-	const audioObject = window.AudioUtils.audioTupleToAudioObject(JSON.parse(audio));
+		audioObject = window.AudioUtils.audioTupleToAudioObject(JSON.parse(audio))!;
+	}
 	if (!audioObject || audioObject?.restrictionStatus) return;
 
 	if (attach.vms_down_inj) return;
@@ -22,7 +26,9 @@ const onAddAttachAudio = async (attach: DownloadTargetElement) => {
 
 	await waitRAF();
 
-	const afterWrapper = attach.querySelector<HTMLElement>('.SecondaryAttachment__after');
+	const afterWrapper = attach.querySelector<HTMLElement>(
+		`.SecondaryAttachment__after,[data-testid="secondaryattachment-after"],[class*="SecondaryAttachment__after"]`
+	);
 	if (!afterWrapper) return;
 
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
@@ -74,19 +80,21 @@ const onAddAttachAudio = async (attach: DownloadTargetElement) => {
 	}
 };
 
-const onAddAttachPlaylist = async (attach: DownloadTargetElement) => {
-	const playlistId: string[] = [];
+const onAddAttachPlaylist = async (attach: DownloadTargetElement, playlistId?: string[]) => {
+	if (!playlistId || playlistId.length === 0) {
+		playlistId = [];
 
-	if (attach.dataset.ownerId) {
-		playlistId.push(attach.dataset.ownerId);
-	}
+		if (attach.dataset.ownerId) {
+			playlistId.push(attach.dataset.ownerId);
+		}
 
-	if (attach.dataset.playlistId) {
-		playlistId.push(attach.dataset.playlistId);
-	}
+		if (attach.dataset.playlistId) {
+			playlistId.push(attach.dataset.playlistId);
+		}
 
-	if (attach.dataset.accessKey) {
-		playlistId.push(attach.dataset.accessKey);
+		if (attach.dataset.accessKey) {
+			playlistId.push(attach.dataset.accessKey);
+		}
 	}
 
 	if (!playlistId.length) {
@@ -99,7 +107,9 @@ const onAddAttachPlaylist = async (attach: DownloadTargetElement) => {
 
 	await waitRAF();
 
-	const afterWrapper = attach.querySelector<HTMLElement>('.SecondaryAttachment__after');
+	const afterWrapper = attach.querySelector<HTMLElement>(
+		`.SecondaryAttachment__after,[data-testid="secondaryattachment-after"],[class*="SecondaryAttachment__after"]`
+	);
 	if (!afterWrapper) return;
 
 	const { setIsLoading, element, getIsLoading } = createDownloadAudioButton({
@@ -127,18 +137,62 @@ const onAddAttachPlaylist = async (attach: DownloadTargetElement) => {
 	afterWrapper.prepend(element);
 };
 
-const initFeed = () => {
-	onAddWallPost((post) => {
-		// аудио
-		for (const attach of post.querySelectorAll<HTMLElement>('.SecondaryAttachment[data-audio]')) {
-			onAddAttachAudio(attach).catch(console.error);
-		}
+const onAddPost = (post: HTMLElement) => {
+	// аудио
+	for (const attach of post.querySelectorAll<HTMLElement>('.SecondaryAttachment[data-audio]')) {
+		onAddAttachAudio(attach).catch(console.error);
+	}
 
-		// плейлисты
-		for (const attach of post.querySelectorAll<HTMLElement>('.SecondaryAttachment[data-playlist-id]')) {
-			onAddAttachPlaylist(attach).catch(console.error);
+	// плейлисты
+	for (const attach of post.querySelectorAll<HTMLElement>('.SecondaryAttachment[data-playlist-id]')) {
+		onAddAttachPlaylist(attach).catch(console.error);
+	}
+
+	// secondary attach
+	for (const attach of post.querySelectorAll<HTMLElement>('[class*="SecondaryAttachment__root"]')) {
+		try {
+			const { fiber } = getReactAttrs(attach);
+
+			const originalAttachment = fiber.return.return.return.return.return.return.memoizedProps.originalAttachment;
+
+			if (originalAttachment?.audio) {
+				const audioObject = window.AudioUtils.audioTupleToAudioObject(originalAttachment.audio);
+				if (!audioObject || audioObject?.restrictionStatus) continue;
+
+				onAddAttachAudio(attach, audioObject);
+			}
+
+			if (originalAttachment?.audio_playlist) {
+				const playlist = originalAttachment.audio_playlist;
+
+				const playlistId = [];
+
+				if (playlist.owner_id) {
+					playlistId.push(playlist.owner_id);
+				}
+
+				if (playlist.id) {
+					playlistId.push(playlist.id);
+				}
+
+				if (playlist.access_key) {
+					playlistId.push(playlist.access_key);
+				}
+
+				if (!playlistId.length) {
+					return;
+				}
+
+				onAddAttachPlaylist(attach, playlistId);
+			}
+		} catch (e) {
+			console.error(e);
 		}
-	});
+	}
+};
+
+const initFeed = () => {
+	onAddWallPost(onAddPost);
 };
 
 export default initFeed;

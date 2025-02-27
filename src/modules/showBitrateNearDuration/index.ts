@@ -4,7 +4,8 @@ import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
-import * as styles from './index.module.scss';
+import styles from './index.module.scss';
+import waitAudioUtils from 'src/globalVars/waitAudioUtils';
 
 const createBitrateElement = (audio: AudioAudio | AudioObject) => {
 	const bitrateEl = document.createElement('span');
@@ -38,6 +39,8 @@ const createBitrateElement = (audio: AudioAudio | AudioObject) => {
 const onAddRow = async (row: HTMLElement) => {
 	const audio = row.dataset.audio;
 	if (!audio) return;
+
+	const AudioUtils = await waitAudioUtils();
 
 	const audioObject = AudioUtils.audioTupleToAudioObject(JSON.parse(audio));
 	if (!audioObject) return;

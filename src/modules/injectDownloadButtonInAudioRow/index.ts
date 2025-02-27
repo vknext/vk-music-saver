@@ -3,6 +3,7 @@ import createDownloadAudioButton, {
 	type CreateDownloadAudioButtonParams,
 } from 'src/elements/createDownloadAudioButton';
 import type { AudioObject } from 'src/global';
+import waitAudioUtils from 'src/globalVars/waitAudioUtils';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
@@ -72,6 +73,8 @@ const createDownloadButton = (
 const onAddRow = async (row: HTMLElement) => {
 	const audio = row.dataset.audio;
 	if (!audio) return;
+
+	const AudioUtils = await waitAudioUtils();
 
 	const audioObject = AudioUtils.audioTupleToAudioObject(JSON.parse(audio));
 	if (!audioObject) return;

@@ -49,7 +49,9 @@
 }
 
 // трек во вложении
-:global(.SecondaryAttachment__after) {
+:global(.SecondaryAttachment__after),
+:global([data-testid='secondaryattachment-after']),
+:global([class*='SecondaryAttachment__after']) {
 	.DownloadAudioButton {
 		display: flex;
 		flex-direction: row-reverse;

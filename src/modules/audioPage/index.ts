@@ -1,6 +1,8 @@
 import downloadAudio from 'src/downloaders/downloadAudio';
+import downloadUserAudio from 'src/downloaders/downloadUserAudio';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import waitGlobalVariable from 'src/globalVars/utils/waitGlobalVariable';
+import waitVariable from 'src/globalVars/utils/waitVariable';
+import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
@@ -9,22 +11,80 @@ import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import getAudioPlayerUserControlsContainer from './getAudioPlayerUserControlsContainer';
+import styles from './index.module.scss';
 
 interface WrapElement extends HTMLElement {
-	_vms_inj?: boolean;
+	[key: string | symbol]: any;
 }
 
 const getCurrentAudioObject = () => {
 	return window.AudioUtils.audioTupleToAudioObject(window.ap.getCurrentAudio());
 };
 
-const onAddPlayer = async (playerWrap: WrapElement) => {
-	if (playerWrap._vms_inj) return;
-	playerWrap._vms_inj = true;
+const uniqueKey = Symbol();
 
+const onAddPlayer = async (playerWrap: WrapElement) => {
+	if (playerWrap[uniqueKey]) return;
+	playerWrap[uniqueKey] = true;
+
+	// вся музыка
+	const tabsActions = document.getElementsByClassName('audio_section_tabs_actions');
+	for (const actions of tabsActions) {
+		if (actions.getElementsByClassName(styles.AudioPageMainTabBtn).length) continue;
+
+		const btn = document.createElement('button');
+		btn.className = styles.AudioPageMainTabBtn;
+
+		btn.addEventListener('click', () => downloadUserAudio(window.cur.oid || window.vk.id).catch(console.error));
+
+		btn.addEventListener('mouseover', function () {
+			window.showTooltip(this, {
+				text: lang.use('vms_download_all_music'),
+				black: 1,
+				noZIndex: true,
+				needLeft: true,
+				shift: [5, 2],
+			});
+		});
+
+		btn.appendChild(getIcon24DownloadOutline());
+
+		actions.prepend(btn);
+	}
+
+	if (tabsActions.length === 0) {
+		const headerExtra = document.querySelector<HTMLElement>(
+			'.audio_page_content_block_wrap .page_block_h2 .page_block_header_extra'
+		);
+		if (headerExtra) {
+			const btn = document.createElement('button');
+			btn.className = styles.AudioPageMainTabBtn;
+
+			btn.addEventListener('click', () => downloadUserAudio(window.cur.oid || window.vk.id).catch(console.error));
+
+			btn.addEventListener('mouseover', function () {
+				window.showTooltip(this, {
+					text: lang.use('vms_download_all_music'),
+					black: 1,
+					noZIndex: true,
+					needLeft: true,
+					shift: [5, 2],
+				});
+			});
+
+			btn.appendChild(getIcon24DownloadOutline());
+
+			headerExtra.appendChild(btn);
+		}
+	}
+
+	// текущий трек из плеера
 	const container = await getAudioPlayerUserControlsContainer(playerWrap);
+	if (!container) return;
 
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton();
+
+	if (container.getElementsByClassName(element.className).length) return;
 
 	const wrapper = document.createElement('div');
 	wrapper.style.paddingRight = '12px';
@@ -73,7 +133,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 	updateText().catch(console.error);
 
-	await waitGlobalVariable('ap');
+	await waitVariable('ap');
 
 	window.ap.on(null, 'curr', () => {
 		updateText();

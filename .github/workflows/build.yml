@@ -7,10 +7,10 @@ jobs:
         runs-on: ubuntu-20.04
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Set up Node.js
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: '22.2.0'
                   cache: 'yarn'
@@ -22,7 +22,7 @@ jobs:
               run: yarn build:ext
 
             - name: Upload ext to artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: VKMusicSaver_ext.zip
                   path: build/*.zip

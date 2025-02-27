@@ -1,0 +1,19 @@
+.AudioPageMainTabBtn {
+	padding: 10px 0 0;
+	margin: -10px 0 0 8px;
+	color: var(--steel_gray_300);
+	width: 28px;
+	height: 28px;
+	float: right;
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	opacity: 0.7;
+	border: 0;
+	background-color: transparent;
+	box-sizing: content-box;
+
+	&:hover {
+		opacity: 1;
+	}
+}

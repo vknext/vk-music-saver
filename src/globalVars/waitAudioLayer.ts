@@ -1,5 +1,5 @@
-import waitGlobalVariable from './utils/waitGlobalVariable';
+import waitVariable from './utils/waitVariable';
 
-const waitAudioLayer = () => waitGlobalVariable('audioLayer');
+const waitAudioLayer = () => waitVariable('audioLayer');
 
 export default waitAudioLayer;

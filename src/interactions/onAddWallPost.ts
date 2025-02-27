@@ -1,53 +1,95 @@
+import ListenerRegistry from 'src/common/ListenerRegistry';
+import observedElementsCleaner from 'src/common/observedElementsCleaner';
+import {
+	generateObservedElementIBSKey,
+	generateObservedElementMBSKey,
+} from 'src/common/observedHTMLElements/generateKeys';
+import type { ObservedHTMLElement } from 'src/global';
 import waitCur from 'src/globalVars/waitCur';
 import waitNav from 'src/globalVars/waitNav';
 import delay from 'src/lib/delay';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';
 import waitRAF from 'src/lib/waitRAF';
 import waitRIC from 'src/lib/waitRIC';
-import type { ObservedHTMLElement } from 'src/types';
-import InteractionListener from './InteractionListener';
+import onPostContentContainerInit from 'src/listeners/onPostContentContainerInit';
 
 type CallbackFunc = (node: HTMLElement) => void;
 
-const POST_SELECTOR = ['.Post--redesign', '.post', '._post:not(.reply)', '.Post', '.FeedBlockWrap'].join(',');
+const POST_SELECTOR = [
+	'.Post--redesign',
+	'.post',
+	'._post:not(.reply)',
+	'.Post',
+	'.FeedBlockWrap',
+	'.feed_post_indicator:not(:has(.post))',
+	`[id*="postadsite_"]:not(:has(.post))`,
+	'[post-hash]:not(:has(.post))',
+].join(',');
 const WALL_MODULE_SELECTOR = ['.wall_module', '#public_wall'].join(',');
 const PAGE_WALL_POSTS_SELECTOR = ['#page_wall_posts', '.page_wall_posts', '#page_donut_posts'].join(',');
 const FEED_ROWS_SELECTOR = ['#feed_rows', '._feed_rows'].join(',');
 
-const interaction = new InteractionListener<CallbackFunc>();
+const MBS_FEED_ROW_KEY = generateObservedElementMBSKey();
+const MBS_PAGE_WALL_POSTS_KEY = generateObservedElementMBSKey();
+const IBS_POST_KEY = generateObservedElementIBSKey();
+
+const registry = new ListenerRegistry<CallbackFunc>();
 
 const onCallback = async (el: HTMLElement) => {
 	if (process.env.NODE_ENV === 'development') {
-		console.info('[VMS/listeners] onAddWallPost', el);
+		console.info('[VMS/interactions/onAddWallPost]', el);
 	}
 
-	for (const callback of interaction.listeners) {
+	// элемент удалили из дома, например при переходе в другой раздел
+	if (!el.closest('html,body')) return;
+
+	if (el.getElementsByClassName('PostContentDumbSkeleton').length) {
+		await delay(500);
+		return onCallback(el);
+	}
+
+	for (const callback of registry.listeners) {
 		await waitRIC();
 		callback(el);
 	}
 };
 
 const onAddPost = (el: ObservedHTMLElement) => {
-	if (el._vms_ibs) return;
+	if (el[IBS_POST_KEY]) return;
 
-	el._vms_ibs = new IntersectionObserver(
-		async (entries) => {
+	const postContentContainer = el.querySelector<HTMLElement>('.PostContentContainer__root:not(.ReactEntryRootClone)');
+
+	if (postContentContainer && postContentContainer.style.display !== 'none') {
+		onCallback(el);
+		return;
+	}
+
+	el[IBS_POST_KEY] = new IntersectionObserver(
+		(entries) => {
 			for (const entry of entries) {
 				if (entry.isIntersecting) {
 					onCallback(el);
+
+					if (el[IBS_POST_KEY]) {
+						el[IBS_POST_KEY].unobserve(el);
+
+						delete el[IBS_POST_KEY];
+					}
 				}
 			}
 		},
-		{ threshold: 0.05 } // 5% элемента должно быть видно
+		{ threshold: 0, rootMargin: '50px 0% 50px 0%' }
 	);
 
-	el._vms_ibs.observe(el);
+	observedElementsCleaner.add(el);
+
+	el[IBS_POST_KEY].observe(el);
 };
 
 const getDocumentPosts = async () => {
 	await waitRAF();
 
-	return document.querySelectorAll<HTMLElement>(POST_SELECTOR);
+	return document.querySelectorAll<ObservedHTMLElement>(POST_SELECTOR);
 };
 
 const validModules = ['feed', 'public', 'profile', 'wall', 'groups'];
@@ -63,7 +105,7 @@ const initObserver = async () => {
 		timeOut = setTimeout(() => {
 			timeOut = null;
 			initObserver();
-		}, 2000);
+		}, 1000);
 
 		return;
 	}
@@ -76,16 +118,16 @@ const initObserver = async () => {
 		const feedRows = row.querySelector<ObservedHTMLElement>(FEED_ROWS_SELECTOR);
 
 		if (feedRows) {
-			if (feedRows._vms_mbs) continue;
+			if (feedRows.closest('.feed_wall--no-islands')) continue;
 
-			feedRows._vms_mbs = new MutationObserver(async (mutations) => {
+			if (feedRows[MBS_FEED_ROW_KEY]) continue;
+
+			feedRows[MBS_FEED_ROW_KEY] = new MutationObserver((mutations) => {
 				for (const mutation of mutations) {
 					if (!mutation.addedNodes.length) continue;
 
 					for (const node of mutation.addedNodes) {
-						await waitRIC();
-
-						const post = (node as HTMLElement).querySelector<HTMLElement>(POST_SELECTOR);
+						const post = (node as HTMLElement).querySelector<ObservedHTMLElement>(POST_SELECTOR);
 						if (!post) continue;
 
 						onAddPost(post);
@@ -93,7 +135,9 @@ const initObserver = async () => {
 				}
 			});
 
-			feedRows._vms_mbs.observe(feedRows, {
+			observedElementsCleaner.add(feedRows);
+
+			feedRows[MBS_FEED_ROW_KEY].observe(feedRows, {
 				childList: true,
 			});
 		}
@@ -102,23 +146,25 @@ const initObserver = async () => {
 	const pageWallPosts = document.querySelectorAll<ObservedHTMLElement>(PAGE_WALL_POSTS_SELECTOR);
 
 	for (const wrapper of pageWallPosts) {
-		if (wrapper._vms_mbs) continue;
+		if (wrapper.closest('.feed_wall--no-islands')) continue;
+
+		if (wrapper[MBS_PAGE_WALL_POSTS_KEY]) continue;
 
 		await waitRIC();
 
-		wrapper._vms_mbs = new MutationObserver(async (mutations) => {
+		wrapper[MBS_PAGE_WALL_POSTS_KEY] = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
 				if (!mutation.addedNodes.length) continue;
 
 				for (const node of mutation.addedNodes) {
-					await waitRIC();
-
-					await onCallback(node as HTMLElement);
+					onAddPost(node as ObservedHTMLElement);
 				}
 			}
 		});
 
-		wrapper._vms_mbs.observe(wrapper, {
+		observedElementsCleaner.add(wrapper);
+
+		wrapper[MBS_PAGE_WALL_POSTS_KEY].observe(wrapper, {
 			childList: true,
 		});
 	}
@@ -131,15 +177,13 @@ const initObserver = async () => {
 };
 
 const initListener = async (): Promise<void> => {
-	await waitNav();
-	await waitCur();
+	const nav = await waitNav();
+	const cur = await waitCur();
 
-	window.nav.subscribeOnModuleEvaluated(async () => {
-		const curModule = window.cur.module;
+	nav.subscribeOnModuleEvaluated(async () => {
+		await waitRAF();
 
-		if (!validModules.includes(curModule)) {
-			return;
-		}
+		const curModule = cur.module;
 
 		if (curModule === 'profile') {
 			await delay(1000);
@@ -148,21 +192,29 @@ const initListener = async (): Promise<void> => {
 		initObserver();
 	});
 
-	if (!window.cur?.module) {
+	if (cur?.module) {
 		await new Promise<void>((resolve) => DOMContentLoaded(resolve));
 	}
 
-	if (validModules.includes(window.cur.module) || window.cur.module === undefined) {
+	if (validModules.includes(cur.module) || cur.module === undefined) {
 		await initObserver();
+	}
+};
+
+const onAddPostContent = ({ target }: { target: HTMLElement }) => {
+	const post = target.closest<ObservedHTMLElement>(POST_SELECTOR);
+
+	if (post) {
+		onAddPost(post);
 	}
 };
 
 let inited = false;
 const onAddWallPost = (callback: CallbackFunc) => {
-	const listener = interaction.addListener(callback);
+	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddWallPost] count: ${interaction.listeners.length}`, interaction);
+		console.info(`[VMS/interactions/onAddWallPost] count: ${registry.listeners.length}`, registry);
 	}
 
 	DOMContentLoaded(async () => {
@@ -174,6 +226,8 @@ const onAddWallPost = (callback: CallbackFunc) => {
 
 	if (!inited) {
 		inited = true;
+
+		onPostContentContainerInit(onAddPostContent, true);
 
 		initListener();
 	}

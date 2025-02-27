@@ -26,7 +26,8 @@
 		"preserveConstEnums": false,
 		"baseUrl": "src",
 		"paths": {
-			"src/*": ["./*"]
+			"src/*": ["./*"],
+			"@vkontakte/vkui": ["./node_modules/@vkontakte/vkui/dist/cssm"]
 		}
 	},
 	"include": ["src", "plugins"]

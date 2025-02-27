@@ -3,7 +3,7 @@ import getIcon20Spinner from 'src/icons/getIcon20Spinner';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import getIcon24Spinner from 'src/icons/getIcon24Spinner';
 import lang from 'src/lang';
-import * as styles from './index.module.scss';
+import styles from './index.module.scss';
 
 interface DownloadAudioButtonResult {
 	setIsLoading: (isLoading: boolean) => void;

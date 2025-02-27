@@ -23,15 +23,6 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		description: '__MSG_extDescription__',
 		homepage_url: 'https://vknext.net',
 		default_locale: 'ru',
-		// в VK Next эти скрипты генерируются автоматически. VMS максимально простое расширение, тут такого не нужно.
-		content_scripts: [
-			{
-				js: ['content.vms.js'],
-				css: ['injected.vms.css'],
-				matches: ['https://vk.com/*', 'https://vk.ru/*'],
-				run_at: 'document_idle',
-			},
-		],
 		icons: {
 			'16': 'assets/icon16.png',
 			'24': 'assets/icon24.png',

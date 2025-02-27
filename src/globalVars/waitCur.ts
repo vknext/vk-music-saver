@@ -1,5 +1,5 @@
-import waitGlobalVariable from './utils/waitGlobalVariable';
+import waitVariable from './utils/waitVariable';
 
-const waitCur = () => waitGlobalVariable('cur');
+const waitCur = () => waitVariable('cur');
 
 export default waitCur;

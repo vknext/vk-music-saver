@@ -1,5 +1,5 @@
-import waitGlobalVariable from './utils/waitGlobalVariable';
+import waitVariable from './utils/waitVariable';
 
-const waitAjax = () => waitGlobalVariable('ajax');
+const waitAjax = () => waitVariable('ajax');
 
 export default waitAjax;

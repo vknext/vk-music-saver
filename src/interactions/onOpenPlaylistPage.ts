@@ -1,15 +1,15 @@
+import ListenerRegistry from 'src/common/ListenerRegistry';
 import waitNav from 'src/globalVars/waitNav';
 import delay from 'src/lib/delay';
 import onDocumentComplete from 'src/lib/onDocumentComplete';
 import waitRAF from 'src/lib/waitRAF';
-import InteractionListener from './InteractionListener';
 
 type CallbackFunc = () => void;
 
-const interaction = new InteractionListener<CallbackFunc>();
+const registry = new ListenerRegistry<CallbackFunc>();
 
 const onCallback = () => {
-	for (const callback of interaction.listeners) {
+	for (const callback of registry.listeners) {
 		callback();
 	}
 };
@@ -19,9 +19,9 @@ const initHook = async () => {
 	if (isInjected) return;
 	isInjected = true;
 
-	await waitNav();
+	const nav = await waitNav();
 
-	window.nav.onLocationChange(async (locStr) => {
+	nav.onLocationChange(async (locStr) => {
 		if (locStr.startsWith('music/album') || locStr.startsWith('music/playlist')) {
 			await delay(1000);
 			await waitRAF();
@@ -32,10 +32,10 @@ const initHook = async () => {
 };
 
 const onOpenPlaylistPage = (callback: CallbackFunc) => {
-	const listener = interaction.addListener(callback);
+	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info('[VMS/interactions/onOpenPlaylistPage] count: ' + interaction.listeners.length, interaction);
+		console.info('[VMS/interactions/onOpenPlaylistPage] count: ' + registry.listeners.length, registry);
 	}
 
 	onDocumentComplete(() => {

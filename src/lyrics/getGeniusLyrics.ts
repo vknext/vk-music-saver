@@ -2,7 +2,7 @@ import type { AudioObject } from 'global';
 
 const cache = new Map<string, string>();
 
-const normalizeString = (str: string): string => str.trim().toLowerCase().replaceAll('ё', 'е');
+const normalizeString = (str: string): string => str.trim().toLowerCase().replaceAll('ё', 'е').replaceAll('&amp;', '&');
 
 export const buildGeniusQuery = (
 	title: string,

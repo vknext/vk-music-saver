@@ -1,17 +1,20 @@
+import ListenerRegistry from 'src/common/ListenerRegistry';
+import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
+import type { ObservedHTMLElement } from 'src/global';
 import delay from 'src/lib/delay';
 import getReactAttrs from 'src/lib/getReactAttrs';
 import onDocumentComplete from 'src/lib/onDocumentComplete';
 import waitRAF from 'src/lib/waitRAF';
 import waitRIC from 'src/lib/waitRIC';
 import type { AudioAudio } from 'src/schemas/objects';
-import type { ObservedHTMLElement } from 'src/types';
-import InteractionListener from './InteractionListener';
 import onOpenPlaylistModal from './onOpenPlaylistModal';
 import onOpenPlaylistPage from './onOpenPlaylistPage';
 
 type CallbackFunc = (el: HTMLElement, audio: AudioAudio | null) => void;
 
-const interaction = new InteractionListener<CallbackFunc>();
+const registry = new ListenerRegistry<CallbackFunc>();
+
+const AUDIO_LIST_ITEMS_MBS_KEY = generateObservedElementMBSKey();
 
 const AUDIO_ROW_SELECTOR = '[class*="AudioRow__root"]';
 
@@ -33,7 +36,9 @@ const findApiAudio = (el: HTMLElement): AudioAudio | null => {
 	return null;
 };
 
-const onCallback = (el: HTMLElement) => {
+const onCallback = async (el: HTMLElement) => {
+	await waitRIC();
+
 	if (el.attributes.getNamedItem('disabled')) return;
 
 	const audio = findApiAudio(el);
@@ -44,16 +49,16 @@ const onCallback = (el: HTMLElement) => {
 		}
 	}
 
-	for (const callback of interaction.listeners) {
+	for (const callback of registry.listeners) {
 		callback(el, audio);
 	}
 };
 
 const findAudioList = async () => {
 	for (const items of document.querySelectorAll<ObservedHTMLElement>('[class*="AudioListItems__root--"] > div')) {
-		if (items._vms_mbs) continue;
+		if (items[AUDIO_LIST_ITEMS_MBS_KEY]) continue;
 
-		items._vms_mbs = new MutationObserver((mutations) => {
+		items[AUDIO_LIST_ITEMS_MBS_KEY] = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
 				if (mutation.type !== 'childList') continue;
 				for (const node of mutation.addedNodes) {
@@ -70,7 +75,7 @@ const findAudioList = async () => {
 			}
 		});
 
-		items._vms_mbs.observe(items, {
+		items[AUDIO_LIST_ITEMS_MBS_KEY].observe(items, {
 			childList: true,
 		});
 	}
@@ -89,7 +94,7 @@ const findAllAudioRows = async (retry = 0) => {
 
 	for (const row of rows) {
 		await waitRIC();
-		onCallback(row);
+		await onCallback(row);
 	}
 
 	await findAudioList();
@@ -97,10 +102,10 @@ const findAllAudioRows = async (retry = 0) => {
 
 let inited = false;
 const onAddAudioRowReact = (callback: CallbackFunc) => {
-	const listener = interaction.addListener(callback);
+	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddAudioRow] count: ${interaction.listeners.length}`, interaction);
+		console.info(`[VMS/interactions/onAddAudioRowReact] count: ${registry.listeners.length}`, registry);
 	}
 
 	onDocumentComplete(findAllAudioRows);

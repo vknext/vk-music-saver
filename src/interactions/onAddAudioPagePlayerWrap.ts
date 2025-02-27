@@ -1,15 +1,15 @@
-import waitAudioLayer from 'src/globalVars/waitAudioLayer';
+import ListenerRegistry from 'src/common/ListenerRegistry';
+import waitAudioUtils from 'src/globalVars/waitAudioUtils';
 import waitNav from 'src/globalVars/waitNav';
-import DOMContentLoaded from 'src/lib/DOMContentLoaded';
 import objectHook from 'src/lib/objectHook';
-import InteractionListener from './InteractionListener';
+import onDocumentComplete from 'src/lib/onDocumentComplete';
 
 type CallbackFunc = (el: HTMLElement) => void;
 
-const interaction = new InteractionListener<CallbackFunc>();
+const registry = new ListenerRegistry<CallbackFunc>();
 
 const onCallback = (el: HTMLElement) => {
-	for (const callback of interaction.listeners) {
+	for (const callback of registry.listeners) {
 		callback(el);
 	}
 };
@@ -21,26 +21,32 @@ const findPlayerWrap = () => {
 };
 
 const hookAudioLayer = async () => {
-	await waitAudioLayer();
+	const AudioUtils = await waitAudioUtils();
 
-	if (!window.audioLayer._initSection) {
-		window.audioLayer._initSection = undefined;
+	const layer = AudioUtils.getLayer();
+
+	if (!layer._initSection) {
+		layer._initSection = undefined;
 	}
 
-	objectHook(window.audioLayer, '_initSection', findPlayerWrap);
+	objectHook(layer, '_initSection', findPlayerWrap);
 };
 
 let inited = false;
 const onAddAudioPagePlayerWrap = (callback: CallbackFunc) => {
-	const listener = interaction.addListener(callback);
+	const listener = registry.addListener(callback);
 
-	DOMContentLoaded(findPlayerWrap);
+	if (process.env.NODE_ENV === 'development') {
+		console.info(`[VMS/interactions/onAddAudioPagePlayerWrap] count: ${registry.listeners.length}`, registry);
+	}
+
+	onDocumentComplete(findPlayerWrap);
 
 	if (!inited) {
 		inited = true;
 
-		waitNav().then(() => {
-			window.nav.onLocationChange((locStr) => {
+		waitNav().then((nav) => {
+			nav.onLocationChange((locStr) => {
 				if (locStr.startsWith('audio')) {
 					findPlayerWrap();
 				}

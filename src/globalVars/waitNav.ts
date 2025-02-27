@@ -1,5 +1,5 @@
-import waitGlobalVariable from './utils/waitGlobalVariable';
+import waitVariable from './utils/waitVariable';
 
-const waitNav = () => waitGlobalVariable('nav');
+const waitNav = () => waitVariable('nav');
 
 export default waitNav;
