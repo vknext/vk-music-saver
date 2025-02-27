@@ -142,7 +142,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		await Promise.all(promises);
 
 		setText(
-			lang.use('vkcom_download_fs_music_playlist_done', {
+			lang.use('vms_fs_music_playlist_done', {
 				folderName: playlist.title,
 			})
 		);

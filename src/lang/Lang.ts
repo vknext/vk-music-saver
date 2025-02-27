@@ -1,9 +1,11 @@
 import pluralFrom from 'src/lib/pluralFrom';
 
-type Formatted = number | string;
+type Formatted = number | string | React.JSX.Element;
 type FormatObject<U extends Formatted> = { [key: string]: U };
 
-export type LangMap = Record<string, string | string[]>;
+export interface LangMap {
+	[key: string]: string | string[];
+}
 
 class Lang<T extends LangMap> {
 	protected isDebug: boolean = false;

@@ -27,7 +27,7 @@ const getTargetPack = async (code: LangsCodeEnum) => {
 	return {};
 };
 
-const getCurrentLangPack = async () => {
+const getCurrentLangPack = async (): Promise<typeof defaultLang> => {
 	await waitVK();
 
 	const code = typeof window.vk?.lang === 'number' ? window.vk.lang : getCodeLangFromNavigator();
