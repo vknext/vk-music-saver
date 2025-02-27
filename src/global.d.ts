@@ -370,6 +370,7 @@ declare global {
 	var cur: CUR;
 	var uiActionsMenu: UIActionsMenu;
 	var colorScheme: IcolorScheme;
+	var showTooltip: (el: HTMLElement, opts: Record<string, any>) => void;
 
 	namespace NodeJS {
 		interface ProcessEnv {

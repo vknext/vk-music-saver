@@ -56,8 +56,6 @@ const watchGlobalProperty = <T extends WindowVariables>(variable: T, callback: (
 
 	let variableValue = window[variable];
 
-	console.log({ variable, variableValue });
-
 	if (variableValue) {
 		callback(variableValue);
 	}

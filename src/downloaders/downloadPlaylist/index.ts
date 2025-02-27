@@ -26,6 +26,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	} catch (e) {
 		console.error(e);
 	}
+
 	// отменяем скрытие элемента
 	clearTimeout(event.closeTO);
 	clearTimeout(event.fadeTO);
