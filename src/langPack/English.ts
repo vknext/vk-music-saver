@@ -22,6 +22,7 @@ const lang = {
   vms_fs_select_zip: 'Скачать',
   vms_fs_select_folder: 'Выбрать папку',
   vms_fs_select_recommended: 'Рекомендуемый способ',
-  vms_download_all_music: 'Скачать всю музыку'
+  vms_download_all_music: 'Скачать всю музыку',
+  vms_sett_num_tracks_in_playlist: 'Нумеровать треки'
 };
 export default lang;
