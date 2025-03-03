@@ -1,6 +1,6 @@
 {
 	"name": "vk-music-saver",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"type": "module",
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS=\"--import=tsx/esm\" webpack serve --config webpack.config.ts --env --dev",
@@ -63,6 +63,7 @@
 		"hls.js": "^1.5.17",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"use-async-effect": "^2.2.7"
+		"use-async-effect": "^2.2.7",
+		"usehooks-ts": "^3.1.1"
 	}
 }

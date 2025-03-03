@@ -33,7 +33,7 @@ async function* getAudios(ownerId: number) {
 }
 
 const downloadUserAudio = async (ownerId: number) => {
-	const fsDirHandle = await getFSDirectoryHandle({
+	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
 		id: `user_music_${ownerId}`,
 		startIn: 'music',
 	});
@@ -95,7 +95,7 @@ const downloadUserAudio = async (ownerId: number) => {
 	const updateProgress = () => {
 		progress++;
 
-		setText(`${filename} (${progress}/${totalAudios})`);
+		setText(`${fsDirHandle ? subFolderName : filename} (${progress}/${totalAudios})`);
 	};
 
 	try {
@@ -115,6 +115,7 @@ const downloadUserAudio = async (ownerId: number) => {
 						lastModified,
 						signal,
 						audioIndex: audioIndex++,
+						isNumTracksInPlaylist: isNumTracks || false,
 					});
 
 					zipFilePromise.then(() => {

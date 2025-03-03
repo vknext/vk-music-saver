@@ -8,6 +8,7 @@ interface getBlobAudioFromPlaylistParams {
 	signal: AbortSignal;
 	audioIndex: number;
 	playlist?: AudioPlaylist;
+	isNumTracksInPlaylist?: boolean;
 }
 
 const getBlobAudioFromPlaylist = async ({
@@ -16,6 +17,7 @@ const getBlobAudioFromPlaylist = async ({
 	signal,
 	playlist,
 	audioIndex,
+	isNumTracksInPlaylist,
 }: getBlobAudioFromPlaylistParams) => {
 	if (signal.aborted) return null;
 	if (!audio.url) return null;
@@ -27,7 +29,13 @@ const getBlobAudioFromPlaylist = async ({
 			signal,
 		});
 
-		const names = [`${audioIndex}. `, `${audio.artist} - ${audio.title}`];
+		const names = [];
+
+		if (isNumTracksInPlaylist) {
+			names.push(`${audioIndex}. `);
+		}
+
+		names.push(`${audio.artist} - ${audio.title}`);
 
 		if (audio.subtitle) {
 			names.push(` (${audio.subtitle})`);

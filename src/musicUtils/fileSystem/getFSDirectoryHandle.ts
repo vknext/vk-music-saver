@@ -5,17 +5,14 @@ interface getFSDirectoryHandleProps {
 	startIn: WellKnownDirectory;
 }
 
-const getFSDirectoryHandle = async ({
-	id,
-	startIn,
-}: getFSDirectoryHandleProps): Promise<FileSystemDirectoryHandle | null> => {
+const getFSDirectoryHandle = async ({ id, startIn }: getFSDirectoryHandleProps) => {
 	if ('showDirectoryPicker' in window) {
 		return await selectFSDirectory({
 			onShowPicker: () => window.showDirectoryPicker({ id, startIn, mode: 'readwrite' }),
 		});
 	}
 
-	return null;
+	return [null];
 };
 
 export default getFSDirectoryHandle;

@@ -11,7 +11,7 @@ import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
-	const fsDirHandle = await getFSDirectoryHandle({
+	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
 		id: 'playlist_music',
 		startIn: 'music',
 	});
@@ -93,12 +93,12 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	let progress = 0;
 	const totalAudios = playlist.audios.length;
 
-	setText(`${filename} (${progress}/${totalAudios})`);
+	setText(`${fsDirHandle ? playlistFolderName : filename} (${progress}/${totalAudios})`);
 
 	const updateProgress = () => {
 		progress++;
 
-		setText(`${filename} (${progress}/${totalAudios})`);
+		setText(`${fsDirHandle ? playlistFolderName : filename} (${progress}/${totalAudios})`);
 	};
 
 	for (const audios of arrayUnFlat(playlist.audios, 8)) {
@@ -109,8 +109,9 @@ const downloadPlaylist = async (playlistFullId: string) => {
 				audio,
 				lastModified,
 				signal,
-				audioIndex: audioIndex++,
 				playlist,
+				audioIndex: audioIndex++,
+				isNumTracksInPlaylist: isNumTracks || false,
 			});
 
 			zipFilePromise.then(() => {
@@ -144,7 +145,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		setText(
 			lang.use('vms_fs_music_playlist_done', {
-				folderName: playlist.title,
+				folderName: playlistFolderName,
 			})
 		);
 
