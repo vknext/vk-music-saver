@@ -8,6 +8,7 @@ import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
 import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
 import getAlbumThumbnail from './getAlbumThumbnail';
+import getPerformer from './getPerformer';
 import getPlaylistById from './getPlaylistById';
 
 export interface GetAudioBlobParams extends Pick<ConvertTrackToBlobOptions, 'onProgress'> {
@@ -95,6 +96,18 @@ export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlob
 			});
 		}
 
+		if (!audioArtists.length) {
+			let artistTitle = audio.performer || audio.artist;
+
+			if (artistTitle) {
+				for (const artist of artistTitle.split(',')) {
+					audioArtists.push({
+						name: artist.trim(),
+					});
+				}
+			}
+		}
+
 		if (audioArtists.length) {
 			const artistNames = audioArtists.map((performer) => performer.name) || [];
 
@@ -142,7 +155,7 @@ export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlob
 			try {
 				const lyrics = await getGeniusLyrics({
 					title: audio.title,
-					performer: audio.performer || '',
+					performer: getPerformer(audio) || '',
 					mainArtists: audioArtists,
 				});
 

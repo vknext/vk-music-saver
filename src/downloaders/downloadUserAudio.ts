@@ -33,6 +33,12 @@ async function* getAudios(ownerId: number) {
 }
 
 const downloadUserAudio = async (ownerId: number) => {
+	if (window.vk.id === 0) {
+		// alert потому что Notifier отсутствует
+		alert(lang.use('vms_playlist_download_auth_required'));
+		return;
+	}
+
 	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
 		id: `user_music_${ownerId}`,
 		startIn: 'music',

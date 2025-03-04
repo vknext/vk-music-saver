@@ -3,26 +3,8 @@ import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import { getAudioBlob, type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';
 import getAudioByObject from 'src/musicUtils/getAudioByObject';
-import { AudioArtist, AudioAudio } from 'src/schemas/objects';
-
-const getArtistTitle = (artists: AudioArtist[] = []) => artists.map((artist) => artist.name).join(', ');
-
-const getPerformer = (audio: AudioObject | AudioAudio) => {
-	let artistTitle = audio.performer || audio.artist;
-
-	if (!artistTitle) {
-		const mainArtists = getArtistTitle(audio.main_artists || audio.mainArtists);
-		const featuredArtists = getArtistTitle(audio.featured_artists || audio.featArtists);
-
-		artistTitle = mainArtists;
-
-		if (featuredArtists) {
-			artistTitle += ` feat. ${featuredArtists}`;
-		}
-	}
-
-	return artistTitle;
-};
+import getPerformer from 'src/musicUtils/getPerformer';
+import { AudioAudio } from 'src/schemas/objects';
 
 interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
 	audioObject: AudioObject | AudioAudio;

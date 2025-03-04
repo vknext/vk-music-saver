@@ -6,11 +6,18 @@ import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
+import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
 import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
+	if (window.vk.id === 0) {
+		// alert потому что Notifier отсутствует
+		alert(lang.use('vms_playlist_download_auth_required'));
+		return;
+	}
+
 	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
 		id: 'playlist_music',
 		startIn: 'music',
@@ -83,7 +90,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		nameChunks.push('playlist');
 	}
 
-	const playlistFolderName = unescapeHTML(nameChunks.join(''));
+	const playlistFolderName = sanitizeFolderName(unescapeHTML(nameChunks.join('')));
 	const filename = `${playlistFolderName}.zip`;
 
 	const promises: Promise<ClientZipFile | null | void>[] = [];
