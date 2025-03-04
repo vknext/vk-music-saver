@@ -19,7 +19,7 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 
 		audioObject = window.AudioUtils.audioTupleToAudioObject(JSON.parse(audio))!;
 	}
-	if (!audioObject || audioObject?.restrictionStatus) return;
+	if (!audioObject || audioObject?.restrictionStatus || !audioObject.url) return;
 
 	if (attach.vms_down_inj) return;
 	attach.vms_down_inj = true;

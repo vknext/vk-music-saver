@@ -84,6 +84,8 @@ const getBasePlaylist = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 
 		if (!playlist) return null;
 
+		if (window.vk.id === 0) return null;
+
 		const audios = await vkApi.api<AudioGetParams, AudioGetResponse>('audio.get', {
 			owner_id: playlist.ownerId,
 			playlist_id: playlist.id,
@@ -123,6 +125,8 @@ const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 	const playlist: AudioPlaylist | null = await getBasePlaylist(params);
 
 	if (!playlist) return null;
+
+	if (window.vk.id === 0) return playlist;
 
 	try {
 		const audios = await vkApi.api<AudioGetParams, AudioGetResponse>('audio.get', {

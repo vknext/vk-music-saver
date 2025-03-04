@@ -12,6 +12,12 @@ import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
+	if (window.vk.id === 0) {
+		// alert потому что Notifier отсутствует
+		alert(lang.use('vms_playlist_download_auth_required'));
+		return;
+	}
+
 	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
 		id: 'playlist_music',
 		startIn: 'music',
