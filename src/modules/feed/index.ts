@@ -1,7 +1,9 @@
+import observedElementsCleaner from 'src/common/observedElementsCleaner';
+import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
 import downloadAudio from 'src/downloaders/downloadAudio';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import type { AudioObject } from 'src/global';
+import type { AudioObject, ObservedHTMLElement } from 'src/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
@@ -11,6 +13,8 @@ import humanFileSize from 'src/lib/humanFileSize';
 import waitRAF from 'src/lib/waitRAF';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { DownloadTargetElement } from 'src/types';
+
+const LIST_MBS = generateObservedElementMBSKey();
 
 const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: AudioObject) => {
 	if (!audioObject) {
@@ -137,6 +141,43 @@ const onAddAttachPlaylist = async (attach: DownloadTargetElement, playlistId?: s
 	afterWrapper.prepend(element);
 };
 
+const onAddSecondaryAttachRoot = async (attach: DownloadTargetElement) => {
+	const { fiber } = getReactAttrs(attach);
+
+	const originalAttachment = fiber.return.return.return.return.return.return.memoizedProps.originalAttachment;
+
+	if (originalAttachment?.audio) {
+		const audioObject = window.AudioUtils.audioTupleToAudioObject(originalAttachment.audio);
+		if (!audioObject || audioObject?.restrictionStatus) return;
+
+		onAddAttachAudio(attach, audioObject);
+	}
+
+	if (originalAttachment?.audio_playlist) {
+		const playlist = originalAttachment.audio_playlist;
+
+		const playlistId = [];
+
+		if (playlist.owner_id) {
+			playlistId.push(playlist.owner_id);
+		}
+
+		if (playlist.id) {
+			playlistId.push(playlist.id);
+		}
+
+		if (playlist.access_key) {
+			playlistId.push(playlist.access_key);
+		}
+
+		if (!playlistId.length) {
+			return;
+		}
+
+		await onAddAttachPlaylist(attach, playlistId);
+	}
+};
+
 const onAddPost = (post: HTMLElement) => {
 	// аудио
 	for (const attach of post.querySelectorAll<HTMLElement>('.SecondaryAttachment[data-audio]')) {
@@ -150,44 +191,30 @@ const onAddPost = (post: HTMLElement) => {
 
 	// secondary attach
 	for (const attach of post.querySelectorAll<HTMLElement>('[class*="SecondaryAttachment__root"]')) {
-		try {
-			const { fiber } = getReactAttrs(attach);
+		onAddSecondaryAttachRoot(attach).catch(console.error);
+	}
 
-			const originalAttachment = fiber.return.return.return.return.return.return.memoizedProps.originalAttachment;
+	for (const list of post.querySelectorAll<ObservedHTMLElement>('[class*="SecondaryAttachmentList__root"]')) {
+		if (list[LIST_MBS]) continue;
 
-			if (originalAttachment?.audio) {
-				const audioObject = window.AudioUtils.audioTupleToAudioObject(originalAttachment.audio);
-				if (!audioObject || audioObject?.restrictionStatus) continue;
-
-				onAddAttachAudio(attach, audioObject);
+		list[LIST_MBS] = new MutationObserver((mutations) => {
+			for (const mutation of mutations) {
+				console.log({ mutation });
+				if (mutation.type === 'childList' && mutation.addedNodes.length) {
+					for (const node of mutation.addedNodes) {
+						if (node.nodeType === 1) {
+							onAddSecondaryAttachRoot(node as ObservedHTMLElement).catch(console.error);
+						}
+					}
+				}
 			}
+		});
 
-			if (originalAttachment?.audio_playlist) {
-				const playlist = originalAttachment.audio_playlist;
+		list[LIST_MBS].observe(list, {
+			childList: true,
+		});
 
-				const playlistId = [];
-
-				if (playlist.owner_id) {
-					playlistId.push(playlist.owner_id);
-				}
-
-				if (playlist.id) {
-					playlistId.push(playlist.id);
-				}
-
-				if (playlist.access_key) {
-					playlistId.push(playlist.access_key);
-				}
-
-				if (!playlistId.length) {
-					return;
-				}
-
-				onAddAttachPlaylist(attach, playlistId);
-			}
-		} catch (e) {
-			console.error(e);
-		}
+		observedElementsCleaner.add(list);
 	}
 };
 
