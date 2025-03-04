@@ -6,6 +6,7 @@ import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
+import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
 import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
@@ -83,7 +84,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		nameChunks.push('playlist');
 	}
 
-	const playlistFolderName = unescapeHTML(nameChunks.join(''));
+	const playlistFolderName = sanitizeFolderName(unescapeHTML(nameChunks.join('')));
 	const filename = `${playlistFolderName}.zip`;
 
 	const promises: Promise<ClientZipFile | null | void>[] = [];

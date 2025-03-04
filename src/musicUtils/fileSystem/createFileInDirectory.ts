@@ -7,21 +7,25 @@ interface createFileInDirectoryProps {
 }
 
 const createFileInDirectory = async ({ dirHandle, zipFilePromise, subFolderName }: createFileInDirectoryProps) => {
-	const zipFile = await zipFilePromise;
-	if (!zipFile) return;
+	try {
+		const zipFile = await zipFilePromise;
+		if (!zipFile) return;
 
-	const { name, input } = zipFile;
+		const { name, input } = zipFile;
 
-	const subDirHandle = subFolderName
-		? await dirHandle.getDirectoryHandle(subFolderName, { create: true })
-		: dirHandle;
+		const subDirHandle = subFolderName
+			? await dirHandle.getDirectoryHandle(subFolderName, { create: true })
+			: dirHandle;
 
-	const fileHandle = await subDirHandle.getFileHandle(name, { create: true });
+		const fileHandle = await subDirHandle.getFileHandle(name, { create: true });
 
-	const writableStream = await fileHandle.createWritable();
+		const writableStream = await fileHandle.createWritable();
 
-	await writableStream.write(input);
-	await writableStream.close();
+		await writableStream.write(input);
+		await writableStream.close();
+	} catch (e) {
+		console.error(e);
+	}
 };
 
 export default createFileInDirectory;
