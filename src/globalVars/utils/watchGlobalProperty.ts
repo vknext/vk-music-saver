@@ -21,11 +21,14 @@ interface definePropertyProps<V, T> {
 
 const defineProperty = <T extends WindowVariables>(props: definePropertyProps<T, (typeof window)[T]>) => {
 	const { variable, getValue, setValue, enumerable } = props;
+	const descriptor = Object.getOwnPropertyDescriptor(window, variable);
 
 	Object.defineProperty(window, variable, {
 		get: getValue,
 		set: (value) => {
 			setValue(value);
+
+			descriptor?.set?.call(window, value);
 
 			if (!enumerable) {
 				props.enumerable = true;
