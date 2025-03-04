@@ -24,6 +24,6 @@ const lang = {
   vms_fs_select_recommended: "Рекомендований спосіб",
   vms_download_all_music: "Завантажити всю музику",
   vms_sett_num_tracks_in_playlist: "Нумерувати треки",
-  vms_playlist_download_auth_required: 'Вы должны быть авторизованы для скачивания плейлистов'
+  vms_playlist_download_auth_required: "Ви маєте бути авторизовані для завантаження плейлистів"
 };
 export default lang;
