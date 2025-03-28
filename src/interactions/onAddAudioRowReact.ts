@@ -19,11 +19,15 @@ const AUDIO_LIST_ITEMS_MBS_KEY = generateObservedElementMBSKey();
 const AUDIO_ROW_SELECTOR = '[class*="AudioRow__root"]';
 
 const findApiAudio = (el: HTMLElement): AudioAudio | null => {
-	const { props: audioRowProps } = getReactAttrs(el);
+	const { fiber, props: audioRowProps } = getReactAttrs(el);
 
-	if (audioRowProps?.children?.props?.audio?.apiAudio) {
-		return audioRowProps.children.props.audio.apiAudio as AudioAudio;
-	}
+	const apiAudio =
+		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.audio?.apiAudio ||
+		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return
+			?.memoizedProps?.audio?.apiAudio ||
+		audioRowProps?.children?.props?.audio?.apiAudio;
+
+	if (apiAudio) return apiAudio as AudioAudio;
 
 	if (el.parentElement) {
 		const { props } = getReactAttrs(el.parentElement);
@@ -82,7 +86,7 @@ const findAudioList = async () => {
 };
 
 const findAllAudioRows = async (retry = 0) => {
-	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton__skeleton"]`)) {
+	if (document.querySelector(`.vkui__root .vkuiFlex__host [class*="Skeleton__skeleton"]`)) {
 		await delay(1000);
 		return findAllAudioRows(retry + 1);
 	}

@@ -105,7 +105,7 @@ const onAddReactRow = async (audioRow: HTMLElement, audio: AudioAudio | null) =>
 	if (actions._vms_inj) return;
 	actions._vms_inj = true;
 
-	const vkuiButtonGroup = actions.querySelector<HTMLElement>('.vkuiButtonGroup');
+	const vkuiButtonGroup = actions.querySelector<HTMLElement>('.vkuiButtonGroup,.vkuiButtonGroup__host');
 
 	const downloadItem = createDownloadButton(audio, 24);
 
