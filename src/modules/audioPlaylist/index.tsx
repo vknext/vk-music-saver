@@ -1,12 +1,13 @@
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
-import createVKUIButton from 'src/elements/createVKUIButton';
 import waitUIActionsMenu from 'src/globalVars/waitUIActionsMenu';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import onOpenPlaylistModal from 'src/interactions/onOpenPlaylistModal';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
 import delay from 'src/lib/delay';
+import onCurBackHide from 'src/listeners/onCurBackHide';
+import initReactApp from 'src/react/initReactApp';
 import { DownloadTargetElement } from 'src/types';
 import styles from './index.module.scss';
 
@@ -147,39 +148,29 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 	if (actions.vms_down_inj) return;
 	actions.vms_down_inj = true;
 
-	const { element, setIsLoading, setText, getIsLoading } = createVKUIButton({
-		mode: 'secondary',
-		appearance: 'neutral',
-		size: 'm',
+	const root = document.createElement('div');
+
+	const DownloadButton = await import('./DownloadButton').then((m) => m.default);
+
+	const { unmount } = await initReactApp({
+		root,
+		content: (
+			<DownloadButton
+				mode="secondary"
+				appearance="neutral"
+				size="m"
+				playlistFullId={location.pathname.split('/').at(-1)}
+			/>
+		),
 	});
 
-	setText(lang.use('vms_download'));
+	onCurBackHide(unmount);
 
-	element.addEventListener('click', async () => {
-		if (getIsLoading()) return;
-		setIsLoading(true);
-
-		try {
-			const playlistFullId = location.pathname.split('/').at(-1);
-
-			if (!playlistFullId) {
-				window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-				return;
-			}
-
-			await downloadPlaylist(playlistFullId);
-		} catch (error) {
-			console.error(error);
-		}
-
-		setIsLoading(false);
-	});
-
-	actions.appendChild(element);
+	actions.appendChild(root);
 };
 
 const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) => {
-	if (document.querySelector(`.vkui__root .vkuiFlex [class*="Skeleton__skeleton"]`)) {
+	if (document.querySelector(`.vkui__root .vkuiFlex__host [class*="Skeleton__skeleton"]`)) {
 		await delay(1000);
 		return injectToAudioPlaylistModalNew(playlistFullId, retry + 1);
 	}
@@ -191,30 +182,20 @@ const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) 
 		if (actions.vms_down_inj) return;
 		actions.vms_down_inj = true;
 
-		const vkuiFlex = actions.querySelector<HTMLElement>('.vkuiFlex');
+		const vkuiFlex = actions.querySelector<HTMLElement>('.vkuiFlex__host');
 
-		const { element, setIsLoading, setText, getIsLoading } = createVKUIButton({
-			mode: 'primary',
-			appearance: 'overlay',
-			size: 'm',
+		const root = document.createElement('div');
+
+		const DownloadButton = await import('./DownloadButton').then((m) => m.default);
+
+		const { unmount } = await initReactApp({
+			root,
+			content: <DownloadButton mode="primary" appearance="overlay" size="m" playlistFullId={playlistFullId} />,
 		});
 
-		setText(lang.use('vms_download'));
+		onCurBackHide(unmount);
 
-		element.addEventListener('click', async () => {
-			if (getIsLoading()) return;
-			setIsLoading(true);
-
-			try {
-				await downloadPlaylist(playlistFullId);
-			} catch (error) {
-				console.error(error);
-			}
-
-			setIsLoading(false);
-		});
-
-		(vkuiFlex || actions).appendChild(element);
+		(vkuiFlex || actions).appendChild(root);
 	}
 };
 

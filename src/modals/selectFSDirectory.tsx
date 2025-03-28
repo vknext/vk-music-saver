@@ -11,7 +11,7 @@ const selectFSDirectory = async ({ onShowPicker }: selectFSDirectoryProps) => {
 	const { promise, resolve } = createPromise<[directory: FileSystemDirectoryHandle | null, isNumTracks: boolean]>();
 
 	showReactModal(<Modal onSelect={resolve} onShowPicker={onShowPicker} />, {
-		zIndex: 612,
+		zIndex: 1005,
 	});
 
 	return await promise;
