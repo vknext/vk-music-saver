@@ -127,7 +127,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 		}
 
 		// если скачивание напрямую в папку - 5 минут, иначе 15
-		const ms = (callbacks ? 5 : 15) * 60 * 1000;
+		const ms = (callbacks?.onSave ? 15 : 5) * 60 * 1000;
 		const timeoutId = setTimeout(() => removeDownloadById(id), ms);
 
 		set(() => {
