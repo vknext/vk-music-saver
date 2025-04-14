@@ -149,10 +149,8 @@ const downloadUserAudio = async (ownerId: number) => {
 
 		await showSnackbar({
 			type: 'done',
-			text: 'VK Music Saver',
-			subtitle: lang.use('vms_fs_music_playlist_done', {
-				folderName: subFolderName,
-			}),
+			text: lang.use('vms_fs_music_done'),
+			subtitle: subFolderName,
 		});
 
 		finish();

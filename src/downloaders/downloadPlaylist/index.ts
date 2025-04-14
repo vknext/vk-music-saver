@@ -158,10 +158,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		await showSnackbar({
 			type: 'done',
-			text: 'VK Music Saver',
-			subtitle: lang.use('vms_fs_music_playlist_done', {
-				folderName: playlistFolderName,
-			}),
+			text: lang.use('vms_fs_music_playlist_done'),
+			subtitle: playlistFolderName,
 		});
 
 		finish();
