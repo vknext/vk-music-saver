@@ -1,4 +1,4 @@
-import { AudioObject } from 'src/global';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import { getAudioBlob, type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';

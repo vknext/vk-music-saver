@@ -1231,10 +1231,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vknext/audio-utils@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@vknext/audio-utils/-/audio-utils-1.6.0.tgz#3e08f0b069cbdf92b2d9b2788b6c868a88f7d197"
-  integrity sha512-RN0t5qsyj9sxaS74yMs66po60VciA25nUtJZCbEjNXhPTHSLoyZDsH0jtvHa09EuFj2DEJ4bhbQPEsLMVIMRGw==
+"@vknext/shared@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@vknext/shared/-/shared-1.2.2.tgz#c80054c32f51f8196218ace79b6504258fe17b8e"
+  integrity sha512-Tkl8/rRpU3NRLIhCFMrcmIe9bR/wyY3YYhdU7ImvTVIVp0To4hudI86j5fHUJs3Wj59oSBgfyiib1SOefdpeyA==
   dependencies:
     iframe-message-bridge "^1.1.1"
 

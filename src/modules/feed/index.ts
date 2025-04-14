@@ -1,9 +1,10 @@
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
 import downloadAudio from 'src/downloaders/downloadAudio';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import type { AudioObject, ObservedHTMLElement } from 'src/global';
+import type { ObservedHTMLElement } from 'src/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';

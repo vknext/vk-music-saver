@@ -1,13 +1,12 @@
+import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import type { NotifierEvent } from 'src/global';
-import waitVkApi from 'src/globalVars/waitVkApi';
 import lang from 'src/lang';
 import arrayUnFlat from 'src/lib/arrayUnFlat';
 import delay from 'src/lib/delay';
 import saveFileAs from 'src/lib/saveFileAs';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
-import type { AudioGetParams } from 'src/schemas/params';
-import type { AudioGetResponse } from 'src/schemas/responses';
+import { UsersGetResponse, type AudioGetResponse } from 'src/schemas/responses';
 import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
 
@@ -17,9 +16,9 @@ async function* getAudios(ownerId: number) {
 	let allAudiosCount = count + 1;
 
 	do {
-		const vkApi = await waitVkApi();
+		const vkApi = await waitVKApi();
 
-		const response = await vkApi.api<AudioGetParams, AudioGetResponse>('audio.get', {
+		const response = await vkApi.api<AudioGetResponse>('audio.get', {
 			owner_id: ownerId,
 			offset,
 			count,
@@ -73,7 +72,7 @@ const downloadUserAudio = async (ownerId: number) => {
 	let subFolderName = `audios${ownerId}`;
 
 	try {
-		const [user] = await window.vkApi.api('users.get', {
+		const [user] = await window.vkApi.api<UsersGetResponse>('users.get', {
 			fields: 'photo_100,is_nft',
 			user_ids: ownerId,
 		});

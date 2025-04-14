@@ -1,3 +1,4 @@
+import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
 import ListenerRegistry from 'src/common/ListenerRegistry';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import {
@@ -5,7 +6,6 @@ import {
 	generateObservedElementMBSKey,
 } from 'src/common/observedHTMLElements/generateKeys';
 import type { ObservedHTMLElement } from 'src/global';
-import waitNav from 'src/globalVars/waitNav';
 import hookAjaxPost from 'src/interceptors/hookAjaxPost';
 import delay from 'src/lib/delay';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';

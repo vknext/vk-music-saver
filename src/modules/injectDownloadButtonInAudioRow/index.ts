@@ -1,9 +1,9 @@
+import { waitAudioUtils } from '@vknext/shared/vkcom/globalVars/waitAudioUtils';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import downloadAudio from 'src/downloaders/downloadAudio';
 import createDownloadAudioButton, {
 	type CreateDownloadAudioButtonParams,
 } from 'src/elements/createDownloadAudioButton';
-import type { AudioObject } from 'src/global';
-import waitAudioUtils from 'src/globalVars/waitAudioUtils';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';

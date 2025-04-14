@@ -1,8 +1,7 @@
-import { audioUnmaskSource } from '@vknext/audio-utils/audioUnmaskSource';
-import type { AudioObject } from 'global';
-import waitVkApi from 'src/globalVars/waitVkApi';
+import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
+import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import { AudioAudio } from 'src/schemas/objects';
-import { AudioGetByIdParams } from 'src/schemas/params';
 import { AudioGetByIdResponse } from 'src/schemas/responses';
 
 const getAudioByObject = async (audioObject: AudioAudio | AudioObject): Promise<AudioAudio | AudioObject> => {
@@ -13,9 +12,9 @@ const getAudioByObject = async (audioObject: AudioAudio | AudioObject): Promise<
 		audio.push(audioObject.accessKey);
 	}
 
-	await waitVkApi();
+	const vkApi = await waitVKApi();
 
-	const items = await window.vkApi.api<AudioGetByIdParams, AudioGetByIdResponse>('audio.getById', {
+	const items = await vkApi.api<AudioGetByIdResponse>('audio.getById', {
 		audios: audio.join('_'),
 		v: '5.204',
 	});

@@ -1,3 +1,5 @@
+import { waitCur } from '@vknext/shared/vkcom/globalVars/waitCur';
+import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
 import ListenerRegistry from 'src/common/ListenerRegistry';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import {
@@ -5,8 +7,6 @@ import {
 	generateObservedElementMBSKey,
 } from 'src/common/observedHTMLElements/generateKeys';
 import type { ObservedHTMLElement } from 'src/global';
-import waitCur from 'src/globalVars/waitCur';
-import waitNav from 'src/globalVars/waitNav';
 import delay from 'src/lib/delay';
 import DOMContentLoaded from 'src/lib/DOMContentLoaded';
 import waitRAF from 'src/lib/waitRAF';

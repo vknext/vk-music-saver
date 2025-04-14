@@ -1,6 +1,6 @@
+import { waitUIActionsMenu } from '@vknext/shared/vkcom/globalVars/waitUIActionsMenu';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
-import waitUIActionsMenu from 'src/globalVars/waitUIActionsMenu';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import onOpenPlaylistModal from 'src/interactions/onOpenPlaylistModal';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';

@@ -1,4 +1,4 @@
-import type { AudioObject } from 'global';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 
 const cache = new Map<string, string>();
 

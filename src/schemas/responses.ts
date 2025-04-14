@@ -14,3 +14,5 @@ export interface AudioGetResponse {
 	profiles?: Objects.UsersUserFull[];
 	groups?: Objects.GroupsGroupFull[];
 }
+
+export type UsersGetResponse = Objects.UsersUserFull[];

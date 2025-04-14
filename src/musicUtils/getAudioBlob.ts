@@ -1,6 +1,6 @@
-import { audioUnmaskSource } from '@vknext/audio-utils/audioUnmaskSource';
-import { convertTrackToBlob, type ConvertTrackToBlobOptions } from '@vknext/audio-utils/convertTrackToBlob';
-import { AudioObject } from 'src/global';
+import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
+import { convertTrackToBlob, type ConvertTrackToBlobOptions } from '@vknext/shared/vkcom/audio/convertTrackToBlob';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import lang from 'src/lang';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';

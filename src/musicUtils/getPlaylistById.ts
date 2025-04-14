@@ -1,5 +1,5 @@
 import type { AudioPlaylist } from 'src/schemas/objects';
-import type { AudioGetParams, AudioGetPlaylistByIdParams } from 'src/schemas/params';
+import type { AudioGetPlaylistByIdParams } from 'src/schemas/params';
 import type { AudioGetResponse } from 'src/schemas/responses';
 
 interface OldPlaylist {
@@ -50,15 +50,12 @@ const getLargePhotoUrl = (photoData: Record<string, any>): string | undefined =>
 
 const getBasePlaylist = async (params: AudioGetPlaylistByIdParams): Promise<AudioPlaylist | null> => {
 	try {
-		const { playlist } = await window.vkApi.api<AudioGetPlaylistByIdParams, { playlist: AudioPlaylist }>(
-			'audio.getPlaylistById',
-			{
-				playlist_id: params.playlist_id,
-				owner_id: params.owner_id,
-				access_key: params.access_key,
-				extra_fields: 'owner, duration',
-			}
-		);
+		const { playlist } = await window.vkApi.api<{ playlist: AudioPlaylist }>('audio.getPlaylistById', {
+			playlist_id: params.playlist_id,
+			owner_id: params.owner_id,
+			access_key: params.access_key,
+			extra_fields: 'owner, duration',
+		});
 
 		if (playlist.photo) {
 			playlist.coverUrl_l = getLargePhotoUrl(playlist.photo);
@@ -86,7 +83,7 @@ const getBasePlaylist = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 
 		if (window.vk.id === 0) return null;
 
-		const audios = await vkApi.api<AudioGetParams, AudioGetResponse>('audio.get', {
+		const audios = await vkApi.api<AudioGetResponse>('audio.get', {
 			owner_id: playlist.ownerId,
 			playlist_id: playlist.id,
 			access_key: params.access_key,
@@ -129,7 +126,7 @@ const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 	if (window.vk.id === 0) return playlist;
 
 	try {
-		const audios = await vkApi.api<AudioGetParams, AudioGetResponse>('audio.get', {
+		const audios = await vkApi.api<AudioGetResponse>('audio.get', {
 			owner_id: playlist.owner_id || playlist.ownerId,
 			playlist_id: playlist.id,
 			access_key: params.access_key,

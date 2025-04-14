@@ -1,5 +1,5 @@
+import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
 import ListenerRegistry from 'src/common/ListenerRegistry';
-import waitNav from 'src/globalVars/waitNav';
 import delay from 'src/lib/delay';
 import onDocumentComplete from 'src/lib/onDocumentComplete';
 import waitRAF from 'src/lib/waitRAF';
