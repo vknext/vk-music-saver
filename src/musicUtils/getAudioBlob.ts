@@ -1,9 +1,10 @@
 import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
-import { convertTrackToBlob, type ConvertTrackToBlobOptions } from '@vknext/shared/vkcom/audio/convertTrackToBlob';
+import { convertTrackToBlob } from '@vknext/shared/vkcom/audio/convertTrackToBlob';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
 import lang from 'src/lang';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
+import showSnackbar from 'src/react/showSnackbar';
 import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
 import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
@@ -11,15 +12,16 @@ import getAlbumThumbnail from './getAlbumThumbnail';
 import getPerformer from './getPerformer';
 import getPlaylistById from './getPlaylistById';
 
-export interface GetAudioBlobParams extends Pick<ConvertTrackToBlobOptions, 'onProgress'> {
+export interface GetAudioBlobParams {
 	audio: AudioObject | AudioAudio;
 	playlist?: AudioPlaylist | null;
 	signal?: AbortSignal;
+	onProgress?: (current: number, total: number) => void;
 }
 
-export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlobParams) => {
+export const getAudioBlob = async ({ signal, audio, playlist, onProgress }: GetAudioBlobParams) => {
 	if (!audio.url) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_url_not_found') });
+		await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_url_not_found') });
 
 		console.error('Audio URL not found', audio);
 
@@ -28,8 +30,13 @@ export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlob
 
 	const blob = await convertTrackToBlob({
 		url: audioUnmaskSource(audio.url),
-		onProgress,
 		forceHls: !/firefox|fxios/i.test(globalThis.navigator.userAgent),
+		onProgress(current) {
+			if (!onProgress) return;
+
+			// ffmpeg отдает значение от 0 до 1
+			onProgress(Math.round(current * 100), 100);
+		},
 	});
 
 	if (!playlist) {
@@ -157,6 +164,7 @@ export const getAudioBlob = async ({ audio, playlist, onProgress }: GetAudioBlob
 					title: audio.title,
 					performer: getPerformer(audio) || '',
 					mainArtists: audioArtists,
+					signal,
 				});
 
 				if (lyrics?.length) {

@@ -3,6 +3,7 @@ import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
+import showSnackbar from 'src/react/showSnackbar';
 
 const downloadPlaylistCover = async (playlistFullId: string) => {
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
@@ -14,16 +15,21 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 	});
 
 	if (!playlist) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: lang.use('vms_playlist_not_found'),
+		});
 	}
 
 	const albumThumbUrl = getAlbumThumbUrl(playlist);
 
 	if (!albumThumbUrl) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_album_cover_not_found') });
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: lang.use('vms_album_cover_not_found'),
+		});
 	}
 
 	const albumArtists = (playlist.main_artists || []).map((performer) => performer.name);

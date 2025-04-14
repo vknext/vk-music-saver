@@ -6,6 +6,7 @@ import initShowBitrateNearDuration from './modules/showBitrateNearDuration';
 import './injected.scss';
 
 import getGlobalVKNext from './getGlobalVKNext';
+import DOMContentLoaded from './lib/DOMContentLoaded';
 import initAudioPage from './modules/audioPage';
 import initAudioPlaylist from './modules/audioPlaylist';
 import initFeed from './modules/feed';
@@ -55,3 +56,7 @@ const start = async () => {
 };
 
 start().catch(console.error);
+
+DOMContentLoaded(() => {
+	import('./modules/manager').catch((e) => console.error('[VMS/manager]', e));
+});

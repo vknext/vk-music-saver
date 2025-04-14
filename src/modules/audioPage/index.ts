@@ -7,7 +7,6 @@ import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap'
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
-import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import getAudioPlayerUserControlsContainer from './getAudioPlayerUserControlsContainer';
@@ -106,7 +105,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 		downloadAudio({
 			audioObject,
 			onProgress: (progress) => {
-				setText(formatFFMpegProgress(progress));
+				setText(`${progress}%`);
 			},
 		}).finally(() => {
 			setIsLoading(false);

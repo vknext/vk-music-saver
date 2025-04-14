@@ -1,0 +1,63 @@
+.DownloadTaskCell {
+	display: flex;
+	align-items: center;
+	min-block-size: 48px;
+	padding-inline: var(--vkui--size_base_padding_horizontal--regular);
+	color: var(--vkui--color_text_primary);
+	text-decoration: none;
+}
+
+.DownloadTaskCell__before {
+	display: flex;
+	align-items: center;
+	align-self: stretch;
+	padding-block: var(--vkui--spacing_size_s);
+	padding-inline-end: var(--vkui--spacing_size_xl);
+	color: var(--vkui--color_icon_accent);
+
+	& > :global(.vkuiIcon) {
+		box-sizing: content-box;
+	}
+}
+
+.DownloadTaskCell__middle {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	justify-content: center;
+	min-inline-size: 0;
+	max-inline-size: 100%;
+	padding-block: var(--vkui--spacing_size_l);
+	overflow: hidden;
+}
+
+.DownloadTaskCell__after {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	align-self: stretch;
+	color: var(--vkui--color_icon_accent);
+	margin-left: 6px;
+}
+
+.DownloadTaskCell__children {
+	display: block;
+	color: inherit;
+}
+
+.DownloadTaskCell__subtitle {
+	color: var(--vkui--color_text_secondary);
+}
+
+.DownloadTaskCellProgress {
+	padding-top: 6px;
+	color: var(--vkui--color_text_subhead);
+}
+
+.DownloadTaskCellProgress__progress {
+	flex: 1 1 auto;
+}
+
+.DownloadTaskCellProgress__label {
+	flex: 0 0 auto;
+}

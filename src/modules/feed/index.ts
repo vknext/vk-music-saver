@@ -8,11 +8,11 @@ import type { ObservedHTMLElement } from 'src/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
-import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import getReactAttrs from 'src/lib/getReactAttrs';
 import humanFileSize from 'src/lib/humanFileSize';
 import waitRAF from 'src/lib/waitRAF';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
+import showSnackbar from 'src/react/showSnackbar';
 import type { DownloadTargetElement } from 'src/types';
 
 const LIST_MBS = generateObservedElementMBSKey();
@@ -66,8 +66,8 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 
 		downloadAudio({
 			audioObject,
-			onProgress: async (progress) => {
-				setText(formatFFMpegProgress(progress));
+			onProgress: (progress) => {
+				setText(`${progress}%`);
 			},
 		}).finally(() => {
 			setIsLoading(false);
@@ -103,8 +103,11 @@ const onAddAttachPlaylist = async (attach: DownloadTargetElement, playlistId?: s
 	}
 
 	if (!playlistId.length) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: lang.use('vms_playlist_not_found'),
+		});
 	}
 
 	if (attach.vms_down_inj) return;
@@ -200,7 +203,6 @@ const onAddPost = (post: HTMLElement) => {
 
 		list[LIST_MBS] = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {
-				console.log({ mutation });
 				if (mutation.type === 'childList' && mutation.addedNodes.length) {
 					for (const node of mutation.addedNodes) {
 						if (node.nodeType === 1) {

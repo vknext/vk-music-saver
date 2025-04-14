@@ -1231,6 +1231,13 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
+"@vknext/icons@^1.33.0":
+  version "1.33.0"
+  resolved "https://registry.yarnpkg.com/@vknext/icons/-/icons-1.33.0.tgz#a3d22ba3b21bf9d1e04d931eda7553d99d1b06e5"
+  integrity sha512-N4Ojkiq3mwMa6+NWLm+0lZkgkCPDMpzVR6b9l4gpR29WDx3csEuLD8ow0UdDg4LWCprJqX3q44qXLr2EMK34bw==
+  dependencies:
+    "@vkontakte/icons-sprite" "^2.0.0"
+
 "@vknext/shared@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@vknext/shared/-/shared-1.2.2.tgz#c80054c32f51f8196218ace79b6504258fe17b8e"
@@ -1245,7 +1252,7 @@
   dependencies:
     "@swc/helpers" "^0.5.12"
 
-"@vkontakte/icons-sprite@2.3.1":
+"@vkontakte/icons-sprite@2.3.1", "@vkontakte/icons-sprite@^2.0.0":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@vkontakte/icons-sprite/-/icons-sprite-2.3.1.tgz#1b6b1615014ca09f6e6460d2ee80bf80b9d77623"
   integrity sha512-j7HB2Mqw2kJdWN/sTgiXDW7hXpsIM6l5MYYJ9OisxtzbitXH1wvl7aEXUc3NuR0JPVg7ImaZeot+HU4VjtMcag==
@@ -5410,3 +5417,8 @@ zip-stream@^6.0.1:
     archiver-utils "^5.0.0"
     compress-commons "^6.0.2"
     readable-stream "^4.0.0"
+
+zustand@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.3.tgz#b323435b73d06b2512e93c77239634374b0e407f"
+  integrity sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==

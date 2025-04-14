@@ -15,11 +15,6 @@ export interface NotifierEvent {
 	startFading?: () => void;
 }
 
-export interface Notifier {
-	showEvent(event: NotifierEvent): void;
-	hideEvent(event: NotifierEvent): void;
-}
-
 interface VKNext {
 	vms_installed?: boolean;
 }
@@ -34,7 +29,6 @@ declare global {
 
 	var vknext: VKNext;
 
-	var Notifier: Notifier;
 	var audioLayer: AudioLayer;
 	var stManager: stManager;
 	var jsc: (module: string) => string;

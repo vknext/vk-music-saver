@@ -7,7 +7,7 @@ const lang = {
 	vms_downloading: 'Скачивается...',
 	vms_playlist_is_empty: 'Плейлист пуст.',
 	vms_playlist_not_found: 'Плейлист не найден',
-	vms_audio_not_found: 'Трек не найден',
+	vms_audio_not_found: 'ВКонтакте не вернул информацию о треке',
 	vms_audio_url_not_found: 'Отсутствует ссылка на трек',
 	vms_album_cover_not_found: 'У этого альбома нет обложки',
 	vms_archivation: 'архивация...',
@@ -27,6 +27,11 @@ const lang = {
 	vms_download_all_music: 'Скачать всю музыку',
 	vms_sett_num_tracks_in_playlist: 'Нумеровать треки',
 	vms_playlist_download_auth_required: 'Вы должны быть авторизованы для скачивания плейлистов',
+	vms_download_manager_active_tasks: 'Активные загрузки',
+	vms_download_manager_finished_tasks: 'Завершенные загрузки',
+	vms_download_manager_save: 'Сохранить',
+	vms_download_manager_remove: 'Удалить',
+	vms_download_manager_cancel: 'Отменить',
 };
 
 export default lang;

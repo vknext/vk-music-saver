@@ -1,0 +1,43 @@
+.PopoverReforged {
+	background: var(--vkui--color_background_modal) !important;
+	border-radius: var(--vkui--size_border_radius--regular) !important;
+	box-shadow: var(--vkui--elevation3) !important;
+
+	&:global([class*='vkui-anim-fade-in--']) {
+		animation: reforged-anim-fade-in 0.1s ease-in forwards !important;
+	}
+
+	&:global([class*='vkui-anim-fade-out--']) {
+		animation: reforged-anim-fade-out 0.1s ease-in forwards !important;
+	}
+}
+
+.PopoverReforged--noBackground {
+	background: none !important;
+	border-radius: none !important;
+	box-shadow: none !important;
+}
+
+@keyframes reforged-anim-fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(5px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes reforged-anim-fade-out {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	to {
+		opacity: 0;
+		transform: translateY(5px);
+	}
+}

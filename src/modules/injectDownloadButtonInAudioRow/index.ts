@@ -8,7 +8,6 @@ import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
-import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
@@ -42,8 +41,8 @@ const createDownloadButton = (
 
 		downloadAudio({
 			audioObject: audio,
-			onProgress: async (progress) => {
-				setText(formatFFMpegProgress(progress));
+			onProgress: (progress) => {
+				setText(`${progress}%`);
 			},
 		}).finally(() => {
 			setIsLoading(false);
