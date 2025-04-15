@@ -1,8 +1,8 @@
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
+import { delay } from '@vknext/shared/utils/delay';
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
 import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
-import ListenerRegistry from 'src/common/ListenerRegistry';
-import delay from 'src/lib/delay';
-import onDocumentComplete from 'src/lib/onDocumentComplete';
-import waitRAF from 'src/lib/waitRAF';
 
 type CallbackFunc = () => void;
 

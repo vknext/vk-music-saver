@@ -1,5 +1,5 @@
+import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import lang from 'src/lang';
-import arrayUnFlat from 'src/lib/arrayUnFlat';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';

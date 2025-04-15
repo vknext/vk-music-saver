@@ -1,7 +1,7 @@
+import { delay } from '@vknext/shared/utils/delay';
+import { waitHTMLHead, type HTMLHeadTaskQueueS } from '@vknext/shared/utils/waitHTMLHead';
 import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
-import ListenerRegistry from 'src/common/ListenerRegistry';
-import delay from 'src/lib/delay';
-import waitHTMLHead, { type HTMLHeadTaskQueueS } from 'src/lib/waitHTMLHead';
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
 
 type CallbackFunc = (tqs: HTMLHeadTaskQueueS) => void;
 

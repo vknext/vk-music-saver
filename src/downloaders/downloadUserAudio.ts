@@ -1,6 +1,6 @@
+import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import lang from 'src/lang';
-import arrayUnFlat from 'src/lib/arrayUnFlat';
 import saveFileAs from 'src/lib/saveFileAs';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';

@@ -1,3 +1,4 @@
+import { delay } from '@vknext/shared/utils/delay';
 import { waitUIActionsMenu } from '@vknext/shared/vkcom/globalVars/waitUIActionsMenu';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
@@ -5,7 +6,6 @@ import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import onOpenPlaylistModal from 'src/interactions/onOpenPlaylistModal';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
-import delay from 'src/lib/delay';
 import onCurBackHide from 'src/listeners/onCurBackHide';
 import initReactApp from 'src/react/initReactApp';
 import showSnackbar from 'src/react/showSnackbar';

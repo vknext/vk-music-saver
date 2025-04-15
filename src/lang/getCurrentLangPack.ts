@@ -1,7 +1,7 @@
+import { LangsCodeEnum } from '@vknext/shared/lib/lang/LangsCodeEnum';
+import { getCodeLangFromNavigator } from '@vknext/shared/lib/lang/getCodeLangFromNavigator';
 import { waitVK } from '@vknext/shared/vkcom/globalVars/waitVK';
 import defaultLang from '../langPack/default';
-import LangsCodeEnum from './LangsCodeEnum';
-import getCodeLangFromNavigator from './getCodeLangFromNavigator';
 
 const langNameMap: Record<LangsCodeEnum, string> = {
 	[LangsCodeEnum.Russian]: 'default',

@@ -1,5 +1,9 @@
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
+import { DOMContentLoaded } from '@vknext/shared/utils/DOMContentLoaded';
+import { delay } from '@vknext/shared/utils/delay';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
+import { waitRIC } from '@vknext/shared/utils/waitRIC';
 import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
-import ListenerRegistry from 'src/common/ListenerRegistry';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import {
 	generateObservedElementIBSKey,
@@ -7,10 +11,6 @@ import {
 } from 'src/common/observedHTMLElements/generateKeys';
 import type { ObservedHTMLElement } from 'src/global';
 import hookAjaxPost from 'src/interceptors/hookAjaxPost';
-import delay from 'src/lib/delay';
-import DOMContentLoaded from 'src/lib/DOMContentLoaded';
-import waitRAF from 'src/lib/waitRAF';
-import waitRIC from 'src/lib/waitRIC';
 
 type CallbackFunc = (el: HTMLElement) => void;
 

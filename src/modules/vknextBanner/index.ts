@@ -1,8 +1,8 @@
 // TODO: переписать на свои стили
 
+import { delay } from '@vknext/shared/utils/delay';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
-import delay from 'src/lib/delay';
-import waitRAF from 'src/lib/waitRAF';
 
 const createSeparator = () => {
 	const catalogBlock = document.createElement('div');

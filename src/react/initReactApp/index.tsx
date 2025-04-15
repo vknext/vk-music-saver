@@ -1,6 +1,7 @@
 import type { Root } from 'react-dom/client';
 
-import waitHTMLBody from 'src/lib/waitHTMLBody';
+import { waitHTMLBody } from '@vknext/shared/utils/waitHTMLBody';
+
 import styles from './initReactApp.module.scss';
 
 interface ElementRoot extends HTMLElement {

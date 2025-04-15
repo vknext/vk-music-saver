@@ -1,7 +1,7 @@
+import { createPromise } from '@vknext/shared/utils/createPromise';
 import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
 import { getTrackDetails, type GetTrackDetailsResult } from '@vknext/shared/vkcom/audio/getTrackDetails';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
-import createPromise from 'src/lib/createPromise';
 import { AudioAudio } from 'src/schemas/objects';
 import TrackDetailsStorage from 'src/storages/TrackDetailsStorage';
 import getAudioByObject from './getAudioByObject';

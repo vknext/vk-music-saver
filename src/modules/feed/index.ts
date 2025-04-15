@@ -1,3 +1,5 @@
+import { getReactAttrs } from '@vknext/shared/utils/getReactAttrs';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
@@ -8,9 +10,7 @@ import type { ObservedHTMLElement } from 'src/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
-import getReactAttrs from 'src/lib/getReactAttrs';
 import humanFileSize from 'src/lib/humanFileSize';
-import waitRAF from 'src/lib/waitRAF';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import showSnackbar from 'src/react/showSnackbar';
 import type { DownloadTargetElement } from 'src/types';

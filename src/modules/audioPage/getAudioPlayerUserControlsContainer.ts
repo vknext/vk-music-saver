@@ -1,4 +1,4 @@
-import delay from 'src/lib/delay';
+import { delay } from '@vknext/shared/utils/delay';
 
 const getAudioPlayerUserControlsContainer = async (root: HTMLElement, retryCount = 0): Promise<HTMLElement> => {
 	if (retryCount === 5) {

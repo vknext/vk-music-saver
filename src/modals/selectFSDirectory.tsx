@@ -1,4 +1,4 @@
-import createPromise from 'src/lib/createPromise';
+import { createPromise } from '@vknext/shared/utils/createPromise';
 import showReactModal from 'src/react/showReactModal';
 
 interface selectFSDirectoryProps {
