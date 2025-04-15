@@ -13,7 +13,10 @@ const DownloadManager = () => {
 	const [isShown, setIsShown] = useState(true);
 	const tasks = useDownloadTasks();
 
-	const activeTasks = Array.from(tasks.values()).filter((task) => task.status !== DownloadStatus.FINISHED);
+	const activeTasks = Array.from(tasks.values())
+		.filter((task) => task.status !== DownloadStatus.FINISHED)
+		.reverse();
+
 	const finishedTasks = Array.from(tasks.values())
 		.filter((task) => task.status === DownloadStatus.FINISHED)
 		.reverse();

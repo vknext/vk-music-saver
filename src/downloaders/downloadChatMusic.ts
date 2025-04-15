@@ -178,11 +178,13 @@ const downloadChatMusic = async (peerId: number) => {
 	const results = await limiter.waitAll();
 	const files = results.filter((f) => !!f);
 
-	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
-
 	if (signal.aborted) return;
 
 	if (fsDirHandle) {
+		setExtraText(
+			lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) })
+		);
+
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_done'),
@@ -194,6 +196,7 @@ const downloadChatMusic = async (peerId: number) => {
 		return;
 	}
 
+	setExtraText('');
 	startArchiving();
 
 	const { downloadZip } = await import('client-zip');
@@ -208,6 +211,8 @@ const downloadChatMusic = async (peerId: number) => {
 	await onSave();
 
 	finish({ onSave, onRemove });
+
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
 };
 
 export default downloadChatMusic;

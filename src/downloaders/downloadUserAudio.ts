@@ -151,11 +151,13 @@ const downloadUserAudio = async (ownerId: number) => {
 	const results = await limiter.waitAll();
 	const files = results.filter((f) => !!f);
 
-	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
-
 	if (signal.aborted) return;
 
 	if (fsDirHandle) {
+		setExtraText(
+			lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) })
+		);
+
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_done'),
@@ -167,6 +169,7 @@ const downloadUserAudio = async (ownerId: number) => {
 		return;
 	}
 
+	setExtraText('');
 	startArchiving();
 
 	const { downloadZip } = await import('client-zip');
@@ -181,6 +184,8 @@ const downloadUserAudio = async (ownerId: number) => {
 	await onSave();
 
 	finish({ onSave, onRemove });
+
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
 };
 
 export default downloadUserAudio;
