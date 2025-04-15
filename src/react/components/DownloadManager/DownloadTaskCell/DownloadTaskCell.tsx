@@ -16,7 +16,13 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 
 	const { progress, status, photoUrl } = task;
 
-	const isShownProgress = progress.current || progress.total;
+	const isShownProgress = (() => {
+		if (task.type === DownloadType.TRACK && progress.current) {
+			return true;
+		}
+
+		return !!progress.current && !!progress.total;
+	})();
 
 	const isPreparing = status === DownloadStatus.PREPARING;
 	const isDownloading = status === DownloadStatus.DOWNLOADING;
@@ -56,8 +62,9 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 						)}
 						<Subhead className={styles.DownloadTaskCellProgress__label}>
 							{progress.current && progress.total
-								? `${progress.current}/${progress.total}${task.type === DownloadType.TRACK ? '%' : ''}`
+								? `${progress.current}/${progress.total}`
 								: progress.current}
+							{task.type === DownloadType.TRACK ? '%' : ''}
 						</Subhead>
 					</Flex>
 				)}

@@ -2,15 +2,12 @@ import type { ClientZipFile } from '../../types';
 
 interface createFileInDirectoryProps {
 	dirHandle: FileSystemDirectoryHandle;
-	zipFilePromise: Promise<ClientZipFile | null>;
+	zipFile: ClientZipFile;
 	subFolderName?: string;
 }
 
-const createFileInDirectory = async ({ dirHandle, zipFilePromise, subFolderName }: createFileInDirectoryProps) => {
+const createFileInDirectory = async ({ dirHandle, zipFile, subFolderName }: createFileInDirectoryProps) => {
 	try {
-		const zipFile = await zipFilePromise;
-		if (!zipFile) return;
-
 		const { name, input } = zipFile;
 
 		const subDirHandle = subFolderName

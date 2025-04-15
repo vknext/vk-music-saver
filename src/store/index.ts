@@ -1,5 +1,7 @@
+import { DownloadStatus } from './constants';
 import { useDownloadStore, type StartDownloadInput } from './useDownloadStore';
-export { DownloadType, DownloadStatus } from './constants';
+
+export { DownloadStatus, DownloadType } from './constants';
 export { type DownloadTask } from './useDownloadStore';
 
 export const startDownload = (input: StartDownloadInput) => useDownloadStore.getState().startDownload(input);

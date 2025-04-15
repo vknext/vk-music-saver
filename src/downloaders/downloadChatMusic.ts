@@ -1,11 +1,13 @@
 import { Ranges } from '@vknext/shared/lib/Ranges';
-import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
+import { MAX_PARALLEL_AUDIO_CONVERSION } from 'src/common/constants';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
+import TaskLimiter from 'src/lib/TaskLimiter';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import showSnackbar from 'src/react/showSnackbar';
+import type { AudioAudio } from 'src/schemas/objects';
 import {
 	type MessagesGetConversationsByIdResponse,
 	type MessagesGetHistoryAttachmentsResponse,
@@ -13,6 +15,7 @@ import {
 } from 'src/schemas/responses';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
+import formatTrackName from './downloadPlaylist/formatTrackName';
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
 
 async function* getAudios(ownerId: number) {
@@ -105,7 +108,7 @@ const downloadChatMusic = async (peerId: number) => {
 		photoUrl: photoUrl,
 	});
 
-	const promises: Promise<ClientZipFile | null | void>[] = [];
+	const limiter = new TaskLimiter<ClientZipFile | null | void>(MAX_PARALLEL_AUDIO_CONVERSION);
 
 	let audioIndex = 1;
 
@@ -123,45 +126,42 @@ const downloadChatMusic = async (peerId: number) => {
 		});
 	};
 
+	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
+		const blob = await getBlobAudioFromPlaylist({ audio, signal });
+		if (!blob) return;
+
+		const trackName = formatTrackName({ audio, isNumTracksInPlaylist: isNumTracks || false, index: audioIndex++ });
+
+		const zipFile: ClientZipFile = {
+			name: `${trackName}.mp3`,
+			lastModified: audio.date ? new Date(audio.date * 1000) : lastModified,
+			input: blob,
+		};
+
+		updateProgress();
+
+		if (fsDirHandle) {
+			return await createFileInDirectory({ zipFile, subFolderName, dirHandle: fsDirHandle });
+		}
+
+		return zipFile;
+	};
+
 	try {
 		for await (const { items } of getAudios(peerId)) {
 			if (signal.aborted) return;
 
 			totalAudios += items.length;
 
-			for (const itemsChunk of arrayUnFlat(items, 8)) {
+			for (const { attachment } of items) {
 				if (signal.aborted) return;
 
-				for (const { attachment } of itemsChunk) {
-					if (attachment?.type !== 'audio') continue;
+				if (attachment?.type !== 'audio') continue;
 
-					const zipFilePromise = getBlobAudioFromPlaylist({
-						audio: attachment.audio,
-						lastModified,
-						signal,
-						audioIndex: audioIndex++,
-						isNumTracksInPlaylist: isNumTracks || false,
-					});
-
-					zipFilePromise.then(() => {
-						updateProgress();
-					});
-
-					if (fsDirHandle) {
-						promises.push(
-							createFileInDirectory({
-								zipFilePromise,
-								subFolderName,
-								dirHandle: fsDirHandle,
-							})
-						);
-					} else {
-						promises.push(zipFilePromise);
-					}
-				}
-
-				await Promise.all(promises);
+				limiter.addTask(() => downloadTrack(attachment.audio));
 			}
+
+			await limiter.waitAll();
 		}
 	} catch (e) {
 		console.error(e);
@@ -169,9 +169,11 @@ const downloadChatMusic = async (peerId: number) => {
 		await showSnackbar({ type: 'warning', text: `VK Music Saver (${filename})`, subtitle: e.message });
 	}
 
-	if (fsDirHandle) {
-		await Promise.all(promises);
+	const results = await limiter.waitAll();
 
+	if (signal.aborted) return;
+
+	if (fsDirHandle) {
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_done'),
@@ -183,11 +185,7 @@ const downloadChatMusic = async (peerId: number) => {
 		return;
 	}
 
-	const results = await Promise.all(promises);
-
 	const files = results.filter(Boolean) as ClientZipFile[];
-
-	if (signal.aborted) return;
 
 	startArchiving();
 

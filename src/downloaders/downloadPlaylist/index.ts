@@ -1,6 +1,7 @@
-import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
+import { MAX_PARALLEL_AUDIO_CONVERSION } from 'src/common/constants';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
+import TaskLimiter from 'src/lib/TaskLimiter';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
@@ -8,8 +9,10 @@ import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
 import showSnackbar from 'src/react/showSnackbar';
+import type { AudioAudio } from 'src/schemas/objects';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
+import formatTrackName from './formatTrackName';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
@@ -91,7 +94,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		photoUrl: getAlbumThumbUrl(playlist) || undefined,
 	});
 
-	const promises: Promise<ClientZipFile | null | void>[] = [];
+	const limiter = new TaskLimiter<ClientZipFile | null | void>(MAX_PARALLEL_AUDIO_CONVERSION);
 
 	let audioIndex = 1;
 
@@ -114,48 +117,36 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		});
 	};
 
-	for (const audios of arrayUnFlat(playlist.audios, 8)) {
-		if (signal.aborted) return;
+	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
+		const blob = await getBlobAudioFromPlaylist({ audio, signal });
+		if (!blob) return;
 
-		for (const audio of audios) {
-			const zipFilePromise = getBlobAudioFromPlaylist({
-				audio,
-				lastModified,
-				signal,
-				playlist,
-				audioIndex: audioIndex++,
-				isNumTracksInPlaylist: isNumTracks || false,
-			});
+		const trackName = formatTrackName({ audio, isNumTracksInPlaylist: isNumTracks || false, index: audioIndex++ });
 
-			zipFilePromise.then(() => {
-				updateProgress();
-			});
+		const zipFile: ClientZipFile = {
+			name: `${trackName}.mp3`,
+			lastModified: audio.date ? new Date(audio.date * 1000) : lastModified,
+			input: blob,
+		};
 
-			if (fsDirHandle) {
-				promises.push(
-					createFileInDirectory({
-						zipFilePromise,
-						dirHandle: fsDirHandle,
-						subFolderName: playlistFolderName,
-					})
-				);
-			} else {
-				promises.push(zipFilePromise);
-			}
+		updateProgress();
+
+		if (fsDirHandle) {
+			return await createFileInDirectory({ zipFile, subFolderName: playlistFolderName, dirHandle: fsDirHandle });
 		}
 
-		await Promise.all(promises);
+		return zipFile;
+	};
+
+	for (const audio of playlist.audios) {
+		limiter.addTask(() => downloadTrack(audio));
 	}
 
-	const results = await Promise.all(promises);
-
-	const files = results.filter((f) => !!f);
+	const results = await limiter.waitAll();
 
 	if (signal.aborted) return;
 
 	if (fsDirHandle) {
-		await Promise.all(promises);
-
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_playlist_done'),
@@ -166,6 +157,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		return;
 	}
+
+	const files = results.filter((f) => !!f);
 
 	startArchiving();
 

@@ -5,9 +5,11 @@ import saveFileAs from 'src/lib/saveFileAs';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import showSnackbar from 'src/react/showSnackbar';
+import type { AudioAudio } from 'src/schemas/objects';
 import { UsersGetResponse, type AudioGetResponse } from 'src/schemas/responses';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
+import formatTrackName from './downloadPlaylist/formatTrackName';
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
 
 async function* getAudios(ownerId: number) {
@@ -98,6 +100,27 @@ const downloadUserAudio = async (ownerId: number) => {
 		});
 	};
 
+	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
+		const blob = await getBlobAudioFromPlaylist({ audio, signal });
+		if (!blob) return;
+
+		const trackName = formatTrackName({ audio, isNumTracksInPlaylist: isNumTracks || false, index: audioIndex++ });
+
+		const zipFile: ClientZipFile = {
+			name: `${trackName}.mp3`,
+			lastModified: audio.date ? new Date(audio.date * 1000) : lastModified,
+			input: blob,
+		};
+
+		updateProgress();
+
+		if (fsDirHandle) {
+			return await createFileInDirectory({ zipFile, subFolderName, dirHandle: fsDirHandle });
+		}
+
+		return zipFile;
+	};
+
 	try {
 		for await (const { count, items } of getAudios(ownerId)) {
 			if (signal.aborted) return;
@@ -110,29 +133,7 @@ const downloadUserAudio = async (ownerId: number) => {
 				if (signal.aborted) return;
 
 				for (const audio of audios) {
-					const zipFilePromise = getBlobAudioFromPlaylist({
-						audio,
-						lastModified,
-						signal,
-						audioIndex: audioIndex++,
-						isNumTracksInPlaylist: isNumTracks || false,
-					});
-
-					zipFilePromise.then(() => {
-						updateProgress();
-					});
-
-					if (fsDirHandle) {
-						promises.push(
-							createFileInDirectory({
-								zipFilePromise,
-								subFolderName,
-								dirHandle: fsDirHandle,
-							})
-						);
-					} else {
-						promises.push(zipFilePromise);
-					}
+					promises.push(downloadTrack(audio));
 				}
 
 				await Promise.all(promises);
@@ -144,9 +145,11 @@ const downloadUserAudio = async (ownerId: number) => {
 		await showSnackbar({ type: 'warning', text: `VK Music Saver (${filename})`, subtitle: e.message });
 	}
 
-	if (fsDirHandle) {
-		await Promise.all(promises);
+	const results = await Promise.all(promises);
 
+	if (signal.aborted) return;
+
+	if (fsDirHandle) {
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_done'),
@@ -158,11 +161,7 @@ const downloadUserAudio = async (ownerId: number) => {
 		return;
 	}
 
-	const results = await Promise.all(promises);
-
 	const files = results.filter(Boolean) as ClientZipFile[];
-
-	if (signal.aborted) return;
 
 	startArchiving();
 
