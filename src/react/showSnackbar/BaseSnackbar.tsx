@@ -1,4 +1,4 @@
-import { Icon20CheckCircleFillGreen, Icon20ErrorCircleFillRed, Icon20ErrorCircleFillYellow } from '@vkontakte/icons';
+import { Icon24CheckCircleOutline, Icon24ErrorCircleOutline, Icon24WarningTriangleOutline } from '@vkontakte/icons';
 import { classNames, Snackbar, type SnackbarProps } from '@vkontakte/vkui';
 import styles from './index.module.scss';
 
@@ -10,15 +10,15 @@ export interface BaseSnackbarProps
 
 const BeforeSnackbar = ({ type }: Pick<BaseSnackbarProps, 'type'>) => {
 	if (type === 'done') {
-		return <Icon20CheckCircleFillGreen width={28} height={28} />;
+		return <Icon24CheckCircleOutline color="var(--vkui--color_icon_positive)" />;
 	}
 
 	if (type === 'error') {
-		return <Icon20ErrorCircleFillRed width={28} height={28} />;
+		return <Icon24ErrorCircleOutline color="var(--vkui--color_icon_negative)" />;
 	}
 
 	if (type === 'warning') {
-		return <Icon20ErrorCircleFillYellow width={28} height={28} />;
+		return <Icon24WarningTriangleOutline color="var(--vkui--color_icon_warning)" />;
 	}
 
 	return null;
