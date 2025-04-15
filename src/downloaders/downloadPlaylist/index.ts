@@ -118,24 +118,36 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	};
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
-		const blob = await getBlobAudioFromPlaylist({ audio, signal });
-		if (!blob) return;
+		try {
+			const blob = await getBlobAudioFromPlaylist({ audio, signal });
+			if (!blob) return;
 
-		const trackName = formatTrackName({ audio, isNumTracksInPlaylist: isNumTracks || false, index: audioIndex++ });
+			const trackName = formatTrackName({
+				audio,
+				isNumTracksInPlaylist: isNumTracks || false,
+				index: audioIndex++,
+			});
 
-		const zipFile: ClientZipFile = {
-			name: `${trackName}.mp3`,
-			lastModified: audio.date ? new Date(audio.date * 1000) : lastModified,
-			input: blob,
-		};
+			const zipFile: ClientZipFile = {
+				name: `${trackName}.mp3`,
+				lastModified: audio.date ? new Date(audio.date * 1000) : lastModified,
+				input: blob,
+			};
 
-		updateProgress();
+			updateProgress();
 
-		if (fsDirHandle) {
-			return await createFileInDirectory({ zipFile, subFolderName: playlistFolderName, dirHandle: fsDirHandle });
+			if (fsDirHandle) {
+				return await createFileInDirectory({
+					zipFile,
+					subFolderName: playlistFolderName,
+					dirHandle: fsDirHandle,
+				});
+			}
+
+			return zipFile;
+		} catch (e) {
+			console.error(e);
 		}
-
-		return zipFile;
 	};
 
 	for (const audio of playlist.audios) {
