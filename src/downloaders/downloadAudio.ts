@@ -8,6 +8,7 @@ import getPerformer from 'src/musicUtils/getPerformer';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioAudio } from 'src/schemas/objects';
 import { DownloadType, getDownloadTaskById, startDownload } from 'src/store';
+import { DownloadTaskNotFoundError } from 'src/store/downloadErrors';
 
 interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
 	audioObject: AudioObject | AudioAudio;
@@ -30,12 +31,18 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 
 	const taskId = 'audio' + [audioObject.owner_id, audioObject.id].join('_');
 
-	const prevTask = getDownloadTaskById(taskId);
+	try {
+		const prevTask = getDownloadTaskById(taskId);
 
-	if (prevTask) {
-		prevTask.onSave?.();
+		if (prevTask) {
+			prevTask.onSave?.();
 
-		return;
+			return;
+		}
+	} catch (e) {
+		if (!(e instanceof DownloadTaskNotFoundError)) {
+			console.error(e);
+		}
 	}
 
 	const controller = new AbortController();
