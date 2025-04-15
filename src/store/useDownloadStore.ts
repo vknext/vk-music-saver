@@ -18,6 +18,7 @@ export interface DownloadTask {
 	progress: Progress;
 	status: DownloadStatus;
 	photoUrl?: string;
+	extraText?: string;
 	/**
 	 * Пользователь отменил скачивание
 	 */
@@ -48,6 +49,10 @@ interface DownloadTaskHandlers {
 	setPhotoUrl: (photoUrl: string) => void;
 	startArchiving: () => void;
 	/**
+	 * Отображается после "title", но над прогрессом
+	 */
+	setExtraText: (text: string) => void;
+	/**
 	 * Скачивание завершено
 	 */
 	finish: (callbacks?: DownloadTaskFinishProps) => void;
@@ -69,38 +74,39 @@ interface DownloadStore {
 }
 
 export const useDownloadStore = create<DownloadStore>((set, get) => {
-	const setProgressById = (id: string, progress: Progress) => {
+	const getTaskById = (id: string) => {
 		const tasks = new Map(get().tasks);
 		const task = tasks.get(id);
 
 		if (!task) {
 			throw new DownloadTaskNotFoundError(id);
 		}
+
+		return task;
+	};
+
+	const setProgressById = (id: string, progress: Progress) => {
+		const task = getTaskById(id);
+
+		const tasks = new Map(get().tasks);
 
 		if (task.status === DownloadStatus.FINISHED) {
 			throw new DownloadTaskAlreadyFinishedError(id);
 		}
 
 		set(() => {
-			tasks.set(id, {
-				...task,
-				progress,
-				status: DownloadStatus.DOWNLOADING,
-			});
+			tasks.set(id, { ...task, progress, status: DownloadStatus.DOWNLOADING });
 
 			return { tasks };
 		});
 	};
 
 	const setTitleById = (id: string, title: string) => {
-		const tasks = new Map(get().tasks);
-		const task = tasks.get(id);
+		const task = getTaskById(id);
 
-		if (!task) {
-			throw new DownloadTaskNotFoundError(id);
-		}
+		set((state) => {
+			const tasks = new Map(state.tasks);
 
-		set(() => {
 			tasks.set(id, {
 				...task,
 				title,
@@ -111,12 +117,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 	};
 
 	const finishTaskById = (id: string, callbacks?: DownloadTaskFinishProps) => {
-		const tasks = new Map(get().tasks);
-		const task = tasks.get(id);
-
-		if (!task) {
-			throw new DownloadTaskNotFoundError(id);
-		}
+		const task = getTaskById(id);
 
 		if (task.status === DownloadStatus.FINISHED) {
 			throw new DownloadTaskAlreadyFinishedError(id);
@@ -130,38 +131,31 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 		const ms = (callbacks?.onSave ? 15 : 5) * 60 * 1000;
 		const timeoutId = setTimeout(() => removeDownloadById(id), ms);
 
-		set(() => {
+		set((state) => {
+			const tasks = new Map(state.tasks);
+
 			const onRemove = new Set(task.onRemove);
 
 			if (callbacks?.onRemove) {
 				onRemove.add(callbacks.onRemove);
 			}
 
-			tasks.set(id, {
-				...task,
-				onRemove,
-				timeoutId,
-				onSave: callbacks?.onSave,
-				status: DownloadStatus.FINISHED,
-			});
+			tasks.set(id, { ...task, onRemove, timeoutId, onSave: callbacks?.onSave, status: DownloadStatus.FINISHED });
 
 			return { tasks };
 		});
 	};
 
 	const cancelDownloadById = (id: string) => {
-		const tasks = new Map(get().tasks);
-		const task = tasks.get(id);
-
-		if (!task) {
-			throw new DownloadTaskNotFoundError(id);
-		}
+		const task = getTaskById(id);
 
 		for (const onCancel of task.onCancel) {
 			onCancel();
 		}
 
-		set(() => {
+		set((state) => {
+			const tasks = new Map(state.tasks);
+
 			tasks.delete(id);
 
 			return { tasks };
@@ -187,36 +181,36 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 	};
 
 	const startArchivingById = (id: string) => {
-		const tasks = new Map(get().tasks);
-		const task = tasks.get(id);
+		const task = getTaskById(id);
 
-		if (!task) {
-			throw new DownloadTaskNotFoundError(id);
-		}
+		set((state) => {
+			const tasks = new Map(state.tasks);
 
-		set(() => {
-			tasks.set(id, {
-				...task,
-				status: DownloadStatus.ARCHIVING,
-			});
+			tasks.set(id, { ...task, status: DownloadStatus.ARCHIVING });
 
 			return { tasks };
 		});
 	};
 
 	const setPhotoUrlById = (id: string, photoUrl: string) => {
-		const tasks = new Map(get().tasks);
-		const task = tasks.get(id);
+		const task = getTaskById(id);
 
-		if (!task) {
-			throw new DownloadTaskNotFoundError(id);
-		}
+		set((state) => {
+			const tasks = new Map(state.tasks);
 
-		set(() => {
-			tasks.set(id, {
-				...task,
-				photoUrl,
-			});
+			tasks.set(id, { ...task, photoUrl });
+
+			return { tasks };
+		});
+	};
+
+	const setExtraTextById = (id: string, text: string) => {
+		const task = getTaskById(id);
+
+		set((state) => {
+			const tasks = new Map(state.tasks);
+
+			tasks.set(id, { ...task, extraText: text });
 
 			return { tasks };
 		});
@@ -224,6 +218,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 
 	const getTaskHandlersById = (id: string): DownloadTaskHandlers => {
 		return {
+			setExtraText: (text) => setExtraTextById(id, text),
 			setPhotoUrl: (photoUrl) => setPhotoUrlById(id, photoUrl),
 			setTitle: (title) => setTitleById(id, title),
 			setProgress: (progress) => setProgressById(id, progress),
@@ -261,7 +256,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 		},
 
 		getTask: (id) => {
-			const task = get().tasks.get(id);
+			const task = getTaskById(id);
 
 			return task ? { ...task } : undefined;
 		},

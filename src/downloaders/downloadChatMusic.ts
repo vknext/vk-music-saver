@@ -100,7 +100,7 @@ const downloadChatMusic = async (peerId: number) => {
 
 	const taskId = `convo_music${peerId}`;
 
-	const { setProgress, startArchiving, finish } = startDownload({
+	const { setProgress, startArchiving, finish, setExtraText } = startDownload({
 		id: taskId,
 		title: fsDirHandle ? subFolderName : filename,
 		type: DownloadType.CONVO,
@@ -120,10 +120,7 @@ const downloadChatMusic = async (peerId: number) => {
 
 		progress++;
 
-		setProgress({
-			current: progress,
-			total: totalAudios,
-		});
+		setProgress({ current: progress, total: totalAudios });
 	};
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
@@ -144,6 +141,7 @@ const downloadChatMusic = async (peerId: number) => {
 			};
 
 			updateProgress();
+			setExtraText(lang.use('vms_playlist_track_download_completed', { trackName }));
 
 			if (fsDirHandle) {
 				return await createFileInDirectory({ zipFile, subFolderName, dirHandle: fsDirHandle });
@@ -178,6 +176,9 @@ const downloadChatMusic = async (peerId: number) => {
 	}
 
 	const results = await limiter.waitAll();
+	const files = results.filter((f) => !!f);
+
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
 
 	if (signal.aborted) return;
 
@@ -192,8 +193,6 @@ const downloadChatMusic = async (peerId: number) => {
 
 		return;
 	}
-
-	const files = results.filter(Boolean) as ClientZipFile[];
 
 	startArchiving();
 

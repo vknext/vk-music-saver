@@ -29,6 +29,11 @@
 	max-inline-size: 100%;
 	padding-block: var(--vkui--spacing_size_l);
 	overflow: hidden;
+
+	& > :not(:first-child) {
+		-webkit-margin-before: var(--vkui--spacing_size_2xs);
+		margin-block-start: var(--vkui--spacing_size_2xs);
+	}
 }
 
 .DownloadTaskCell__after {
@@ -50,7 +55,6 @@
 }
 
 .DownloadTaskCellProgress {
-	padding-top: 6px;
 	color: var(--vkui--color_text_subhead);
 }
 

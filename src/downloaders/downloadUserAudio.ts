@@ -75,7 +75,7 @@ const downloadUserAudio = async (ownerId: number) => {
 
 	const taskId = `music${ownerId}`;
 
-	const { setProgress, startArchiving, finish } = startDownload({
+	const { setProgress, startArchiving, finish, setExtraText } = startDownload({
 		id: taskId,
 		title: fsDirHandle ? subFolderName : filename,
 		type: DownloadType.OWNER_MUSIC,
@@ -95,10 +95,7 @@ const downloadUserAudio = async (ownerId: number) => {
 
 		progress++;
 
-		setProgress({
-			current: progress,
-			total: totalAudios,
-		});
+		setProgress({ current: progress, total: totalAudios });
 	};
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
@@ -119,6 +116,7 @@ const downloadUserAudio = async (ownerId: number) => {
 			};
 
 			updateProgress();
+			setExtraText(lang.use('vms_playlist_track_download_completed', { trackName }));
 
 			if (fsDirHandle) {
 				return await createFileInDirectory({ zipFile, subFolderName, dirHandle: fsDirHandle });
@@ -151,6 +149,9 @@ const downloadUserAudio = async (ownerId: number) => {
 	}
 
 	const results = await limiter.waitAll();
+	const files = results.filter((f) => !!f);
+
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
 
 	if (signal.aborted) return;
 
@@ -165,8 +166,6 @@ const downloadUserAudio = async (ownerId: number) => {
 
 		return;
 	}
-
-	const files = results.filter(Boolean) as ClientZipFile[];
 
 	startArchiving();
 

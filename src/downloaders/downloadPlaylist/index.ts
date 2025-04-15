@@ -86,7 +86,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	const taskId = `playlist${playlistFullId}`;
 
-	const { setProgress, startArchiving, finish } = startDownload({
+	const { setProgress, startArchiving, finish, setExtraText } = startDownload({
 		id: taskId,
 		title: fsDirHandle ? playlistFolderName : `${unescapeHTML(nameChunks.join(''))}.zip`,
 		type: DownloadType.PLAYLIST,
@@ -101,20 +101,14 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	let progress = 0;
 	const totalAudios = playlist.audios.length;
 
-	setProgress({
-		current: 0,
-		total: totalAudios,
-	});
+	setProgress({ current: 0, total: totalAudios });
 
 	const updateProgress = () => {
 		if (signal.aborted) return;
 
 		progress++;
 
-		setProgress({
-			current: progress,
-			total: totalAudios,
-		});
+		setProgress({ current: progress, total: totalAudios });
 	};
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
@@ -135,6 +129,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 			};
 
 			updateProgress();
+			setExtraText(lang.use('vms_playlist_track_download_completed', { trackName }));
 
 			if (fsDirHandle) {
 				return await createFileInDirectory({
@@ -155,6 +150,9 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	}
 
 	const results = await limiter.waitAll();
+	const files = results.filter((f) => !!f);
+
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
 
 	if (signal.aborted) return;
 
@@ -169,8 +167,6 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		return;
 	}
-
-	const files = results.filter((f) => !!f);
 
 	startArchiving();
 

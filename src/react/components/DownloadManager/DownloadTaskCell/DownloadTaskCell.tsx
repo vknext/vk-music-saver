@@ -42,6 +42,9 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 				<Headline className={styles.DownloadTaskCell__children} Component="span" weight="3">
 					{task.title}
 				</Headline>
+				{!!task.extraText && (
+					<Footnote className={styles.DownloadTaskCell__subtitle}>{task.extraText}</Footnote>
+				)}
 				{(isPreparing || (isDownloading && !isShownProgress)) && (
 					<Footnote normalize={false} className={styles.DownloadTaskCell__subtitle}>
 						{lang.use('vms_downloading')}
@@ -53,7 +56,7 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 					</Footnote>
 				)}
 				{isDownloading && isShownProgress && (
-					<Flex align="center" gap={12} className={styles.DownloadTaskCellProgress}>
+					<Flex align="center" gap={[0, 12]} className={styles.DownloadTaskCellProgress}>
 						{progress.current && progress.total && (
 							<Progress
 								className={styles.DownloadTaskCellProgress__progress}

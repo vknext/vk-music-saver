@@ -32,6 +32,9 @@ const lang = {
 	vms_download_manager_save: 'Сохранить',
 	vms_download_manager_remove: 'Удалить',
 	vms_download_manager_cancel: 'Отменить',
+	vms_playlist_track_download_completed: '{trackName} - завершено',
+	vms_playlist_download_completed: `Скачано {total}`,
+	vkcom_tracks_plurals: ['трек', 'трека', 'треков'],
 };
 
 export default lang;
