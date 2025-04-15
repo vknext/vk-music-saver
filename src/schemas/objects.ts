@@ -903,3 +903,139 @@ export interface UsersUserFull extends UsersUser {
 	can_subscribe_stories?: boolean;
 	can_ban?: boolean;
 }
+
+export interface MessagesConversationPeer {
+	[key: string]: any;
+	id: number;
+	local_id?: number;
+	type: MessagesConversationPeerType;
+}
+
+export type MessagesConversationPeerType = 'chat' | 'email' | 'user' | 'group';
+
+export interface MessagesChatSettingsPhoto {
+	/**
+	 * URL of the preview image with 50px in width
+	 */
+	photo_50?: string;
+	/**
+	 * URL of the preview image with 100px in width
+	 */
+	photo_100?: string;
+	/**
+	 * URL of the preview image with 200px in width
+	 */
+	photo_200?: string;
+	/**
+	 * If provided photo is default
+	 */
+	is_default_photo?: boolean | number;
+	/**
+	 * If provided photo is default call photo
+	 */
+	is_default_call_photo?: boolean | number;
+	[key: string]: any;
+}
+
+export interface MessagesChatSettings {
+	/**
+	 * Chat title
+	 */
+	title: string;
+	/**
+	 * Admin id
+	 */
+	admin_ids?: number[];
+	/**
+	 * Active member ID
+	 */
+	active_ids?: number[];
+	[key: string]: any;
+	members_count?: number;
+	friends_count?: number;
+	owner_id: number;
+	is_group_channel?: boolean | number;
+	is_disappearing?: boolean | number;
+	theme?: string;
+	disappearing_chat_link?: string;
+	is_service?: boolean | number;
+	photo?: MessagesChatSettingsPhoto;
+}
+
+export interface MessagesConversation {
+	/**
+	 * ID of the last message in conversation
+	 */
+	last_message_id?: number;
+	/**
+	 * Conversation message ID of the last message in conversation
+	 */
+	last_conversation_message_id?: number;
+	/**
+	 * Last message user have read
+	 */
+	in_read?: number;
+	/**
+	 * Last outgoing message have been read by the opponent
+	 */
+	out_read?: number;
+	/**
+	 * Unread messages number
+	 */
+	unread_count?: number;
+	/**
+	 * Is this conversation uread
+	 */
+	is_marked_unread?: boolean | number;
+	/**
+	 * Message id of message with mention
+	 */
+	mentions?: number[];
+	important?: boolean | number;
+	unanswered?: boolean | number;
+	special_service_type?: 'business_notify';
+	peer: MessagesConversationPeer;
+	chat_settings?: MessagesChatSettings;
+}
+
+export interface MessagesGetConversationById {
+	/**
+	 * Total number
+	 */
+	count?: number;
+	[key: string]: any;
+	items: MessagesConversation[];
+}
+
+interface MessagesMessageBase {
+	type: MessagesMessageAttachmentType;
+
+	[key: string]: any;
+}
+
+interface MessagesMessageAttachmentAudio extends MessagesMessageBase {
+	type: 'audio';
+	audio: AudioAudio;
+}
+
+export type MessagesMessageAttachment = MessagesMessageAttachmentAudio;
+
+export type MessagesMessageAttachmentType = 'audio';
+
+export interface MessagesHistoryAttachment {
+	/**
+	 * Message ID
+	 */
+	message_id?: number;
+	/**
+	 * Message author's ID
+	 */
+	from_id?: number;
+	/**
+	 * Forward level (optional)
+	 */
+	forward_level?: number;
+	[key: string]: any;
+	was_listened?: boolean | number;
+	attachment?: MessagesMessageAttachment;
+}

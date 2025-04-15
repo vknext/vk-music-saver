@@ -1,8 +1,8 @@
 import { Icon24Cancel, Icon24DeleteOutline, Icon24DownloadOutline } from '@vkontakte/icons';
-import { Flex, Footnote, Headline, IconButton, Image, Progress, Subhead, Tooltip } from '@vkontakte/vkui';
+import { Avatar, Flex, Footnote, Headline, IconButton, Image, Progress, Subhead, Tooltip } from '@vkontakte/vkui';
 import normalizeProgressValue from 'src/lib/normalizeProgressValue';
 import useLang from 'src/react/hooks/useLang';
-import { DownloadStatus, useDownloadTaskHandlers, type DownloadTask } from 'src/store';
+import { DownloadStatus, DownloadType, useDownloadTaskHandlers, type DownloadTask } from 'src/store';
 import styles from './DownloadTaskCell.module.scss';
 import FallbackIcon from './FallbackIcon';
 
@@ -16,7 +16,7 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 
 	const { progress, status, photoUrl } = task;
 
-	const isShownProgress = progress.current !== 0 && progress.total !== 0;
+	const isShownProgress = progress.current || progress.total;
 
 	const isPreparing = status === DownloadStatus.PREPARING;
 	const isDownloading = status === DownloadStatus.DOWNLOADING;
@@ -26,7 +26,11 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 	return (
 		<div className={styles.DownloadTaskCell}>
 			<div className={styles.DownloadTaskCell__before}>
-				<Image size={48} src={photoUrl} fallbackIcon={<FallbackIcon type={task.type} />} />
+				{task.type === DownloadType.CONVO ? (
+					<Avatar size={48} src={photoUrl} fallbackIcon={<FallbackIcon type={task.type} />} />
+				) : (
+					<Image size={48} src={photoUrl} fallbackIcon={<FallbackIcon type={task.type} />} />
+				)}
 			</div>
 			<div className={styles.DownloadTaskCell__middle}>
 				<Headline className={styles.DownloadTaskCell__children} Component="span" weight="3">
@@ -44,12 +48,16 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 				)}
 				{isDownloading && isShownProgress && (
 					<Flex align="center" gap={12} className={styles.DownloadTaskCellProgress}>
-						<Progress
-							className={styles.DownloadTaskCellProgress__progress}
-							value={normalizeProgressValue(progress.current, 0, progress.total)}
-						/>
+						{progress.current && progress.total && (
+							<Progress
+								className={styles.DownloadTaskCellProgress__progress}
+								value={normalizeProgressValue(progress.current, 0, progress.total)}
+							/>
+						)}
 						<Subhead className={styles.DownloadTaskCellProgress__label}>
-							{progress.current}/{progress.total}
+							{progress.current && progress.total
+								? `${progress.current}/${progress.total}${task.type === DownloadType.TRACK ? '%' : ''}`
+								: progress.current}
 						</Subhead>
 					</Flex>
 				)}

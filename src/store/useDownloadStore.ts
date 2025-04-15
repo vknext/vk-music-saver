@@ -7,8 +7,8 @@ import {
 } from './downloadErrors';
 
 interface Progress {
-	current: number;
-	total: number;
+	current?: number;
+	total?: number;
 }
 
 export interface DownloadTask {
@@ -241,7 +241,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 			const newTask: DownloadTask = {
 				...props,
 				id,
-				progress: { current: 0, total: 1 },
+				progress: { current: undefined, total: undefined },
 				status: DownloadStatus.PREPARING,
 				onCancel: new Set(onCancel ? [onCancel] : []),
 				onRemove: new Set(),

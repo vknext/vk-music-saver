@@ -16,3 +16,16 @@ export interface AudioGetResponse {
 }
 
 export type UsersGetResponse = Objects.UsersUserFull[];
+
+export type MessagesGetConversationsByIdResponse = Objects.MessagesGetConversationById;
+
+export interface MessagesGetHistoryAttachmentsResponse {
+	/**
+	 * Value for pagination
+	 */
+	next_from: string;
+	[key: string]: any;
+	items: Objects.MessagesHistoryAttachment[];
+	profiles: Objects.UsersUserFull[];
+	groups: Objects.GroupsGroupFull[];
+}

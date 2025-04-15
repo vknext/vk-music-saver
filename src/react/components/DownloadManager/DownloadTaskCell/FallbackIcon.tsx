@@ -6,7 +6,11 @@ interface FallbackIconProps {
 }
 
 const FallbackIcon = ({ type: taskType }: FallbackIconProps) => {
-	if (taskType === DownloadType.OWNER_MUSIC || taskType === DownloadType.PLAYLIST) {
+	if (
+		taskType === DownloadType.OWNER_MUSIC ||
+		taskType === DownloadType.PLAYLIST ||
+		taskType === DownloadType.CONVO
+	) {
 		return <Icon28PlaylistOutline width={24} height={24} />;
 	}
 

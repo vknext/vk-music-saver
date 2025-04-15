@@ -9,6 +9,7 @@ import { DOMContentLoaded } from '@vknext/shared/utils/DOMContentLoaded';
 import getGlobalVKNext from './getGlobalVKNext';
 import initAudioPage from './modules/audioPage';
 import initAudioPlaylist from './modules/audioPlaylist';
+import initConvoProfile from './modules/convoProfile';
 import initFeed from './modules/feed';
 import initVKNextBanner from './modules/vknextBanner';
 
@@ -44,6 +45,12 @@ const start = async () => {
 		initFeed();
 	} catch (e) {
 		console.error('[VMS/initFeed]', e);
+	}
+
+	try {
+		initConvoProfile();
+	} catch (e) {
+		console.error(['[VMS/initConvoProfile]', e], e);
 	}
 
 	try {

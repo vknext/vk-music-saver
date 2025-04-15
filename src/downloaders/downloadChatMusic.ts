@@ -1,3 +1,4 @@
+import { Ranges } from '@vknext/shared/lib/Ranges';
 import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import lang from 'src/lang';
@@ -5,60 +6,84 @@ import saveFileAs from 'src/lib/saveFileAs';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import showSnackbar from 'src/react/showSnackbar';
-import { UsersGetResponse, type AudioGetResponse } from 'src/schemas/responses';
+import {
+	type MessagesGetConversationsByIdResponse,
+	type MessagesGetHistoryAttachmentsResponse,
+	type UsersGetResponse,
+} from 'src/schemas/responses';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
 
 async function* getAudios(ownerId: number) {
-	let offset = 0;
-	let count = 200;
-	let allAudiosCount = count + 1;
+	let count = 100;
+	let next_from: string | undefined;
+
+	let isBreak = false;
 
 	const vkApi = await waitVKApi();
 
 	do {
-		const response = await vkApi.api<AudioGetResponse>('audio.get', {
-			owner_id: ownerId,
-			offset,
-			count,
-		});
+		const params: Record<string, string | number> = { media_type: 'audio', peer_id: ownerId, count };
 
-		allAudiosCount = response.count;
-		offset += count;
+		if (next_from) {
+			params.start_from = next_from;
+		}
+
+		const response = await vkApi.api<MessagesGetHistoryAttachmentsResponse>(
+			'messages.getHistoryAttachments',
+			params
+		);
+
+		next_from = response.next_from;
 
 		yield response;
-	} while (offset === 0 || offset < allAudiosCount);
+
+		if (response.items.length === 0) {
+			isBreak = true;
+
+			return;
+		}
+	} while (isBreak === false);
 }
 
-const downloadUserAudio = async (ownerId: number) => {
-	if (window.vk.id === 0) {
-		return await showSnackbar({
-			type: 'warning',
-			text: 'VK Music Saver',
-			subtitle: lang.use('vms_playlist_download_auth_required'),
-		});
-	}
-
+const downloadChatMusic = async (peerId: number) => {
 	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
-		id: `user_music_${ownerId}`,
+		id: `chat_music_${peerId}`,
 		startIn: 'music',
 	});
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
-	let subFolderName = `audios${ownerId}`;
+	let subFolderName = `convo${peerId}`;
 	let photoUrl = undefined;
 
 	try {
-		const [user] = await window.vkApi.api<UsersGetResponse>('users.get', {
-			fields: 'photo_100,is_nft',
-			user_ids: ownerId,
-		});
+		if (Ranges.isChatId(peerId)) {
+			const { items } = await window.vkApi.api<MessagesGetConversationsByIdResponse>(
+				'messages.getConversationsById',
+				{
+					peer_ids: peerId,
+				}
+			);
 
-		if (user) {
-			subFolderName = `${user.first_name} ${user.last_name}`;
-			photoUrl = user.photo_100;
+			const chatSettings = items[0]?.chat_settings;
+
+			if (chatSettings?.title) {
+				subFolderName = chatSettings.title;
+			}
+
+			photoUrl = chatSettings?.photo?.photo_50 || chatSettings?.photo?.photo_100;
+		} else if (Ranges.isUserId(peerId)) {
+			const [user] = await window.vkApi.api<UsersGetResponse>('users.get', {
+				fields: 'photo_100,is_nft',
+				user_ids: peerId,
+			});
+
+			if (user) {
+				subFolderName = `${user.first_name} ${user.last_name}`;
+				photoUrl = user.photo_100;
+			}
 		}
 	} catch (e) {
 		console.error(e);
@@ -70,12 +95,12 @@ const downloadUserAudio = async (ownerId: number) => {
 	const { signal } = controller;
 	const lastModified = new Date();
 
-	const taskId = `music${ownerId}`;
+	const taskId = `convo_music${peerId}`;
 
 	const { setProgress, startArchiving, finish } = startDownload({
 		id: taskId,
 		title: fsDirHandle ? subFolderName : filename,
-		type: DownloadType.OWNER_MUSIC,
+		type: DownloadType.CONVO,
 		onCancel: () => controller.abort(),
 		photoUrl: photoUrl,
 	});
@@ -99,19 +124,19 @@ const downloadUserAudio = async (ownerId: number) => {
 	};
 
 	try {
-		for await (const { count, items } of getAudios(ownerId)) {
+		for await (const { items } of getAudios(peerId)) {
 			if (signal.aborted) return;
 
-			if (totalAudios !== count) {
-				totalAudios = count;
-			}
+			totalAudios += items.length;
 
-			for (const audios of arrayUnFlat(items, 8)) {
+			for (const itemsChunk of arrayUnFlat(items, 8)) {
 				if (signal.aborted) return;
 
-				for (const audio of audios) {
+				for (const { attachment } of itemsChunk) {
+					if (attachment?.type !== 'audio') continue;
+
 					const zipFilePromise = getBlobAudioFromPlaylist({
-						audio,
+						audio: attachment.audio,
 						lastModified,
 						signal,
 						audioIndex: audioIndex++,
@@ -180,4 +205,4 @@ const downloadUserAudio = async (ownerId: number) => {
 	finish({ onSave, onRemove });
 };
 
-export default downloadUserAudio;
+export default downloadChatMusic;
