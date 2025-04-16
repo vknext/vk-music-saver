@@ -17,7 +17,7 @@
 
 ## Requirements
 
--   Install Ubuntu version 20.04
+-   Install Ubuntu latest
 -   Install [Node.js](https://nodejs.org/) version 22.2.0
 -   Install [Yarn](https://classic.yarnpkg.com/) version 1.22.22
 
