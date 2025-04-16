@@ -5,28 +5,48 @@ import {
 	ModalPageHeader,
 	Placeholder,
 	SelectionControl,
-	Switch,
+	Separator,
+	Spacing,
 	Tooltip,
 } from '@vkontakte/vkui';
 import { useState } from 'react';
+import AndroidSwitch from 'src/react/components/AndroidSwitch/AndroidSwitch';
 import CustomModalPage from 'src/react/components/CustomModalPage/CustomModalPage';
 import { useCustomModalControl } from 'src/react/components/CustomModalPage/CustomModalPageContext';
+import SettControl from 'src/react/components/SettControl/SettControl';
 import useLang from 'src/react/hooks/useLang';
-import { useLocalStorage } from 'usehooks-ts';
+import GlobalStorage from 'src/storages/GlobalStorage';
+import { DownloadFilesMethod } from 'src/storages/enums';
 import styles from './index.module.scss';
 
 interface SelectFCDirectoryModalProps {
-	onSelect: (value: [directory: FileSystemDirectoryHandle | null, isNumTracks: boolean]) => void;
+	onSelect: (value: FileSystemDirectoryHandle | null) => void;
 	onShowPicker: () => Promise<FileSystemDirectoryHandle>;
 	showNumTracks?: boolean;
 }
 
+interface SettSaveMethodSelectionProps {
+	value: boolean;
+	setValue: (value: boolean) => void;
+}
+
+const SettSaveMethodSelection = ({ value, setValue }: SettSaveMethodSelectionProps) => {
+	const lang = useLang();
+
+	// TODO: вернуть `description={lang.use('vms_sett_save_method_selection_description')}` после реализации настроек
+	return (
+		<SelectionControl>
+			<SelectionControl.Label>{lang.use('vms_sett_save_method_selection')}</SelectionControl.Label>
+			<AndroidSwitch checked={value} onChange={(e) => setValue(e.target.checked)} />
+		</SelectionControl>
+	);
+};
+
 const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 	const { closeModal } = useCustomModalControl();
 	const lang = useLang();
-	const [isNumTracks] = useLocalStorage('vms_sett_num_tracks_in_playlist', true);
-
 	const [errorSelectFolder, setErrorSelectFolder] = useState<string | null>(null);
+	const [saveMethodSelection, setSaveMethodSelection] = useState(false);
 
 	const onSelectFolder = async () => {
 		setErrorSelectFolder(null);
@@ -34,13 +54,28 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 		try {
 			const dirHandle = await onShowPicker();
 
-			onSelect([dirHandle, isNumTracks]);
+			onSelect(dirHandle);
+
+			if (saveMethodSelection) {
+				await GlobalStorage.setValue('downloadMethod', DownloadFilesMethod.DIRECTORY);
+			}
+
 			closeModal();
 		} catch (error) {
 			console.error(error);
 
 			setErrorSelectFolder(error.message);
 		}
+	};
+
+	const onSelectZip = async () => {
+		onSelect(null);
+
+		if (saveMethodSelection) {
+			await GlobalStorage.setValue('downloadMethod', DownloadFilesMethod.DIRECTORY);
+		}
+
+		closeModal();
 	};
 
 	return (
@@ -77,43 +112,35 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 					<Placeholder.Title>{lang.use('vms_fs_option_zip_title')}</Placeholder.Title>
 					<Placeholder.Description>{lang.use('vms_fs_option_zip_description')}</Placeholder.Description>
 					<Placeholder.Actions>
-						<Button
-							size="m"
-							onClick={() => {
-								onSelect([null, isNumTracks]);
-								closeModal();
-							}}
-						>
+						<Button size="m" onClick={onSelectZip}>
 							{lang.use('vms_fs_select_zip')}
 						</Button>
 					</Placeholder.Actions>
 				</Placeholder.Container>
 			</Div>
+			<Div style={{ paddingTop: 0, paddingBottom: 0 }}>
+				<SettSaveMethodSelection value={saveMethodSelection} setValue={setSaveMethodSelection} />
+			</Div>
+			<Spacing size={12}>
+				<Separator />
+			</Spacing>
+			<Div style={{ paddingTop: 0 }}>
+				<SettControl
+					option="numTracksInPlaylist"
+					defaultValue={true}
+					label={lang.use('vms_sett_num_tracks_in_playlist')}
+				/>
+			</Div>
 		</>
 	);
 };
 
-const SettNumTracks = () => {
-	const lang = useLang();
-	const [value, setValue] = useLocalStorage('vms_sett_num_tracks_in_playlist', true);
-
-	return (
-		<Div style={{ paddingTop: 0 }}>
-			<SelectionControl>
-				<SelectionControl.Label>{lang.use('vms_sett_num_tracks_in_playlist')}</SelectionControl.Label>
-				<Switch checked={value} onChange={(e) => setValue(e.target.checked)} />
-			</SelectionControl>
-		</Div>
-	);
-};
-
-const SelectFCDirectoryModal = ({ ...props }: SelectFCDirectoryModalProps) => {
+const SelectFCDirectoryModal = (props: SelectFCDirectoryModalProps) => {
 	const lang = useLang();
 
 	return (
 		<CustomModalPage size={600} header={<ModalPageHeader>{lang.use('vms_fs_method_selection')}</ModalPageHeader>}>
 			<Content {...props} />
-			<SettNumTracks />
 		</CustomModalPage>
 	);
 };

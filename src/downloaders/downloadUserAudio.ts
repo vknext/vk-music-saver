@@ -8,6 +8,7 @@ import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle
 import showSnackbar from 'src/react/showSnackbar';
 import type { AudioAudio } from 'src/schemas/objects';
 import { UsersGetResponse, type AudioGetResponse } from 'src/schemas/responses';
+import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
 import formatTrackName from './downloadPlaylist/formatTrackName';
@@ -43,10 +44,12 @@ const downloadUserAudio = async (ownerId: number) => {
 		});
 	}
 
-	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
+	const fsDirHandle = await getFSDirectoryHandle({
 		id: `user_music_${ownerId}`,
 		startIn: 'music',
 	});
+
+	const isNumTracks = await GlobalStorage.getValue('numTracksInPlaylist', true);
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 

@@ -26,6 +26,8 @@ const lang = {
 	vms_fs_select_recommended: 'Рекомендуемый способ',
 	vms_download_all_music: 'Скачать всю музыку',
 	vms_sett_num_tracks_in_playlist: 'Нумеровать треки',
+	vms_sett_save_method_selection: 'Запомнить выбранный способ скачивания',
+	vms_sett_save_method_selection_description: 'Вы всегда можете изменить метод в настройках расширения',
 	vms_playlist_download_auth_required: 'Вы должны быть авторизованы для скачивания плейлистов',
 	vms_download_manager_active_tasks: 'Активные загрузки',
 	vms_download_manager_finished_tasks: 'Завершенные загрузки',

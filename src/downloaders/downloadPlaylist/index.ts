@@ -10,6 +10,7 @@ import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
 import getPlaylistById from 'src/musicUtils/getPlaylistById';
 import showSnackbar from 'src/react/showSnackbar';
 import type { AudioAudio } from 'src/schemas/objects';
+import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
 import formatTrackName from './formatTrackName';
@@ -24,10 +25,12 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		});
 	}
 
-	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
+	const fsDirHandle = await getFSDirectoryHandle({
 		id: 'playlist_music',
 		startIn: 'music',
 	});
+
+	const isNumTracks = await GlobalStorage.getValue('numTracksInPlaylist', true);
 
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 

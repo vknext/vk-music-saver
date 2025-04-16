@@ -13,6 +13,7 @@ import {
 	type MessagesGetHistoryAttachmentsResponse,
 	type UsersGetResponse,
 } from 'src/schemas/responses';
+import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
 import formatTrackName from './downloadPlaylist/formatTrackName';
@@ -51,10 +52,12 @@ async function* getAudios(ownerId: number) {
 }
 
 const downloadChatMusic = async (peerId: number) => {
-	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
+	const fsDirHandle = await getFSDirectoryHandle({
 		id: `chat_music_${peerId}`,
 		startIn: 'music',
 	});
+
+	const isNumTracks = await GlobalStorage.getValue('numTracksInPlaylist', true);
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
