@@ -1,6 +1,6 @@
 import { Icon12Dropdown, Icon20Check } from '@vkontakte/icons';
 import { SimpleCell } from '@vkontakte/vkui';
-import { ActionsMenuAction, ActionsMenuPopover } from 'src/components/ActionsMenu';
+import { ActionsMenuAction, ActionsMenuPopover, ActionsMenuSeparator } from 'src/components/ActionsMenu';
 import useLang from 'src/react/hooks/useLang';
 import useStorageValue from 'src/react/hooks/useStorageValue';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
@@ -31,6 +31,7 @@ const AudioConvertMethodSelect = () => {
 							>
 								FFmpeg
 							</ActionsMenuAction>
+							<ActionsMenuSeparator />
 							<ActionsMenuAction
 								multiline
 								type="primary"

@@ -5,6 +5,7 @@ import VMSLogo from 'src/components/VMSLogo/VMSLogo';
 import SettControl from 'src/react/components/SettControl/SettControl';
 import useLang from 'src/react/hooks/useLang';
 import AudioConvertMethodSelect from './AudioConvertMethodSelect';
+import OutsideButton from './OutsideButton/OutsideButton';
 import SelectDownloadMethod from './SelectDownloadMethod';
 
 const SettingsModal = () => {
@@ -18,12 +19,13 @@ const SettingsModal = () => {
 					<VMSLogo />
 				</ModalPageHeader>
 			}
+			outsideButtons={<OutsideButton />}
 		>
 			<Div>
+				{!IS_FIREFOX && <SelectDownloadMethod />}
 				<SettControl option="numTracksInPlaylist" defaultValue={true}>
 					{lang.use('vms_sett_num_tracks_in_playlist')}
 				</SettControl>
-				{!IS_FIREFOX && <SelectDownloadMethod />}
 				<AudioConvertMethodSelect />
 			</Div>
 		</CustomModalPage>

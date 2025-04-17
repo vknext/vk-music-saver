@@ -7,7 +7,14 @@ const EcoPlateButtons = () => {
 	const lang = useLang();
 
 	return (
-		<EcoPlateItem icon={<Icon28LogoMiniVkMusicSaverColor width={20} height={20} />} onClick={showSettingsModal}>
+		<EcoPlateItem
+			icon={<Icon28LogoMiniVkMusicSaverColor width={20} height={20} />}
+			onClick={() => {
+				showSettingsModal();
+
+				window.TopMenu.hide();
+			}}
+		>
 			{lang.use('vms_settings_title')}
 		</EcoPlateItem>
 	);

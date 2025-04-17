@@ -1,6 +1,7 @@
 import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
 import { convertTrackToBlob } from '@vknext/shared/vkcom/audio/convertTrackToBlob';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
+import { VKNEXT_SITE_URL } from 'src/common/constants';
 import lang from 'src/lang';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
@@ -61,8 +62,8 @@ export const getAudioBlob = async ({ signal, audio, playlist, onProgress, forceH
 
 		// comments
 		writer.setFrame('COMM', {
-			description: 'vknext.net',
-			text: 'Track downloaded from VK via VK Music Saver: https://vknext.net',
+			description: VKNEXT_SITE_URL,
+			text: `Track downloaded from VK via VK Music Saver: ${VKNEXT_SITE_URL}`,
 			language: 'eng',
 		});
 
@@ -71,7 +72,7 @@ export const getAudioBlob = async ({ signal, audio, playlist, onProgress, forceH
 			writer.setFrame('APIC', {
 				type: 3,
 				data: await thumbBuffer,
-				description: 'vknext.net',
+				description: VKNEXT_SITE_URL,
 				useUnicodeEncoding: true,
 			});
 		}
