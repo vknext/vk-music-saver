@@ -3,3 +3,8 @@ export enum DownloadFilesMethod {
 	DIRECTORY = 'directory',
 	ZIP = 'zip',
 }
+
+export const enum AudioConvertMethod {
+	FFMPEG = 'ffmpeg',
+	HLS = 'hlsjs',
+}

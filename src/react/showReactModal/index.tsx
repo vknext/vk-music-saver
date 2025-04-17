@@ -1,4 +1,4 @@
-import CustomModalPageProvider from '../components/CustomModalPage/CustomModalPageContext';
+import { CustomModalPageProvider } from '@vknext/shared/components/CustomModalPage/CustomModalPageContext';
 import initReactApp from '../initReactApp';
 import styles from './index.module.scss';
 import { disableBodyScroll, enableBodyScroll } from './scroll';

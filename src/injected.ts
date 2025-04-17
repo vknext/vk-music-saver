@@ -66,4 +66,6 @@ start().catch(console.error);
 
 DOMContentLoaded(() => {
 	import('./modules/manager').catch((e) => console.error('[VMS/manager]', e));
+
+	import('./modules/topProfileMenuButtons').catch((e) => console.error('[VMS/topProfileMenuButtons]', e));
 });

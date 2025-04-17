@@ -17,9 +17,10 @@ export interface GetAudioBlobParams {
 	playlist?: AudioPlaylist | null;
 	signal?: AbortSignal;
 	onProgress?: (current: number, total: number) => void;
+	forceHls: boolean;
 }
 
-export const getAudioBlob = async ({ signal, audio, playlist, onProgress }: GetAudioBlobParams) => {
+export const getAudioBlob = async ({ signal, audio, playlist, onProgress, forceHls }: GetAudioBlobParams) => {
 	if (!audio.url) {
 		await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_url_not_found') });
 
@@ -30,7 +31,7 @@ export const getAudioBlob = async ({ signal, audio, playlist, onProgress }: GetA
 
 	const blob = await convertTrackToBlob({
 		url: audioUnmaskSource(audio.url),
-		forceHls: !/firefox|fxios/i.test(globalThis.navigator.userAgent),
+		forceHls,
 		onProgress(current) {
 			if (!onProgress) return;
 

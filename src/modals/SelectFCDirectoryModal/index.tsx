@@ -1,3 +1,5 @@
+import { CustomModalPage } from '@vknext/shared/components/CustomModalPage/CustomModalPage';
+import { useCustomModalControl } from '@vknext/shared/components/CustomModalPage/CustomModalPageContext';
 import {
 	Button,
 	Div,
@@ -6,13 +8,12 @@ import {
 	Placeholder,
 	SelectionControl,
 	Separator,
+	SimpleCell,
 	Spacing,
 	Tooltip,
 } from '@vkontakte/vkui';
 import { useState } from 'react';
-import AndroidSwitch from 'src/react/components/AndroidSwitch/AndroidSwitch';
-import CustomModalPage from 'src/react/components/CustomModalPage/CustomModalPage';
-import { useCustomModalControl } from 'src/react/components/CustomModalPage/CustomModalPageContext';
+import AndroidSwitch from 'src/components/AndroidSwitch/AndroidSwitch';
 import SettControl from 'src/react/components/SettControl/SettControl';
 import useLang from 'src/react/hooks/useLang';
 import GlobalStorage from 'src/storages/GlobalStorage';
@@ -33,12 +34,15 @@ interface SettSaveMethodSelectionProps {
 const SettSaveMethodSelection = ({ value, setValue }: SettSaveMethodSelectionProps) => {
 	const lang = useLang();
 
-	// TODO: вернуть `description={lang.use('vms_sett_save_method_selection_description')}` после реализации настроек
 	return (
-		<SelectionControl>
-			<SelectionControl.Label>{lang.use('vms_sett_save_method_selection')}</SelectionControl.Label>
-			<AndroidSwitch checked={value} onChange={(e) => setValue(e.target.checked)} />
-		</SelectionControl>
+		<SimpleCell
+			Component="label"
+			after={<AndroidSwitch checked={value} onChange={(e) => setValue(e.target.checked)} />}
+			subtitle={lang.use('vms_sett_save_method_selection_description')}
+			multiline
+		>
+			{lang.use('vms_sett_save_method_selection')}
+		</SimpleCell>
 	);
 };
 
@@ -125,11 +129,9 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 				<Separator />
 			</Spacing>
 			<Div style={{ paddingTop: 0 }}>
-				<SettControl
-					option="numTracksInPlaylist"
-					defaultValue={true}
-					label={lang.use('vms_sett_num_tracks_in_playlist')}
-				/>
+				<SettControl option="numTracksInPlaylist" defaultValue={true}>
+					{lang.use('vms_sett_num_tracks_in_playlist')}
+				</SettControl>
 			</Div>
 		</>
 	);

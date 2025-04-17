@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useLang from 'src/react/hooks/useLang';
 import { useDownloadTasks } from 'src/store';
 import { DownloadStatus } from 'src/store/constants';
-import PopoverReforged from '../PopoverReforged/PopoverReforged';
+import PopoverReforged from '../../../components/PopoverReforged/PopoverReforged';
 import styles from './DownloadManager.module.scss';
 import DownloadTaskCell from './DownloadTaskCell/DownloadTaskCell';
 

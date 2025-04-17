@@ -13,6 +13,8 @@ import {
 	type MessagesGetHistoryAttachmentsResponse,
 	type UsersGetResponse,
 } from 'src/schemas/responses';
+import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
+import { AudioConvertMethod } from 'src/storages/enums';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
@@ -126,9 +128,12 @@ const downloadChatMusic = async (peerId: number) => {
 		setProgress({ current: progress, total: totalAudios });
 	};
 
+	const convertMethod = await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
+	const forceHls = convertMethod === AudioConvertMethod.HLS;
+
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
 		try {
-			const blob = await getBlobAudioFromPlaylist({ audio, signal });
+			const blob = await getBlobAudioFromPlaylist({ forceHls, audio, signal });
 			if (!blob) return;
 
 			const trackName = formatTrackName({

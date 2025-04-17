@@ -6,15 +6,6 @@ export interface stManager {
 	add(statics: string | string[]): Promise<void>;
 }
 
-export interface NotifierEvent {
-	text?: string;
-	title?: string;
-	baloonEl?: HTMLElement;
-	closeTO?: number;
-	fadeTO?: number;
-	startFading?: () => void;
-}
-
 interface VKNext {
 	vms_installed?: boolean;
 }
@@ -22,6 +13,13 @@ interface VKNext {
 interface AudioPlayer {
 	getCurrentAudio: () => any[] | null;
 	on: (unk1: any, type: 'update' | any, callback: (event: any) => void) => () => void;
+}
+
+export interface TopMenu {
+	show: () => void;
+	hide: () => void;
+	select: (element: HTMLElement, event: MouseEvent) => boolean;
+	toggle: (isShown: boolean) => void;
 }
 
 declare global {
@@ -34,6 +32,7 @@ declare global {
 	var jsc: (module: string) => string;
 	var stDeps: { [script: string]: string[] };
 	var showTooltip: (el: HTMLElement, opts: Record<string, any>) => void;
+	var TopMenu: TopMenu;
 
 	namespace NodeJS {
 		interface ProcessEnv {

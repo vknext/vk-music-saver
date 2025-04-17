@@ -1,9 +1,10 @@
 import type { PickByType } from 'src/types/PickByType';
-import type { DownloadFilesMethod } from './enums';
+import type { AudioConvertMethod, DownloadFilesMethod } from './enums';
 
 export interface GlobalStorageBaseValues {
 	numTracksInPlaylist: boolean;
 	downloadMethod: DownloadFilesMethod;
+	audioConvertMethod: AudioConvertMethod;
 }
 
 export type GlobalStorageBaseKeys = keyof GlobalStorageBaseValues;

@@ -5,12 +5,14 @@ interface getBlobAudioFromPlaylistParams {
 	audio: AudioAudio;
 	signal: AbortSignal;
 	playlist?: AudioPlaylist;
+	forceHls: boolean;
 }
 
 const getBlobAudioFromPlaylist = async ({
 	audio,
 	signal,
 	playlist,
+	forceHls,
 }: getBlobAudioFromPlaylistParams): Promise<Blob | null> => {
 	if (signal.aborted) return null;
 
@@ -18,7 +20,7 @@ const getBlobAudioFromPlaylist = async ({
 	if (!audio.url) return null;
 
 	try {
-		const blob = await getAudioBlob({ audio, playlist, signal });
+		const blob = await getAudioBlob({ audio, playlist, signal, forceHls });
 
 		return blob;
 	} catch (e) {
