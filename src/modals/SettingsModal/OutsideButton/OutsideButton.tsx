@@ -1,11 +1,13 @@
+import { Icon28LogoMiniVknextColor } from '@vknext/icons';
 import { useCustomModalControl } from '@vknext/shared/components/CustomModalPage/CustomModalPageContext';
 import { noop } from '@vknext/shared/utils/noop';
-import { Icon20FavoriteOutline, Icon20More, Icon20ShareOutline } from '@vkontakte/icons';
-import { InfoRow, Link, ModalOutsideButton } from '@vkontakte/vkui';
+import { Icon20DonateOutline, Icon20FavoriteOutline, Icon20More, Icon20ShareOutline } from '@vkontakte/icons';
+import { Link, ModalOutsideButton } from '@vkontakte/vkui';
 import {
 	CHROME_REVIEW_URL,
 	FIREFOX_REVIEW_URL,
 	IS_FIREFOX,
+	VKNEXT_DONUT_URL,
 	VKNEXT_GROUP_DOMAIN,
 	VKNEXT_SITE_URL,
 } from 'src/common/constants';
@@ -45,6 +47,14 @@ const OutsideButton = () => {
 		}
 	};
 
+	const onDonateClick: React.MouseEventHandler<HTMLElement> = (event) => {
+		cancelEvent(event);
+
+		window.nav.go(VKNEXT_DONUT_URL);
+
+		closeModal();
+	};
+
 	return (
 		<ActionsMenuPopover
 			trigger="hover"
@@ -67,19 +77,37 @@ const OutsideButton = () => {
 						type="primary"
 						size="large"
 						multiline
+						leftIcon={<Icon20DonateOutline />}
+						onClick={onDonateClick}
+						href={VKNEXT_DONUT_URL}
+					>
+						{lang.use('vms_settings_donate')}
+					</ActionsMenuAction>
+					<ActionsMenuAction
+						type="primary"
+						size="large"
+						multiline
 						leftIcon={<Icon20ShareOutline />}
 						onClick={onShare}
 					>
 						{lang.use('vms_share')}
 					</ActionsMenuAction>
 					<ActionsMenuSeparator />
-					<div className={styles.Div}>
-						<InfoRow header={lang.use('vms_creator')}>
-							<Link href="https://vk.com/vknext" className={styles.Link} onClick={onCreatorClick}>
-								VK Next
-							</Link>
-						</InfoRow>
-					</div>
+					<ActionsMenuAction
+						type="secondary"
+						size="large"
+						leftIcon={<Icon28LogoMiniVknextColor width={20} height={20} />}
+						multiline
+						hasHover={false}
+					>
+						{lang.use('vms_created_by', {
+							name: (
+								<Link href="https://vk.com/vknext" className={styles.Link} onClick={onCreatorClick}>
+									VK Next
+								</Link>
+							),
+						})}
+					</ActionsMenuAction>
 				</>
 			}
 		>

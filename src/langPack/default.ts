@@ -49,8 +49,9 @@ const lang = {
 	vms_settings_title: 'Настройки VK Music Saver',
 	vms_settings_review_in_firefox: 'Оценить в Firefox Add-ons',
 	vms_settings_review_in_chrome: 'Оценить в Chrome Web Store',
+	vms_settings_donate: 'Поддержать разработчиков',
 	vms_share: 'Поделиться',
-	vms_creator: 'Создатель',
+	vms_created_by: 'Создано командой {name}',
 	vms_link_copied: 'Ссылка скопирована',
 	vms_badges_deluxe_function_warning: 'Функция доступна для обладателей подписки Прайм Де Люкс.',
 };
