@@ -12,7 +12,7 @@
 	<a href="https://github.com/vknext/vk-music-saver/releases/latest"><img src="https://img.shields.io/github/v/release/vknext/vk-music-saver?logo=github" alt="GitHub Release Version"></a>
 </p>
 <p align="center">
-Расширение для скачивания музыки и плейлистов, создано на основе VK Next.
+Расширение для скачивания музыки и плейлистов, создано командой VK Next.
 </p>
 
 ## Requirements
