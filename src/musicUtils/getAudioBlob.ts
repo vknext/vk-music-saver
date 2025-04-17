@@ -1,12 +1,15 @@
 import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
 import { convertTrackToBlob } from '@vknext/shared/vkcom/audio/convertTrackToBlob';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
+import { getVMSConfig, vknextApi } from 'src/api';
 import { VKNEXT_SITE_URL } from 'src/common/constants';
 import lang from 'src/lang';
 import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
+import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
+import { AudioConvertMethod } from 'src/storages/enums';
 import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
 import getAlbumThumbnail from './getAlbumThumbnail';
@@ -18,10 +21,16 @@ export interface GetAudioBlobParams {
 	playlist?: AudioPlaylist | null;
 	signal?: AbortSignal;
 	onProgress?: (current: number, total: number) => void;
-	forceHls: boolean;
+	convertMethod: AudioConvertMethod;
 }
 
-export const getAudioBlob = async ({ signal, audio, playlist, onProgress, forceHls }: GetAudioBlobParams) => {
+export const getAudioBlob = async ({
+	signal,
+	audio,
+	playlist,
+	onProgress,
+	convertMethod,
+}: GetAudioBlobParams): Promise<Blob> => {
 	if (!audio.url) {
 		await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_url_not_found') });
 
@@ -30,16 +39,56 @@ export const getAudioBlob = async ({ signal, audio, playlist, onProgress, forceH
 		throw new Error('Audio URL not found');
 	}
 
-	const blob = await convertTrackToBlob({
-		url: audioUnmaskSource(audio.url),
-		forceHls,
-		onProgress(current) {
-			if (!onProgress) return;
+	let blob: Blob | null = null;
 
-			// ffmpeg отдает значение от 0 до 1
-			onProgress(Math.round(current * 100), 100);
-		},
-	});
+	try {
+		const { ffmpegConfig } = await getVMSConfig();
+
+		if (convertMethod === AudioConvertMethod.VKNEXT || ffmpegConfig?.force) {
+			if (ffmpegConfig?.method) {
+				const response = await vknextApi.call<Blob>(
+					ffmpegConfig.method,
+					{
+						url: audioUnmaskSource(audio.url),
+						// Предполагаем, что ссылка может устареть к моменту конвертации, поэтому на сервере сможем получить актуальную ссылку на трек
+						id: audio.id,
+						owner_id: audio.owner_id || audio.ownerId,
+						access_key: audio.access_key || audio.accessKey,
+					},
+					signal
+				);
+
+				if (response instanceof Blob) {
+					blob = response;
+				}
+			}
+		}
+	} catch (e) {
+		if (e instanceof AbortSignal) {
+			throw e;
+		}
+
+		console.error('[VK Next] error convert audio', e);
+	}
+
+	if (!blob) {
+		blob = await convertTrackToBlob({
+			url: audioUnmaskSource(audio.url),
+			forceHls:
+				(convertMethod === AudioConvertMethod.VKNEXT ? AUDIO_CONVERT_METHOD_DEFAULT_VALUE : convertMethod) ===
+				AudioConvertMethod.HLS,
+			onProgress(current) {
+				if (!onProgress) return;
+
+				// ffmpeg отдает значение от 0 до 1
+				onProgress(Math.round(current * 100), 100);
+			},
+		});
+	}
+
+	if (!blob) {
+		throw new Error('Audio conversion error');
+	}
 
 	if (!playlist) {
 		const [ownerId, albumId, albumAccessKey] = getAlbumId(audio);

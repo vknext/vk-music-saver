@@ -29,3 +29,10 @@ export interface MessagesGetHistoryAttachmentsResponse {
 	profiles: Objects.UsersUserFull[];
 	groups: Objects.GroupsGroupFull[];
 }
+
+export interface AppsGetEmbeddedUrlResponse {
+	original_url: string;
+	view_url: string;
+	screen_title: string;
+	type: 'app' | 'game';
+}

@@ -38,17 +38,21 @@ const lang = {
 	vms_download_manager_cancel: 'Отменить',
 	vms_playlist_track_download_completed: '{trackName} - завершено',
 	vms_playlist_download_completed: `Скачано {total}`,
-	vkcom_tracks_plurals: ['трек', 'трека', 'треков'],
+	vms_tracks_plurals: ['трек', 'трека', 'треков'],
 	vms_sett_audio_convert_mode_title: 'Метод конвертации треков из m3u8 в mp3',
-	vms_sett_audio_convert_mode_ffmpeg_desc: 'На старых системах может не работать',
-	vms_sett_audio_convert_mode_hlsjs_desc: 'В Firefox могут быть проблемы',
+	vms_sett_audio_convert_mode_ffmpeg_desc: 'На старых системах может не работать.',
+	vms_sett_audio_convert_mode_hlsjs_desc: 'В Firefox могут быть проблемы.',
 	vms_sett_audio_convert_mode_desc: 'Используется при скачивании треков и плейлистов',
+	vms_sett_audio_convert_mode_vknext: 'Сервер VK Next',
+	vms_sett_audio_convert_mode_vknext_desc:
+		'Использует FFmpeg для конвертации. Лучше других подходит для загрузки больших плейлистов, так как конвертация не занимает оперативную память. Однако может работать медленно, если этим способом одновременно пользуется много пользователей.',
 	vms_settings_title: 'Настройки VK Music Saver',
 	vms_settings_review_in_firefox: 'Оценить в Firefox Add-ons',
 	vms_settings_review_in_chrome: 'Оценить в Chrome Web Store',
 	vms_share: 'Поделиться',
 	vms_creator: 'Создатель',
 	vms_link_copied: 'Ссылка скопирована',
+	vms_badges_deluxe_function_warning: 'Функция доступна для обладателей подписки Прайм Де Люкс.',
 };
 
 export default lang;

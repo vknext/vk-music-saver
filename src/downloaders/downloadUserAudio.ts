@@ -9,7 +9,6 @@ import showSnackbar from 'src/react/showSnackbar';
 import type { AudioAudio } from 'src/schemas/objects';
 import { UsersGetResponse, type AudioGetResponse } from 'src/schemas/responses';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
-import { AudioConvertMethod } from 'src/storages/enums';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
@@ -104,11 +103,10 @@ const downloadUserAudio = async (ownerId: number) => {
 	};
 
 	const convertMethod = await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
-	const forceHls = convertMethod === AudioConvertMethod.HLS;
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
 		try {
-			const blob = await getBlobAudioFromPlaylist({ forceHls, audio, signal });
+			const blob = await getBlobAudioFromPlaylist({ convertMethod, audio, signal });
 			if (!blob) return;
 
 			const trackName = formatTrackName({
@@ -162,9 +160,7 @@ const downloadUserAudio = async (ownerId: number) => {
 	if (signal.aborted) return;
 
 	if (fsDirHandle) {
-		setExtraText(
-			lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) })
-		);
+		setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
 
 		await showSnackbar({
 			type: 'done',
@@ -193,7 +189,7 @@ const downloadUserAudio = async (ownerId: number) => {
 
 	finish({ onSave, onRemove });
 
-	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vkcom_tracks_plurals', progress) }));
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
 };
 
 export default downloadUserAudio;

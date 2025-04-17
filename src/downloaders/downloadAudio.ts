@@ -8,7 +8,6 @@ import getPerformer from 'src/musicUtils/getPerformer';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioAudio } from 'src/schemas/objects';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
-import { AudioConvertMethod } from 'src/storages/enums';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, getDownloadTaskById, startDownload } from 'src/store';
 import { DownloadTaskNotFoundError } from 'src/store/downloadErrors';
@@ -67,11 +66,9 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 		audioName += ` (${audio.subtitle})`;
 	}
 
-	const convertMethod = await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
-
 	try {
 		const blob = await getAudioBlob({
-			forceHls: convertMethod === AudioConvertMethod.HLS,
+			convertMethod: await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
 			audio,
 			signal,
 			onProgress: (current, total) => {

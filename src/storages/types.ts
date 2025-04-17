@@ -5,6 +5,7 @@ export interface GlobalStorageBaseValues {
 	numTracksInPlaylist: boolean;
 	downloadMethod: DownloadFilesMethod;
 	audioConvertMethod: AudioConvertMethod;
+	[key: `view_url_${number}`]: string | null;
 }
 
 export type GlobalStorageBaseKeys = keyof GlobalStorageBaseValues;
