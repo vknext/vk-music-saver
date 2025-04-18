@@ -1,16 +1,17 @@
 import './public-path';
 
-import injectDownloadButtonInAudioRow from 'src/modules/injectDownloadButtonInAudioRow';
-import initShowBitrateNearDuration from 'src/modules/showBitrateNearDuration';
-
 import './index.scss';
 
 import { DOMContentLoaded } from '@vknext/shared/utils/DOMContentLoaded';
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
 import getGlobalVKNext from 'src/getGlobalVKNext';
+
 import initAudioPage from 'src/modules/audioPage';
 import initAudioPlaylist from 'src/modules/audioPlaylist';
 import initConvoProfile from 'src/modules/convoProfile';
 import initFeed from 'src/modules/feed';
+import injectDownloadButtonInAudioRow from 'src/modules/injectDownloadButtonInAudioRow';
+import initShowBitrateNearDuration from 'src/modules/showBitrateNearDuration';
 import initVKNextBanner from 'src/modules/vknextBanner';
 
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания
@@ -73,4 +74,8 @@ DOMContentLoaded(() => {
 	import('src/services/getVMSConfig').then(({ getVMSConfig }) => {
 		getVMSConfig().catch(console.error);
 	});
+});
+
+onDocumentComplete(() => {
+	import('src/modules/settingsHint').catch((e) => console.error('[VMS/settingsHint]', e));
 });

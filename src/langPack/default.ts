@@ -54,6 +54,8 @@ const lang = {
 	vms_created_by: 'Создано командой {name}',
 	vms_link_copied: 'Ссылка скопирована',
 	vms_badges_deluxe_function_warning: 'Функция доступна для обладателей подписки Прайм Де Люкс.',
+	vms_onboarding_settings_hint_title: 'Настройки VK Music Saver',
+	vms_onboarding_settings_hint_description: 'В них ты можешь настроить скачивание так, как удобно именно тебе',
 };
 
 export default lang;

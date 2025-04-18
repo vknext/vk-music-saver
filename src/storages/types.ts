@@ -5,6 +5,7 @@ export interface GlobalStorageBaseValues {
 	numTracksInPlaylist: boolean;
 	downloadMethod: DownloadFilesMethod;
 	audioConvertMethod: AudioConvertMethod;
+	onboarding_settings_hint_seen: boolean;
 	[key: `view_url_${number}`]: string | null;
 }
 
