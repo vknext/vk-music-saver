@@ -27,7 +27,7 @@ const lang = {
 	vms_fs_select_folder: 'Выбрать папку',
 	vms_fs_select_recommended: 'Рекомендуемый способ',
 	vms_download_all_music: 'Скачать всю музыку',
-	vms_sett_num_tracks_in_playlist: 'Нумеровать треки',
+	vms_sett_num_tracks_in_playlist: 'Нумеровать треки в плейлисте',
 	vms_sett_save_method_selection: 'Запомнить выбранный способ скачивания',
 	vms_sett_save_method_selection_description: 'Вы всегда можете изменить способ в настройках расширения',
 	vms_playlist_download_auth_required: 'Вы должны быть авторизованы для скачивания плейлистов',
@@ -39,10 +39,11 @@ const lang = {
 	vms_playlist_track_download_completed: '{trackName} - завершено',
 	vms_playlist_download_completed: `Скачано {total}`,
 	vms_tracks_plurals: ['трек', 'трека', 'треков'],
-	vms_sett_audio_convert_mode_title: 'Метод конвертации треков из m3u8 в mp3',
+	vms_sett_audio_convert_mode_title: 'Метод конвертации треков',
 	vms_sett_audio_convert_mode_ffmpeg_desc: 'На старых системах может не работать.',
 	vms_sett_audio_convert_mode_hlsjs_desc: 'В Firefox могут быть проблемы.',
-	vms_sett_audio_convert_mode_desc: 'Используется при скачивании треков и плейлистов',
+	vms_sett_audio_convert_mode_desc:
+		'ВКонтакте отдает треки в формате m3u8, а расширение конвертирует в привычный mp3',
 	vms_sett_audio_convert_mode_vknext: 'Сервер VK Next',
 	vms_sett_audio_convert_mode_vknext_desc:
 		'Использует FFmpeg для конвертации. Лучше других подходит для загрузки больших плейлистов, так как конвертация не занимает оперативную память. Однако может работать медленно, если этим способом одновременно пользуется много пользователей.',
@@ -55,7 +56,7 @@ const lang = {
 	vms_link_copied: 'Ссылка скопирована',
 	vms_badges_deluxe_function_warning: 'Функция доступна для обладателей подписки Прайм Де Люкс.',
 	vms_onboarding_settings_hint_title: 'Настройки VK Music Saver',
-	vms_onboarding_settings_hint_description: 'В них ты можешь настроить скачивание так, как удобно именно тебе',
+	vms_onboarding_settings_hint_description: 'В них можно настроить скачивание так, как удобно именно тебе',
 };
 
 export default lang;
