@@ -2,13 +2,13 @@ import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
-import getPlaylistById from 'src/musicUtils/getPlaylistById';
+import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
 import showSnackbar from 'src/react/showSnackbar';
 
 const downloadPlaylistCover = async (playlistFullId: string) => {
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 
-	const playlist = await getPlaylistById({
+	const playlist = await getAudioPlaylistById({
 		owner_id: parseInt(ownerId),
 		playlist_id: parseInt(playlistId),
 		access_key: playlistAccessKey,

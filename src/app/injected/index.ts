@@ -69,7 +69,8 @@ DOMContentLoaded(() => {
 
 	import('src/modules/topProfileMenuButtons').catch((e) => console.error('[VMS/topProfileMenuButtons]', e));
 
-	import('src/api/index').then((m) => {
-		m.getVMSConfig().catch(console.error);
+	// preload
+	import('src/services/getVMSConfig').then(({ getVMSConfig }) => {
+		getVMSConfig().catch(console.error);
 	});
 });

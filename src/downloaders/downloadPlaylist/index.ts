@@ -7,9 +7,9 @@ import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirecto
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
-import getPlaylistById from 'src/musicUtils/getPlaylistById';
 import showSnackbar from 'src/react/showSnackbar';
 import type { AudioAudio } from 'src/schemas/objects';
+import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
@@ -37,7 +37,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
-	const playlist = await getPlaylistById({
+	const playlist = await getAudioPlaylistById({
 		owner_id: parseInt(ownerId),
 		playlist_id: parseInt(playlistId),
 		access_key: playlistAccessKey,

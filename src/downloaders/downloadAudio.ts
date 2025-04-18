@@ -3,14 +3,14 @@ import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
 import { getAudioBlob, type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';
-import getAudioByObject from 'src/musicUtils/getAudioByObject';
-import getPerformer from 'src/musicUtils/getPerformer';
+import getAudioByObject from 'src/services/getAudioByObject';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioAudio } from 'src/schemas/objects';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, getDownloadTaskById, startDownload } from 'src/store';
 import { DownloadTaskNotFoundError } from 'src/store/downloadErrors';
+import formatTrackName from './downloadPlaylist/formatTrackName';
 
 interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
 	audioObject: AudioObject | AudioAudio;
@@ -50,21 +50,15 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 	const controller = new AbortController();
 	const { signal } = controller;
 
+	const trackName = formatTrackName({ audio, isNumTracksInPlaylist: false });
+
 	const { setProgress, finish } = startDownload({
 		id: taskId,
-		title: audio.title || lang.use('vms_downloading'),
+		title: `${trackName}.mp3`,
 		type: DownloadType.TRACK,
 		onCancel: () => controller.abort(),
 		photoUrl: getAlbumThumbUrl(audio) || undefined,
 	});
-
-	let artistTitle = getPerformer(audio);
-
-	let audioName = [artistTitle.trim(), audio.title].join(' - ');
-
-	if (audio.subtitle) {
-		audioName += ` (${audio.subtitle})`;
-	}
 
 	try {
 		const blob = await getAudioBlob({
@@ -83,9 +77,8 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 		if (signal.aborted) return;
 
 		const blobUrl = URL.createObjectURL(blob);
-		const name = `${audioName}.mp3`;
 
-		const onSave = () => saveFileAs(blobUrl, name);
+		const onSave = () => saveFileAs(blobUrl, `${trackName}.mp3`);
 		const onRemove = () => URL.revokeObjectURL(blobUrl);
 
 		await onSave();

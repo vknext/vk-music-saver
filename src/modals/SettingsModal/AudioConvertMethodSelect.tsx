@@ -2,12 +2,12 @@ import { useCustomModalControl } from '@vknext/shared/components/CustomModalPage
 import { Icon12Dropdown, Icon20Check } from '@vkontakte/icons';
 import { SimpleCell } from '@vkontakte/vkui';
 import { useEffect, useState } from 'react';
-import { getVMSConfig } from 'src/api';
 import { ActionsMenuAction, ActionsMenuPopover, ActionsMenuSeparator } from 'src/components/ActionsMenu';
 import Badges from 'src/components/Badges';
 import useLang from 'src/hooks/useLang';
 import useStorageValue from 'src/hooks/useStorageValue';
 import showSnackbar from 'src/react/showSnackbar';
+import { getVMSConfig } from 'src/services/getVMSConfig';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import { AudioConvertMethod } from 'src/storages/enums';
 

@@ -1,10 +1,11 @@
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import fixFilename from 'src/lib/fixFilename';
 import getPerformer from 'src/musicUtils/getPerformer';
 import type { AudioAudio } from 'src/schemas/objects';
 
 interface formatTrackFilenameProps {
 	isNumTracksInPlaylist?: boolean;
-	audio: AudioAudio;
+	audio: AudioAudio | AudioObject;
 	index?: number;
 }
 

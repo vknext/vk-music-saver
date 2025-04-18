@@ -1,19 +1,20 @@
 import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
 import { convertTrackToBlob } from '@vknext/shared/vkcom/audio/convertTrackToBlob';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
-import { getVMSConfig, vknextApi } from 'src/api';
+import { vknextApi } from 'src/api';
 import { VKNEXT_SITE_URL } from 'src/common/constants';
 import lang from 'src/lang';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
+import { getVMSConfig } from 'src/services/getVMSConfig';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import { AudioConvertMethod } from 'src/storages/enums';
 import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
 import getAlbumThumbnail from './getAlbumThumbnail';
 import getPerformer from './getPerformer';
-import getPlaylistById from './getPlaylistById';
+import getAudioPlaylistById from '../services/getAudioPlaylistById';
 
 export interface GetAudioBlobParams {
 	audio: AudioObject | AudioAudio;
@@ -93,7 +94,7 @@ export const getAudioBlob = async ({
 		const [ownerId, albumId, albumAccessKey] = getAlbumId(audio);
 
 		if (ownerId && albumId) {
-			playlist = await getPlaylistById({
+			playlist = await getAudioPlaylistById({
 				owner_id: ownerId,
 				playlist_id: albumId,
 				access_key: albumAccessKey,

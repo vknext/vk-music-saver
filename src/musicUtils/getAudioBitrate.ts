@@ -4,7 +4,7 @@ import { getTrackDetails, type GetTrackDetailsResult } from '@vknext/shared/vkco
 import type { AudioObject } from '@vknext/shared/vkcom/types';
 import { AudioAudio } from 'src/schemas/objects';
 import TrackDetailsStorage from 'src/storages/TrackDetailsStorage';
-import getAudioByObject from './getAudioByObject';
+import getAudioByObject from '../services/getAudioByObject';
 
 const MAX_CONCURRENT_TASKS = 2;
 const TASK_DELAY_MS = 800;
