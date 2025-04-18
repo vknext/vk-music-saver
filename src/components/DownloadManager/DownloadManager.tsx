@@ -1,10 +1,10 @@
 import { Icon28LogoMiniVkMusicSaverColor } from '@vknext/icons';
 import { classNames, Header } from '@vkontakte/vkui';
 import { useState } from 'react';
-import useLang from 'src/react/hooks/useLang';
+import useLang from 'src/hooks/useLang';
 import { useDownloadTasks } from 'src/store';
 import { DownloadStatus } from 'src/store/constants';
-import PopoverReforged from '../../../components/PopoverReforged/PopoverReforged';
+import PopoverReforged from 'src/components/PopoverReforged/PopoverReforged';
 import styles from './DownloadManager.module.scss';
 import DownloadTaskCell from './DownloadTaskCell/DownloadTaskCell';
 

@@ -6,7 +6,6 @@ import {
 	FormStatus,
 	ModalPageHeader,
 	Placeholder,
-	SelectionControl,
 	Separator,
 	SimpleCell,
 	Spacing,
@@ -14,8 +13,8 @@ import {
 } from '@vkontakte/vkui';
 import { useState } from 'react';
 import AndroidSwitch from 'src/components/AndroidSwitch/AndroidSwitch';
-import SettControl from 'src/react/components/SettControl/SettControl';
-import useLang from 'src/react/hooks/useLang';
+import SettControl from 'src/components/SettControl/SettControl';
+import useLang from 'src/hooks/useLang';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadFilesMethod } from 'src/storages/enums';
 import styles from './index.module.scss';

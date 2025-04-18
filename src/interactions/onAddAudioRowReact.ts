@@ -5,7 +5,7 @@ import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
 import { waitRAF } from '@vknext/shared/utils/waitRAF';
 import { waitRIC } from '@vknext/shared/utils/waitRIC';
 import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
-import type { ObservedHTMLElement } from 'src/global';
+import type { ObservedHTMLElement } from 'src/types/global';
 import type { AudioAudio } from 'src/schemas/objects';
 import onOpenPlaylistModal from './onOpenPlaylistModal';
 import onOpenPlaylistPage from './onOpenPlaylistPage';

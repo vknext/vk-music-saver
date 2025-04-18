@@ -1,4 +1,4 @@
-import addScript from './lib/dom/addScript';
+import addScript from 'src/lib/dom/addScript';
 
 if (process.env.NODE_ENV === 'development') {
 	console.info('[VK Music Saver] Content start');

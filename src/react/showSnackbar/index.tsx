@@ -1,4 +1,4 @@
-import initReactApp from '../../react/initReactApp';
+import initReactApp from 'src/react/initReactApp';
 import type { BaseSnackbarProps } from './BaseSnackbar';
 import styles from './index.module.scss';
 

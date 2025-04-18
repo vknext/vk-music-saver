@@ -9,7 +9,7 @@ import {
 	generateObservedElementIBSKey,
 	generateObservedElementMBSKey,
 } from 'src/common/observedHTMLElements/generateKeys';
-import type { ObservedHTMLElement } from 'src/global';
+import type { ObservedHTMLElement } from 'src/types/global';
 import hookAjaxPost from 'src/interceptors/hookAjaxPost';
 
 type CallbackFunc = (el: HTMLElement) => void;

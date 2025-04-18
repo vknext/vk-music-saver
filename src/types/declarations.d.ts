@@ -3,8 +3,6 @@ declare module '*.module.scss' {
 	export = styles;
 }
 
-declare module 'browser-id3-writer';
-
 declare module '*.svg' {
 	const svg: string;
 	export default svg;

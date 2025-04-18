@@ -1,4 +1,4 @@
-import type { ObservedHTMLElement } from 'src/global';
+import type { ObservedHTMLElement } from 'src/types/global';
 import onCurBackHide from 'src/listeners/onCurBackHide';
 
 class ObservedHTMLElementsCleaner {

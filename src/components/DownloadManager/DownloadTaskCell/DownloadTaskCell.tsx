@@ -1,7 +1,7 @@
 import { Icon24Cancel, Icon24DeleteOutline, Icon24DownloadOutline } from '@vkontakte/icons';
 import { Avatar, Flex, Footnote, Headline, IconButton, Image, Progress, Subhead, Tooltip } from '@vkontakte/vkui';
 import normalizeProgressValue from 'src/lib/normalizeProgressValue';
-import useLang from 'src/react/hooks/useLang';
+import useLang from 'src/hooks/useLang';
 import { DownloadStatus, DownloadType, useDownloadTaskHandlers, type DownloadTask } from 'src/store';
 import styles from './DownloadTaskCell.module.scss';
 import FallbackIcon from './FallbackIcon';

@@ -6,7 +6,7 @@ import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/g
 import downloadAudio from 'src/downloaders/downloadAudio';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import type { ObservedHTMLElement } from 'src/global';
+import type { ObservedHTMLElement } from 'src/types/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';

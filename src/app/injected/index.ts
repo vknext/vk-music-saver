@@ -1,17 +1,17 @@
 import './public-path';
 
-import injectDownloadButtonInAudioRow from './modules/injectDownloadButtonInAudioRow';
-import initShowBitrateNearDuration from './modules/showBitrateNearDuration';
+import injectDownloadButtonInAudioRow from 'src/modules/injectDownloadButtonInAudioRow';
+import initShowBitrateNearDuration from 'src/modules/showBitrateNearDuration';
 
-import './injected.scss';
+import './index.scss';
 
 import { DOMContentLoaded } from '@vknext/shared/utils/DOMContentLoaded';
-import getGlobalVKNext from './getGlobalVKNext';
-import initAudioPage from './modules/audioPage';
-import initAudioPlaylist from './modules/audioPlaylist';
-import initConvoProfile from './modules/convoProfile';
-import initFeed from './modules/feed';
-import initVKNextBanner from './modules/vknextBanner';
+import getGlobalVKNext from 'src/getGlobalVKNext';
+import initAudioPage from 'src/modules/audioPage';
+import initAudioPlaylist from 'src/modules/audioPlaylist';
+import initConvoProfile from 'src/modules/convoProfile';
+import initFeed from 'src/modules/feed';
+import initVKNextBanner from 'src/modules/vknextBanner';
 
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания
 getGlobalVKNext().vms_installed = true;
@@ -65,7 +65,11 @@ const start = async () => {
 start().catch(console.error);
 
 DOMContentLoaded(() => {
-	import('./modules/manager').catch((e) => console.error('[VMS/manager]', e));
+	import('src/modules/manager').catch((e) => console.error('[VMS/manager]', e));
 
-	import('./modules/topProfileMenuButtons').catch((e) => console.error('[VMS/topProfileMenuButtons]', e));
+	import('src/modules/topProfileMenuButtons').catch((e) => console.error('[VMS/topProfileMenuButtons]', e));
+
+	import('src/api/index').then((m) => {
+		m.getVMSConfig().catch(console.error);
+	});
 });

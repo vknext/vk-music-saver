@@ -4,7 +4,6 @@ import type { AudioObject } from '@vknext/shared/vkcom/types';
 import { getVMSConfig, vknextApi } from 'src/api';
 import { VKNEXT_SITE_URL } from 'src/common/constants';
 import lang from 'src/lang';
-import convertBlobToUint8Array from 'src/lib/convertBlobToUint8Array';
 import getGeniusLyrics from 'src/lyrics/getGeniusLyrics';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
@@ -107,7 +106,7 @@ export const getAudioBlob = async ({
 	try {
 		const { ID3Writer } = await import('browser-id3-writer');
 
-		const writer = new ID3Writer(await convertBlobToUint8Array(blob));
+		const writer = new ID3Writer(await blob.arrayBuffer());
 
 		// comments
 		writer.setFrame('COMM', {
@@ -176,8 +175,11 @@ export const getAudioBlob = async ({
 		if (playlist) {
 			// album title
 			writer.setFrame('TALB', playlist.title);
+
 			// album release year
-			writer.setFrame('TYER', playlist.year);
+			if (playlist.year) {
+				writer.setFrame('TYER', playlist.year);
+			}
 
 			if (playlist.genres) {
 				const genres = playlist.genres.map((genre) => genre.name);
@@ -205,7 +207,7 @@ export const getAudioBlob = async ({
 				const albumArtists = playlist.main_artists.map((performer) => performer.name);
 
 				// album artist
-				writer.setFrame('TPE2', albumArtists);
+				writer.setFrame('TPE2', albumArtists.join(' '));
 			}
 		}
 

@@ -1,8 +1,8 @@
 import { Icon12Dropdown, Icon20Check } from '@vkontakte/icons';
 import { SimpleCell } from '@vkontakte/vkui';
 import { ActionsMenuAction, ActionsMenuPopover, ActionsMenuSeparator } from 'src/components/ActionsMenu';
-import useLang from 'src/react/hooks/useLang';
-import useStorageValue from 'src/react/hooks/useStorageValue';
+import useLang from 'src/hooks/useLang';
+import useStorageValue from 'src/hooks/useStorageValue';
 import { DownloadFilesMethod } from 'src/storages/enums';
 
 const SelectDownloadMethod = () => {

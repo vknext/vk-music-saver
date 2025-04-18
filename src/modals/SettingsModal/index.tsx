@@ -2,8 +2,8 @@ import { CustomModalPage } from '@vknext/shared/components/CustomModalPage/Custo
 import { Div, ModalPageHeader } from '@vkontakte/vkui';
 import { IS_FIREFOX } from 'src/common/constants';
 import VMSLogo from 'src/components/VMSLogo/VMSLogo';
-import SettControl from 'src/react/components/SettControl/SettControl';
-import useLang from 'src/react/hooks/useLang';
+import SettControl from 'src/components/SettControl/SettControl';
+import useLang from 'src/hooks/useLang';
 import AudioConvertMethodSelect from './AudioConvertMethodSelect';
 import OutsideButton from './OutsideButton/OutsideButton';
 import SelectDownloadMethod from './SelectDownloadMethod';

@@ -13,7 +13,7 @@ import {
 } from 'src/common/constants';
 import { ActionsMenuAction, ActionsMenuPopover, ActionsMenuSeparator } from 'src/components/ActionsMenu';
 import cancelEvent from 'src/lib/cancelEvent';
-import useLang from 'src/react/hooks/useLang';
+import useLang from 'src/hooks/useLang';
 import showSnackbar from 'src/react/showSnackbar';
 import styles from './OutsideButton.module.scss';
 

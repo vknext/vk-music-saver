@@ -1,6 +1,6 @@
 import { classNames } from '@vkontakte/vkui';
-import type { PopoverReforgedProps } from '../PopoverReforged/PopoverReforged';
-import PopoverReforged from '../PopoverReforged/PopoverReforged';
+import type { PopoverReforgedProps } from 'src/components/PopoverReforged/PopoverReforged';
+import PopoverReforged from 'src/components/PopoverReforged/PopoverReforged';
 import { ActionsMenu } from './ActionsMenu/ActionsMenu';
 
 export interface ActionsMenuPopoverProps extends Omit<PopoverReforgedProps, 'content' | 'noBackground'> {

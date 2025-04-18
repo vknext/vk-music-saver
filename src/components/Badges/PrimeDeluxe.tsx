@@ -1,7 +1,7 @@
 import { Icon20CrownCircleFillVkNext } from '@vknext/icons';
 import type { TooltipProps } from '@vkontakte/vkui';
 import { Tooltip, classNames } from '@vkontakte/vkui';
-import useLang from 'src/react/hooks/useLang';
+import useLang from 'src/hooks/useLang';
 import styles from './Badges.module.scss';
 
 interface PrimeDeluxeProps extends TooltipProps {

@@ -1,7 +1,7 @@
 import { Icon28LogoMiniVkMusicSaverColor } from '@vknext/icons';
 import EcoPlateItem from 'src/components/EcoPlateItem/EcoPlateItem';
 import showSettingsModal from 'src/modals/showSettingsModal';
-import useLang from 'src/react/hooks/useLang';
+import useLang from 'src/hooks/useLang';
 
 const EcoPlateButtons = () => {
 	const lang = useLang();

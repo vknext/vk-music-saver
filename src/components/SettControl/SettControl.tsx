@@ -1,7 +1,7 @@
 import { SimpleCell, Skeleton } from '@vkontakte/vkui';
-import useStorageValue from 'src/react/hooks/useStorageValue';
+import useStorageValue from 'src/hooks/useStorageValue';
 import type { GlobalStorageBooleanKeys, GlobalStorageBooleanValues } from 'src/storages/types';
-import AndroidSwitch from '../../../components/AndroidSwitch/AndroidSwitch';
+import AndroidSwitch from 'src/components/AndroidSwitch/AndroidSwitch';
 import styles from './SettControl.module.scss';
 
 interface SettControlProps<Key extends GlobalStorageBooleanKeys> {

@@ -33,7 +33,7 @@ const renderManager = async () => {
 		unmountApp();
 	}
 
-	const { default: DownloadManager } = await import('src/react/components/DownloadManager/DownloadManager');
+	const { default: DownloadManager } = await import('src/components/DownloadManager/DownloadManager');
 
 	const { unmount } = await initReactApp({
 		root: wrapper,

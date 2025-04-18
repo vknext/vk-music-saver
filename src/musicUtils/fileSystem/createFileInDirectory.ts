@@ -1,4 +1,4 @@
-import type { ClientZipFile } from '../../types';
+import type { ClientZipFile } from 'src/types';
 
 interface createFileInDirectoryProps {
 	dirHandle: FileSystemDirectoryHandle;

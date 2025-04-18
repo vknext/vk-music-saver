@@ -44,21 +44,21 @@ const getEntry = () => {
 
 	const defaultEntries: Entry = {
 		content: {
-			import: path.resolve('./', 'src', 'content.ts'),
+			import: path.resolve('./', 'src', 'app', 'content.ts'),
 			chunkLoading: false,
 			runtime: false,
 		},
 		injected: {
-			import: path.resolve('./', 'src', 'injected.ts'),
+			import: path.resolve('./', 'src', 'app', 'injected', 'index.ts'),
 			publicPath: './',
 			runtime: false,
 		},
 		background: {
-			import: path.resolve('./', 'src', 'background', 'index.ts'),
+			import: path.resolve('./', 'src', 'app', 'background.ts'),
 			runtime: false,
 			chunkLoading: false,
 		},
-		popup: path.resolve('./', 'src', 'popup', 'index.ts'),
+		popup: path.resolve('./', 'src', 'app', 'popup', 'index.ts'),
 	};
 
 	if (!IS_DEV) {
@@ -211,11 +211,9 @@ const options: Configuration = {
 				},
 			],
 		}),
-		new WebpackExtensionManifestPlugin({
-			config: manifest,
-		}),
+		new WebpackExtensionManifestPlugin({ config: manifest }),
 		new HtmlWebpackPlugin({
-			template: path.resolve('./', 'src', 'popup', 'index.html'),
+			template: path.resolve('./', 'src', 'app', 'popup', 'index.html'),
 			filename: 'popup.html',
 			chunks: ['popup'],
 			inject: true,
@@ -340,7 +338,8 @@ const options: Configuration = {
 						options: {
 							sourceMap: IS_DEV,
 							modules: {
-								localIdentName: 'vkui[local]--[hash:base64:5]',
+								// длина хеша должна быть больше чем в VK Next чтобы избежать конфликтов
+								localIdentName: 'vkui[local]--[hash:base64:7]',
 								mode: 'local',
 							},
 						},
