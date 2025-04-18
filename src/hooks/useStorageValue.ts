@@ -27,8 +27,12 @@ function useStorageValue<Key extends GlobalStorageBaseKeys>(
 			})
 			.catch(console.error);
 
+		const unsubscribe = GlobalStorage.addListener(key, (props) => _setValue(props.newValue));
+
 		return () => {
 			isMounted = false;
+
+			unsubscribe();
 		};
 	}, []);
 

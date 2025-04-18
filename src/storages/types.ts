@@ -6,6 +6,8 @@ export interface GlobalStorageBaseValues {
 	downloadMethod: DownloadFilesMethod;
 	audioConvertMethod: AudioConvertMethod;
 	onboarding_settings_hint_seen: boolean;
+	single_track_template: string;
+	playlist_track_template: string;
 	[key: `view_url_${number}`]: string | null;
 }
 

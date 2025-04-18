@@ -1,25 +1,67 @@
 import { IndexedDBWrapper } from '@vknext/shared/lib/IndexedDBWrapper';
 import type { GlobalStorageBaseKeys, GlobalStorageBaseValues } from './types';
 
-const idb = new IndexedDBWrapper('vms-global-v1');
+interface ListenersProps<Value> {
+	oldValue: Value;
+	newValue: Value;
+}
 
-const GlobalStorage = {
+class GlobalStorage {
+	private idb: IndexedDBWrapper;
+	private listeners: Map<string, Set<(props: any) => void>> = new Map();
+
+	constructor() {
+		this.idb = new IndexedDBWrapper('vms-global-v1');
+	}
+
 	async getValue<Key extends GlobalStorageBaseKeys>(
 		key: Key,
 		defaultValue: GlobalStorageBaseValues[Key]
 	): Promise<GlobalStorageBaseValues[Key]> {
-		const result = await idb.get<GlobalStorageBaseValues[Key]>(key);
+		const result = await this.idb.get<GlobalStorageBaseValues[Key]>(key);
 
 		return result ?? defaultValue;
-	},
+	}
 
-	async setValue<Key extends GlobalStorageBaseKeys>(key: Key, value: GlobalStorageBaseValues[Key]): Promise<void> {
-		await idb.set(key, value);
-	},
+	async setValue<Key extends GlobalStorageBaseKeys>(key: Key, newValue: GlobalStorageBaseValues[Key]): Promise<void> {
+		const oldValue = await this.idb.get<GlobalStorageBaseValues[Key]>(key);
+
+		await this.idb.set(key, newValue);
+
+		this.listeners.get(key)?.forEach((callback) => callback({ oldValue, newValue }));
+	}
 
 	removeValue<Key extends GlobalStorageBaseKeys>(key: Key): Promise<void> {
-		return idb.remove(key);
-	},
-};
+		return this.idb.remove(key);
+	}
 
-export default GlobalStorage;
+	addListener<Key extends GlobalStorageBaseKeys>(
+		key: Key,
+		callback: (props: ListenersProps<GlobalStorageBaseValues[Key]>) => void
+	): () => void {
+		const listeners = this.listeners.get(key) ?? new Set();
+
+		listeners.add(callback);
+
+		this.listeners.set(key, listeners);
+
+		return () => {
+			listeners.delete(callback);
+		};
+	}
+
+	removeListener<Key extends GlobalStorageBaseKeys>(
+		key: Key,
+		callback: (props: ListenersProps<GlobalStorageBaseValues[Key]>) => void
+	): void {
+		if (!this.listeners.has(key)) return;
+
+		const listeners = this.listeners.get(key)!;
+
+		listeners.delete(callback);
+
+		this.listeners.set(key, listeners);
+	}
+}
+
+export default new GlobalStorage();

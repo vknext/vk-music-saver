@@ -7,6 +7,7 @@ import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirecto
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
+import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import showSnackbar from 'src/react/showSnackbar';
 import type { AudioAudio } from 'src/schemas/objects';
 import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
@@ -14,7 +15,7 @@ import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
-import formatTrackName from './formatTrackName';
+import formatDownloadedTrackName from './formatDownloadedTrackName';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
@@ -122,10 +123,15 @@ const downloadPlaylist = async (playlistFullId: string) => {
 			const blob = await getBlobAudioFromPlaylist({ convertMethod, audio, signal });
 			if (!blob) return;
 
-			const trackName = formatTrackName({
+			const bitrateResult = await getAudioBitrate(audio);
+
+			const index = audioIndex++;
+
+			const trackName = await formatDownloadedTrackName({
+				isPlaylist: true,
 				audio,
-				isNumTracksInPlaylist: isNumTracks || false,
-				index: audioIndex++,
+				index: isNumTracks ? index : undefined,
+				bitrate: bitrateResult?.bitrate,
 			});
 
 			const zipFile: ClientZipFile = {
