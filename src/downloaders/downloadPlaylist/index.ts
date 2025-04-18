@@ -120,7 +120,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
 		try {
-			const blob = await getBlobAudioFromPlaylist({ convertMethod, audio, signal });
+			const blob = await getBlobAudioFromPlaylist({ convertMethod, audio, playlist, signal });
 			if (!blob) return;
 
 			const bitrateResult = await getAudioBitrate(audio);
