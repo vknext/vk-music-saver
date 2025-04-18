@@ -162,12 +162,12 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 
 	const root = document.createElement('div');
 
-	const DownloadButton = await import('./DownloadButton').then((m) => m.default);
+	const DownloadButton = await import('./DownloadButton/DownloadButton');
 
 	const { unmount } = await initReactApp({
 		root,
 		content: (
-			<DownloadButton
+			<DownloadButton.default
 				mode="secondary"
 				appearance="neutral"
 				size="m"
@@ -198,11 +198,13 @@ const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) 
 
 		const root = document.createElement('div');
 
-		const DownloadButton = await import('./DownloadButton').then((m) => m.default);
+		const DownloadButton = await import('./DownloadButton/DownloadButton');
 
 		const { unmount } = await initReactApp({
 			root,
-			content: <DownloadButton mode="primary" appearance="overlay" size="m" playlistFullId={playlistFullId} />,
+			content: (
+				<DownloadButton.default mode="primary" appearance="overlay" size="m" playlistFullId={playlistFullId} />
+			),
 		});
 
 		onCurBackHide(unmount);
