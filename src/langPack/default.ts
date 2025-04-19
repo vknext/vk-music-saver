@@ -57,7 +57,7 @@ const lang = {
 	vms_link_copied: 'Ссылка скопирована',
 	vms_badges_deluxe_function_warning: 'Функция доступна для обладателей подписки Прайм Де Люкс.',
 	vms_onboarding_settings_hint_title: 'Настройки VK Music Saver',
-	vms_onboarding_settings_hint_description: 'В них можно настроить скачивание так, как удобно именно тебе',
+	vms_onboarding_settings_hint_description: 'В них можно настроить скачивание так, как удобно именно вам',
 	vms_sett_single_track_template: 'Формат названия одиночного трека',
 	vms_sett_playlist_track_template: 'Формат названия трека в плейлисте',
 	vms_sett_audio_write_id3_tags: 'Добавлять ID3 теги к музыке',
