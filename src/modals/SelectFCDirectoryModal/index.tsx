@@ -60,7 +60,7 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 			onSelect(dirHandle);
 
 			if (saveMethodSelection) {
-				await GlobalStorage.setValue('downloadMethod', DownloadFilesMethod.DIRECTORY);
+				await GlobalStorage.setValue('download_files_method', DownloadFilesMethod.DIRECTORY);
 			}
 
 			closeModal();
@@ -75,7 +75,7 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 		onSelect(null);
 
 		if (saveMethodSelection) {
-			await GlobalStorage.setValue('downloadMethod', DownloadFilesMethod.DIRECTORY);
+			await GlobalStorage.setValue('download_files_method', DownloadFilesMethod.DIRECTORY);
 		}
 
 		closeModal();
@@ -128,7 +128,7 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 				<Separator />
 			</Spacing>
 			<Div style={{ paddingTop: 0 }}>
-				<SettControl option="numTracksInPlaylist" defaultValue={true}>
+				<SettControl option="num_tracks_in_playlist" defaultValue={true}>
 					{lang.use('vms_sett_num_tracks_in_playlist')}
 				</SettControl>
 			</Div>

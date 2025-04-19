@@ -15,7 +15,7 @@ const AudioConvertMethodSelect = () => {
 	const lang = useLang();
 	const { closeModal } = useCustomModalControl();
 
-	const { value, setValue } = useStorageValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
+	const { value, setValue } = useStorageValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
 	const [vknextServerIsAvailable, setVknextServerIsAvailable] = useState(false);
 	const [isDeluxe, setIsDeluxe] = useState(false);
 	const [deluxeUrl, setDeluxeUrl] = useState('');

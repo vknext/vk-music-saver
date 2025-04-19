@@ -62,7 +62,7 @@ const SingleTrackTemplate = () => {
 const PlaylistTrackTemplate = () => {
 	const lang = useLang();
 	const { value, setValue, isLoading } = useStorageValue('playlist_track_template', DEFAULT_TRACK_TEMPLATE);
-	const { value: isNumTracksInPlaylist } = useStorageValue('numTracksInPlaylist', true);
+	const { value: isNumTracksInPlaylist } = useStorageValue('num_tracks_in_playlist', true);
 
 	const options = useMemo(() => {
 		return TRACK_TEMPLATE_PRESETS.map((item) => {

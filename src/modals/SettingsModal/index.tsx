@@ -25,7 +25,7 @@ const SettingsModal = () => {
 		>
 			<Div>
 				<SelectTrackTemplate />
-				<SettControl option="numTracksInPlaylist" defaultValue={true}>
+				<SettControl option="num_tracks_in_playlist" defaultValue={true}>
 					{lang.use('vms_sett_num_tracks_in_playlist')}
 				</SettControl>
 				<Spacing size={12}>

@@ -59,7 +59,7 @@ const downloadChatMusic = async (peerId: number) => {
 		startIn: 'music',
 	});
 
-	const isNumTracks = await GlobalStorage.getValue('numTracksInPlaylist', true);
+	const isNumTracks = await GlobalStorage.getValue('num_tracks_in_playlist', true);
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
@@ -128,7 +128,7 @@ const downloadChatMusic = async (peerId: number) => {
 		setProgress({ current: progress, total: totalAudios });
 	};
 
-	const convertMethod = await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
+	const convertMethod = await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
 		try {

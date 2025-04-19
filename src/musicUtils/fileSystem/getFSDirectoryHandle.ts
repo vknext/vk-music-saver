@@ -15,7 +15,7 @@ const getFSDirectoryHandle = async ({
 	if (IS_DIRECTORY_PICKER_SUPPORTED) {
 		const onShowPicker = () => window.showDirectoryPicker({ id, startIn, mode: 'readwrite' });
 
-		const method = await GlobalStorage.getValue('downloadMethod', DownloadFilesMethod.UNSELECTED);
+		const method = await GlobalStorage.getValue('download_files_method', DownloadFilesMethod.UNSELECTED);
 
 		if (method === DownloadFilesMethod.DIRECTORY) {
 			return await onShowPicker();

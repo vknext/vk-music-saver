@@ -72,7 +72,7 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 	});
 
 	const blob = await getAudioBlob({
-		convertMethod: await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+		convertMethod: await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
 		audio,
 		signal,
 		onProgress: (current, total) => {

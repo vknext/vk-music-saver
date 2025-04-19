@@ -32,7 +32,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		startIn: 'music',
 	});
 
-	const isNumTracks = await GlobalStorage.getValue('numTracksInPlaylist', true);
+	const isNumTracks = await GlobalStorage.getValue('num_tracks_in_playlist', true);
 
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 
@@ -116,7 +116,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		setProgress({ current: progress, total: totalAudios });
 	};
 
-	const convertMethod = await GlobalStorage.getValue('audioConvertMethod', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
+	const convertMethod = await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
 		try {

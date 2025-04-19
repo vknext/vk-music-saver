@@ -7,7 +7,7 @@ import { DownloadFilesMethod } from 'src/storages/enums';
 
 const SelectDownloadMethod = () => {
 	const lang = useLang();
-	const { value, setValue } = useStorageValue('downloadMethod', DownloadFilesMethod.UNSELECTED);
+	const { value, setValue } = useStorageValue('download_files_method', DownloadFilesMethod.UNSELECTED);
 
 	const getCurrentActionTitle = () => {
 		if (value === DownloadFilesMethod.DIRECTORY) {
