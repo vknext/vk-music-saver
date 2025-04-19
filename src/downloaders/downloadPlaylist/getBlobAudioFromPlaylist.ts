@@ -1,25 +1,13 @@
-import { getAudioBlob } from 'src/musicUtils/getAudioBlob';
-import { AudioAudio, AudioPlaylist } from 'src/schemas/objects';
-import type { AudioConvertMethod } from 'src/storages/enums';
+import { getAudioBlob, type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';
 
-interface getBlobAudioFromPlaylistParams {
-	audio: AudioAudio;
-	signal: AbortSignal;
-	playlist?: AudioPlaylist;
-	convertMethod: AudioConvertMethod;
-}
+type getBlobAudioFromPlaylistParams = Omit<GetAudioBlobParams, 'onProgress'>;
 
-const getBlobAudioFromPlaylist = async ({
-	audio,
-	signal,
-	playlist,
-	convertMethod,
-}: getBlobAudioFromPlaylistParams): Promise<Blob | null> => {
-	if (signal.aborted) return null;
-	if (!audio.url) return null;
+const getBlobAudioFromPlaylist = async (props: getBlobAudioFromPlaylistParams): Promise<Blob | null> => {
+	if (props.signal?.aborted) return null;
+	if (!props.audio?.url) return null;
 
 	try {
-		const blob = await getAudioBlob({ audio, playlist, signal, convertMethod });
+		const blob = await getAudioBlob(props);
 
 		return blob;
 	} catch (e) {

@@ -8,6 +8,8 @@ export interface GlobalStorageBaseValues {
 	onboarding_settings_hint_seen: boolean;
 	single_track_template: string;
 	playlist_track_template: string;
+	audio_write_id3_tags: boolean;
+	audio_write_genius_lyrics: boolean;
 	[key: `view_url_${number}`]: string | null;
 }
 

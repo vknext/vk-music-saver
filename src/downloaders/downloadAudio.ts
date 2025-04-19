@@ -72,6 +72,8 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 	});
 
 	const blob = await getAudioBlob({
+		writeTags: await GlobalStorage.getValue('audio_write_id3_tags', true),
+		writeGeniusLyrics: await GlobalStorage.getValue('audio_write_genius_lyrics', true),
 		convertMethod: await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
 		audio,
 		signal,

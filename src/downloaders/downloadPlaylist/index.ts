@@ -117,10 +117,19 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	};
 
 	const convertMethod = await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
+	const writeTags = await GlobalStorage.getValue('audio_write_id3_tags', true);
+	const writeGeniusLyrics = await GlobalStorage.getValue('audio_write_genius_lyrics', true);
 
 	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
 		try {
-			const blob = await getBlobAudioFromPlaylist({ convertMethod, audio, playlist, signal });
+			const blob = await getBlobAudioFromPlaylist({
+				writeGeniusLyrics,
+				writeTags,
+				convertMethod,
+				audio,
+				playlist,
+				signal,
+			});
 			if (!blob) return;
 
 			const bitrateResult = await getAudioBitrate(audio);

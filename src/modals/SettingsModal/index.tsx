@@ -4,10 +4,11 @@ import { IS_FIREFOX } from 'src/common/constants';
 import SettControl from 'src/components/SettControl/SettControl';
 import VMSLogo from 'src/components/VMSLogo/VMSLogo';
 import useLang from 'src/hooks/useLang';
-import AudioConvertMethodSelect from './AudioConvertMethodSelect';
+import AudioConvertMethodSelect from './features/AudioConvertMethodSelect';
+import SelectDownloadMethod from './features/SelectDownloadMethod';
+import SelectTrackTemplate from './features/SelectTrackTemplate';
+import WriteGeniusLyrics from './features/WriteGeniusLyrics';
 import OutsideButton from './OutsideButton/OutsideButton';
-import SelectDownloadMethod from './SelectDownloadMethod';
-import SelectTrackTemplate from './SelectTrackTemplate';
 
 const SettingsModal = () => {
 	const lang = useLang();
@@ -33,6 +34,17 @@ const SettingsModal = () => {
 				</Spacing>
 				{!IS_FIREFOX && <SelectDownloadMethod />}
 				<AudioConvertMethodSelect />
+				<Spacing size={12}>
+					<Separator />
+				</Spacing>
+				<SettControl
+					option="audio_write_id3_tags"
+					defaultValue={true}
+					subtitle={lang.use('vms_sett_audio_write_id3_tags_desc')}
+				>
+					{lang.use('vms_sett_audio_write_id3_tags')}
+				</SettControl>
+				<WriteGeniusLyrics />
 			</Div>
 		</CustomModalPage>
 	);

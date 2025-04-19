@@ -60,6 +60,12 @@ const lang = {
 	vms_onboarding_settings_hint_description: 'В них можно настроить скачивание так, как удобно именно тебе',
 	vms_sett_single_track_template: 'Формат названия одиночного трека',
 	vms_sett_playlist_track_template: 'Формат названия трека в плейлисте',
+	vms_sett_audio_write_id3_tags: 'Добавлять ID3 теги к музыке',
+	vms_sett_audio_write_id3_tags_desc:
+		'Треки и альбомы будут скачиваться с метаданными, такими как имя исполнителя, название, дата выпуска и обложка',
+	vms_sett_audio_write_genius_lyrics: 'Вставлять в метаданные треков тексты с Genius',
+	vms_sett_audio_write_genius_lyrics_desc:
+		'VK Music Saver не связан с этим сайтом и не несет ответственности за точность текстов песен',
 };
 
 export default lang;

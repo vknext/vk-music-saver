@@ -10,11 +10,11 @@ import { AudioArtist, AudioAudio, AudioPlaylist } from 'src/schemas/objects';
 import { getVMSConfig } from 'src/services/getVMSConfig';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import { AudioConvertMethod } from 'src/storages/enums';
+import getAudioPlaylistById from '../services/getAudioPlaylistById';
 import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
 import getAlbumThumbnail from './getAlbumThumbnail';
 import getPerformer from './getPerformer';
-import getAudioPlaylistById from '../services/getAudioPlaylistById';
 
 export interface GetAudioBlobParams {
 	audio: AudioObject | AudioAudio;
@@ -22,6 +22,8 @@ export interface GetAudioBlobParams {
 	signal?: AbortSignal;
 	onProgress?: (current: number, total: number) => void;
 	convertMethod: AudioConvertMethod;
+	writeTags: boolean;
+	writeGeniusLyrics: boolean;
 }
 
 export const getAudioBlob = async ({
@@ -30,6 +32,8 @@ export const getAudioBlob = async ({
 	playlist,
 	onProgress,
 	convertMethod,
+	writeGeniusLyrics,
+	writeTags,
 }: GetAudioBlobParams): Promise<Blob> => {
 	if (!audio.url) {
 		await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_url_not_found') });
@@ -88,6 +92,10 @@ export const getAudioBlob = async ({
 
 	if (!blob) {
 		throw new Error('Audio conversion error');
+	}
+
+	if (!writeTags) {
+		return blob;
 	}
 
 	if (!playlist) {
@@ -212,7 +220,7 @@ export const getAudioBlob = async ({
 			}
 		}
 
-		if (typeof audio.title === 'string') {
+		if (typeof audio.title === 'string' && writeGeniusLyrics) {
 			try {
 				const lyrics = await getGeniusLyrics({
 					title: audio.title,
