@@ -15,6 +15,7 @@ import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
+import { incrementDownloadedPlaylistsCount } from '../utils';
 import formatDownloadedTrackName from './formatDownloadedTrackName';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
@@ -186,6 +187,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		finish();
 
+		await incrementDownloadedPlaylistsCount();
+
 		return;
 	}
 
@@ -206,6 +209,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	finish({ onSave, onRemove });
 
 	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
+
+	await incrementDownloadedPlaylistsCount();
 };
 
 export default downloadPlaylist;

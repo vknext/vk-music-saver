@@ -10,6 +10,9 @@ export interface GlobalStorageBaseValues {
 	playlist_track_template: string;
 	audio_write_id3_tags: boolean;
 	audio_write_genius_lyrics: boolean;
+	downloaded_tracks_count: number;
+	downloaded_playlists_count: number;
+	rate_extension_alert_shown: boolean;
 	[key: `view_url_${number}`]: string | null;
 }
 

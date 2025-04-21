@@ -20,6 +20,7 @@ import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
 import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
+import { incrementDownloadedPlaylistsCount } from './utils';
 
 async function* getAudios(ownerId: number) {
 	let count = 100;
@@ -204,6 +205,8 @@ const downloadChatMusic = async (peerId: number) => {
 
 		finish();
 
+		await incrementDownloadedPlaylistsCount();
+
 		return;
 	}
 
@@ -224,6 +227,8 @@ const downloadChatMusic = async (peerId: number) => {
 	finish({ onSave, onRemove });
 
 	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
+
+	await incrementDownloadedPlaylistsCount();
 };
 
 export default downloadChatMusic;

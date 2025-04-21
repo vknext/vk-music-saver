@@ -12,6 +12,7 @@ import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, getDownloadTaskById, startDownload } from 'src/store';
 import { DownloadTaskNotFoundError } from 'src/store/downloadErrors';
 import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
+import { incrementDownloadedTracksCount } from './utils';
 
 interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
 	audioObject: AudioObject | AudioAudio;
@@ -102,6 +103,8 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 	await onSave();
 
 	finish({ onSave, onRemove });
+
+	await incrementDownloadedTracksCount();
 };
 
 export default downloadAudio;

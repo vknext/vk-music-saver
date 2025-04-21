@@ -66,6 +66,10 @@ const lang = {
 	vms_sett_audio_write_genius_lyrics: 'Вставлять в метаданные треков тексты с Genius',
 	vms_sett_audio_write_genius_lyrics_desc:
 		'VK Music Saver не связан с этим сайтом и не несет ответственности за точность текстов песен',
+	vms_rating_title: 'Вам нравится VK Music Saver?',
+	vms_rating_desc: 'Пожалуйста, поддержите расширение в рейтинге {storeName}',
+	vms_rating_yes: 'Оценить расширение',
+	vms_rating_no: 'Нет, спасибо',
 };
 
 export default lang;
