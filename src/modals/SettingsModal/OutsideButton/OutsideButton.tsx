@@ -1,7 +1,13 @@
 import { Icon28LogoMiniVknextColor } from '@vknext/icons';
 import { useCustomModalControl } from '@vknext/shared/components/CustomModalPage/CustomModalPageContext';
 import { noop } from '@vknext/shared/utils/noop';
-import { Icon20DonateOutline, Icon20FavoriteOutline, Icon20More, Icon20ShareOutline } from '@vkontakte/icons';
+import {
+	Icon20ClearDataOutline,
+	Icon20DonateOutline,
+	Icon20FavoriteOutline,
+	Icon20More,
+	Icon20ShareOutline,
+} from '@vkontakte/icons';
 import { Link, ModalOutsideButton } from '@vkontakte/vkui';
 import {
 	CHROME_REVIEW_URL,
@@ -12,9 +18,10 @@ import {
 	VKNEXT_SITE_URL,
 } from 'src/common/constants';
 import { ActionsMenuAction, ActionsMenuPopover, ActionsMenuSeparator } from 'src/components/ActionsMenu';
-import cancelEvent from 'src/lib/cancelEvent';
 import useLang from 'src/hooks/useLang';
+import cancelEvent from 'src/lib/cancelEvent';
 import showSnackbar from 'src/react/showSnackbar';
+import GlobalStorage from 'src/storages/GlobalStorage';
 import styles from './OutsideButton.module.scss';
 
 const OutsideButton = () => {
@@ -55,6 +62,14 @@ const OutsideButton = () => {
 		closeModal();
 	};
 
+	const onClearStorage: React.MouseEventHandler<HTMLElement> = async (event) => {
+		cancelEvent(event);
+
+		await GlobalStorage.clearDatabase();
+
+		window.location.reload();
+	};
+
 	return (
 		<ActionsMenuPopover
 			trigger="hover"
@@ -91,6 +106,16 @@ const OutsideButton = () => {
 						onClick={onShare}
 					>
 						{lang.use('vms_share')}
+					</ActionsMenuAction>
+					<ActionsMenuSeparator />
+					<ActionsMenuAction
+						type="danger"
+						size="large"
+						multiline
+						leftIcon={<Icon20ClearDataOutline />}
+						onClick={onClearStorage}
+					>
+						{lang.use('vms_clear_storage')}
 					</ActionsMenuAction>
 					<ActionsMenuSeparator />
 					<ActionsMenuAction

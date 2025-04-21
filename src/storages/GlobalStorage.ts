@@ -62,6 +62,10 @@ class GlobalStorage {
 
 		this.listeners.set(key, listeners);
 	}
+
+	async clearDatabase() {
+		await this.idb.clearDatabase();
+	}
 }
 
 export default new GlobalStorage();
