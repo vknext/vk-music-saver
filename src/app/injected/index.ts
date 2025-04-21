@@ -12,7 +12,6 @@ import initConvoProfile from 'src/modules/convoProfile';
 import initFeed from 'src/modules/feed';
 import injectDownloadButtonInAudioRow from 'src/modules/injectDownloadButtonInAudioRow';
 import initShowBitrateNearDuration from 'src/modules/showBitrateNearDuration';
-import initVKNextBanner from 'src/modules/vknextBanner';
 
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания
 getGlobalVKNext().vms_installed = true;
@@ -52,14 +51,6 @@ const start = async () => {
 		initConvoProfile();
 	} catch (e) {
 		console.error(['[VMS/initConvoProfile]', e], e);
-	}
-
-	try {
-		if (!('webpack' in getGlobalVKNext())) {
-			initVKNextBanner();
-		}
-	} catch (e) {
-		console.error('[VMS/initVKNextBanner]', e);
 	}
 };
 
