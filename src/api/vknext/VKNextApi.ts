@@ -1,4 +1,5 @@
 import { waitVK } from '@vknext/shared/vkcom/globalVars/waitVK';
+import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import type { AppsGetEmbeddedUrlResponse } from 'src/schemas/responses';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import getAuthAppId from './getAuthAppId';
@@ -57,7 +58,9 @@ export class VKNextApi {
 			return viewUrlCache;
 		}
 
-		const { view_url } = await window.vkApi.api<AppsGetEmbeddedUrlResponse>('apps.getEmbeddedUrl', {
+		const vkApi = await waitVKApi();
+
+		const { view_url } = await vkApi.api<AppsGetEmbeddedUrlResponse>('apps.getEmbeddedUrl', {
 			app_id: appId,
 			v: '5.123',
 		});
