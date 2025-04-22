@@ -2,7 +2,7 @@ import getIconLogo28LogoMiniVkMusicSaverColor from 'src/icons/getIconLogo28LogoM
 import showSettingsModal from 'src/modals/showSettingsModal';
 
 const init = () => {
-	if (window.vk.id !== 0) return;
+	if (window.vk?.id !== 0) return;
 
 	const inner = document.querySelector<HTMLElement>('.side_bar_inner:has(#quick_login)');
 	if (!inner) return;
