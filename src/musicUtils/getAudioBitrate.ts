@@ -72,7 +72,9 @@ const getAudioBitrate = async (audioObj: AudioAudio | AudioObject): Promise<GetT
 			resolve(result);
 
 			await TrackDetailsStorage.set(audioKey, result);
-		} catch {
+		} catch (e) {
+			console.error(e);
+
 			bitrateCache.delete(audioKey);
 			resolve(null);
 		}
