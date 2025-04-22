@@ -1,13 +1,12 @@
+import waitVariable from '@vknext/shared/vkcom/globalVars/utils/waitVariable';
 import downloadAudio from 'src/downloaders/downloadAudio';
 import downloadUserAudio from 'src/downloaders/downloadUserAudio';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import waitVariable from 'src/globalVars/utils/waitVariable';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import onAddAudioPagePlayerWrap from 'src/interactions/onAddAudioPagePlayerWrap';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
-import formatFFMpegProgress from 'src/lib/formatFFMpegProgress';
 import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import getAudioPlayerUserControlsContainer from './getAudioPlayerUserControlsContainer';
@@ -23,11 +22,7 @@ const getCurrentAudioObject = () => {
 
 const uniqueKey = Symbol();
 
-const onAddPlayer = async (playerWrap: WrapElement) => {
-	if (playerWrap[uniqueKey]) return;
-	playerWrap[uniqueKey] = true;
-
-	// вся музыка
+const addButtonDownloadAllMusic = () => {
 	const tabsActions = document.getElementsByClassName('audio_section_tabs_actions');
 	for (const actions of tabsActions) {
 		if (actions.getElementsByClassName(styles.AudioPageMainTabBtn).length) continue;
@@ -39,7 +34,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 		btn.addEventListener('mouseover', function () {
 			window.showTooltip(this, {
-				text: lang.use('vms_download_all_music'),
+				text: lang.use('vms_download_all_my_music'),
 				black: 1,
 				noZIndex: true,
 				needLeft: true,
@@ -77,6 +72,19 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 			headerExtra.appendChild(btn);
 		}
 	}
+};
+
+const onAddPlayer = async (playerWrap: WrapElement) => {
+	if (playerWrap[uniqueKey]) return;
+	playerWrap[uniqueKey] = true;
+
+	if (
+		location.pathname.startsWith('/audios') ||
+		location.pathname === '/audio' ||
+		playerWrap.closest('.top_audio_layer_place,#top_audio_layer_place')
+	) {
+		addButtonDownloadAllMusic();
+	}
 
 	// текущий трек из плеера
 	const container = await getAudioPlayerUserControlsContainer(playerWrap);
@@ -106,7 +114,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 		downloadAudio({
 			audioObject,
 			onProgress: (progress) => {
-				setText(formatFFMpegProgress(progress));
+				setText(`${progress}%`);
 			},
 		}).finally(() => {
 			setIsLoading(false);

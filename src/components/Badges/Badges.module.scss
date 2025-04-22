@@ -1,0 +1,19 @@
+:global(.vkuiHeader__content-in) > .Badge {
+	display: inline-block;
+	margin-left: 4px;
+}
+
+:global(.vkuiButton__after) > .Badge {
+	margin-left: 0px;
+}
+
+.Tooltip {
+	max-width: 200px;
+	user-select: none;
+}
+
+.Wrapper {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}

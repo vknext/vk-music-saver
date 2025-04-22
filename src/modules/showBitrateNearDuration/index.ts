@@ -1,11 +1,11 @@
-import type { AudioObject } from 'src/global';
+import { waitAudioUtils } from '@vknext/shared/vkcom/globalVars/waitAudioUtils';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
 import styles from './index.module.scss';
-import waitAudioUtils from 'src/globalVars/waitAudioUtils';
 
 const createBitrateElement = (audio: AudioAudio | AudioObject) => {
 	const bitrateEl = document.createElement('span');

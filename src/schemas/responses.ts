@@ -14,3 +14,29 @@ export interface AudioGetResponse {
 	profiles?: Objects.UsersUserFull[];
 	groups?: Objects.GroupsGroupFull[];
 }
+
+export interface AudioGetAudioIdsBySourceResponse {
+	audios: Objects.AudioAudioRawIdTracked[];
+}
+
+export type UsersGetResponse = Objects.UsersUserFull[];
+
+export type MessagesGetConversationsByIdResponse = Objects.MessagesGetConversationById;
+
+export interface MessagesGetHistoryAttachmentsResponse {
+	/**
+	 * Value for pagination
+	 */
+	next_from: string;
+	[key: string]: any;
+	items: Objects.MessagesHistoryAttachment[];
+	profiles: Objects.UsersUserFull[];
+	groups: Objects.GroupsGroupFull[];
+}
+
+export interface AppsGetEmbeddedUrlResponse {
+	original_url: string;
+	view_url: string;
+	screen_title: string;
+	type: 'app' | 'game';
+}

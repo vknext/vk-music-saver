@@ -1,13 +1,14 @@
+import { delay } from '@vknext/shared/utils/delay';
+import { waitUIActionsMenu } from '@vknext/shared/vkcom/globalVars/waitUIActionsMenu';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
-import waitUIActionsMenu from 'src/globalVars/waitUIActionsMenu';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
 import onOpenPlaylistModal from 'src/interactions/onOpenPlaylistModal';
 import onOpenPlaylistPage from 'src/interactions/onOpenPlaylistPage';
 import lang from 'src/lang';
-import delay from 'src/lib/delay';
 import onCurBackHide from 'src/listeners/onCurBackHide';
 import initReactApp from 'src/react/initReactApp';
+import showSnackbar from 'src/react/showSnackbar';
 import { DownloadTargetElement } from 'src/types';
 import styles from './index.module.scss';
 
@@ -25,9 +26,13 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 
 	item.addEventListener('click', async () => {
 		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
+
 		if (!snippet?.dataset?.playlistId) {
-			window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-			return;
+			return await showSnackbar({
+				type: 'error',
+				text: 'VK Music Saver',
+				subtitle: lang.use('vms_playlist_not_found'),
+			});
 		}
 
 		await downloadPlaylist(snippet.dataset.playlistId.replace('playlist_', ''));
@@ -39,9 +44,13 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 
 	itemDownCover.addEventListener('click', async () => {
 		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
+
 		if (!snippet?.dataset?.playlistId) {
-			window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-			return;
+			return await showSnackbar({
+				type: 'error',
+				text: 'VK Music Saver',
+				subtitle: lang.use('vms_playlist_not_found'),
+			});
 		}
 
 		await downloadPlaylistCover(snippet.dataset.playlistId.replace('playlist_', ''));
@@ -99,7 +108,7 @@ const injectToSnipperPlaylistHeader = async () => {
 	header.appendChild(actions);
 };
 
-const injectToAudioPlaylistPage = async () => {
+const injectToAudioPlaylistPage = () => {
 	const uiMenu = document.querySelector<DownloadTargetElement>(
 		'.AudioPlaylistSnippet__actionButton .ActionsMenu__inner'
 	);
@@ -120,8 +129,11 @@ const injectToAudioPlaylistPage = async () => {
 		const snippet = uiMenu.closest<HTMLElement>('.AudioPlaylistSnippet');
 
 		if (!snippet?.dataset?.playlistId) {
-			window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-			return;
+			return await showSnackbar({
+				type: 'error',
+				text: 'VK Music Saver',
+				subtitle: lang.use('vms_playlist_not_found'),
+			});
 		}
 
 		await downloadPlaylist(snippet.dataset.playlistId.replace('playlist_', ''));
@@ -150,12 +162,12 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 
 	const root = document.createElement('div');
 
-	const DownloadButton = await import('./DownloadButton').then((m) => m.default);
+	const DownloadButton = await import('./DownloadButton/DownloadButton');
 
 	const { unmount } = await initReactApp({
 		root,
 		content: (
-			<DownloadButton
+			<DownloadButton.default
 				mode="secondary"
 				appearance="neutral"
 				size="m"
@@ -186,11 +198,13 @@ const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) 
 
 		const root = document.createElement('div');
 
-		const DownloadButton = await import('./DownloadButton').then((m) => m.default);
+		const DownloadButton = await import('./DownloadButton/DownloadButton');
 
 		const { unmount } = await initReactApp({
 			root,
-			content: <DownloadButton mode="primary" appearance="overlay" size="m" playlistFullId={playlistFullId} />,
+			content: (
+				<DownloadButton.default mode="primary" appearance="overlay" size="m" playlistFullId={playlistFullId} />
+			),
 		});
 
 		onCurBackHide(unmount);
@@ -203,8 +217,8 @@ const initAudioPlaylist = async () => {
 	injectToAudioPlaylistModal().catch(console.error);
 
 	onOpenPlaylistPage(() => {
-		injectToAudioPlaylistPage().catch(console.error);
 		injectToAudioPlaylistPageNew().catch(console.error);
+		injectToAudioPlaylistPage();
 	});
 
 	onOpenPlaylistModal(injectToAudioPlaylistModalNew);

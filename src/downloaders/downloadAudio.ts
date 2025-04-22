@@ -1,10 +1,18 @@
-import { AudioObject } from 'src/global';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
+import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
+import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import { getAudioBlob, type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';
-import getAudioByObject from 'src/musicUtils/getAudioByObject';
-import getPerformer from 'src/musicUtils/getPerformer';
+import showSnackbar from 'src/react/showSnackbar';
 import { AudioAudio } from 'src/schemas/objects';
+import getAudioByObject from 'src/services/getAudioByObject';
+import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
+import GlobalStorage from 'src/storages/GlobalStorage';
+import { DownloadType, getDownloadTaskById, startDownload } from 'src/store';
+import { DownloadTaskNotFoundError } from 'src/store/downloadErrors';
+import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
+import { incrementDownloadedTracksCount } from './utils';
 
 interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
 	audioObject: AudioObject | AudioAudio;
@@ -12,36 +20,91 @@ interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
 
 const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) => {
 	if (!audioObject) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_not_found') });
-		return;
+		return await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_not_found') });
 	}
 
 	const audio = await getAudioByObject(audioObject);
+
 	if (!audio.url) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_audio_url_not_found') });
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: lang.use('vms_audio_url_not_found'),
+		});
 	}
 
-	let artistTitle = getPerformer(audio);
-
-	let audioName = [artistTitle.trim(), audio.title].join(' - ');
-
-	if (audio.subtitle) {
-		audioName += ` (${audio.subtitle})`;
-	}
+	const taskId = 'audio' + [audioObject.owner_id, audioObject.id].join('_');
 
 	try {
-		const blob = await getAudioBlob({ audio, onProgress });
+		const prevTask = getDownloadTaskById(taskId);
 
-		const blobUrl = URL.createObjectURL(blob);
+		if (prevTask) {
+			prevTask.onSave?.();
 
-		await saveFileAs(blobUrl, `${audioName}.mp3`);
-
-		URL.revokeObjectURL(blobUrl);
-	} catch (error) {
-		console.error('Error downloading audio:', error);
-		throw new Error('Failed to download audio');
+			return;
+		}
+	} catch (e) {
+		if (!(e instanceof DownloadTaskNotFoundError)) {
+			console.error(e);
+		}
 	}
+
+	const controller = new AbortController();
+	const { signal } = controller;
+
+	let trackName = await formatDownloadedTrackName({ isPlaylist: false, audio });
+
+	const { setProgress, finish, setTitle } = startDownload({
+		id: taskId,
+		title: `${trackName}.mp3`,
+		type: DownloadType.TRACK,
+		onCancel: () => controller.abort(),
+		photoUrl: getAlbumThumbUrl(audio) || undefined,
+	});
+
+	const updateTrackNamePromise = getAudioBitrate(audio).then(async (r) => {
+		trackName = await formatDownloadedTrackName({
+			isPlaylist: false,
+			audio,
+			bitrate: r?.bitrate,
+		});
+
+		setTitle(trackName);
+	});
+
+	const blob = await getAudioBlob({
+		writeTags: await GlobalStorage.getValue('audio_write_id3_tags', true),
+		writeGeniusLyrics: await GlobalStorage.getValue('audio_write_genius_lyrics', true),
+		convertMethod: await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+		audio,
+		signal,
+		onProgress: (current, total) => {
+			if (signal.aborted) return;
+
+			setProgress({ current, total });
+
+			onProgress?.(current, total);
+		},
+	});
+
+	if (signal.aborted) return;
+
+	try {
+		await updateTrackNamePromise;
+	} catch (e) {
+		console.error(e);
+	}
+
+	const blobUrl = URL.createObjectURL(blob);
+
+	const onSave = () => saveFileAs(blobUrl, `${trackName}.mp3`);
+	const onRemove = () => URL.revokeObjectURL(blobUrl);
+
+	await onSave();
+
+	finish({ onSave, onRemove });
+
+	await incrementDownloadedTracksCount();
 };
 
 export default downloadAudio;

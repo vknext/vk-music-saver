@@ -1,75 +1,64 @@
-import type { NotifierEvent } from 'src/global';
+import { MAX_PARALLEL_AUDIO_CONVERSION } from 'src/common/constants';
 import lang from 'src/lang';
-import arrayUnFlat from 'src/lib/arrayUnFlat';
-import delay from 'src/lib/delay';
 import saveFileAs from 'src/lib/saveFileAs';
+import TaskLimiter from 'src/lib/TaskLimiter';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
-import getPlaylistById from 'src/musicUtils/getPlaylistById';
+import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
+import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
+import showSnackbar from 'src/react/showSnackbar';
+import type { AudioAudio } from 'src/schemas/objects';
+import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
+import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
+import GlobalStorage from 'src/storages/GlobalStorage';
+import { DownloadType, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
+import { incrementDownloadedPlaylistsCount } from '../utils';
+import formatDownloadedTrackName from './formatDownloadedTrackName';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
-	if (window.vk.id === 0) {
-		// alert потому что Notifier отсутствует
-		alert(lang.use('vms_playlist_download_auth_required'));
-		return;
-	}
-
-	const [fsDirHandle, isNumTracks] = await getFSDirectoryHandle({
+	const fsDirHandle = await getFSDirectoryHandle({
 		id: 'playlist_music',
 		startIn: 'music',
 	});
 
-	const event: NotifierEvent = {
-		title: 'VK Music Saver',
-		text: lang.use('vms_downloading'),
-	};
-
-	try {
-		window.Notifier.showEvent(event);
-	} catch (e) {
-		console.error(e);
-	}
-
-	// отменяем скрытие элемента
-	clearTimeout(event.closeTO);
-	clearTimeout(event.fadeTO);
-	delete event.startFading;
-
-	const setText = (text: string) => {
-		if (!event.baloonEl) return;
-		if (!event.baloonEl.closest('body')) return;
-
-		const msg = event.baloonEl.getElementsByClassName('notifier_baloon_msg')[0] as HTMLElement;
-		if (!msg) return;
-
-		msg.innerText = text;
-	};
+	const isNumTracks = await GlobalStorage.getValue('num_tracks_in_playlist', true);
 
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 
-	const playlist = await getPlaylistById({
+	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
+
+	const playlist = await getAudioPlaylistById({
 		owner_id: parseInt(ownerId),
 		playlist_id: parseInt(playlistId),
 		access_key: playlistAccessKey,
 	});
 
 	if (!playlist) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_not_found') });
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: lang.use('vms_playlist_not_found'),
+		});
 	}
 
 	if (playlist?.error?.error_msg) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: playlist.error.error_msg });
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: playlist.error.error_msg,
+		});
 	}
 
 	if (!playlist.audios?.length) {
-		window.Notifier.showEvent({ title: 'VK Music Saver', text: lang.use('vms_playlist_is_empty') });
-		return;
+		return await showSnackbar({
+			type: 'error',
+			text: 'VK Music Saver',
+			subtitle: lang.use('vms_playlist_is_empty'),
+		});
 	}
 
 	const controller = new AbortController();
@@ -93,81 +82,110 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	const playlistFolderName = sanitizeFolderName(unescapeHTML(nameChunks.join('')));
 	const filename = `${playlistFolderName}.zip`;
 
-	const promises: Promise<ClientZipFile | null | void>[] = [];
+	const taskId = `playlist${playlistFullId}`;
+
+	const { setProgress, startArchiving, finish, setExtraText } = startDownload({
+		id: taskId,
+		title: fsDirHandle ? playlistFolderName : `${unescapeHTML(nameChunks.join(''))}.zip`,
+		type: DownloadType.PLAYLIST,
+		onCancel: () => controller.abort(),
+		photoUrl: getAlbumThumbUrl(playlist) || undefined,
+	});
+
+	const limiter = new TaskLimiter<ClientZipFile | null | void>(MAX_PARALLEL_AUDIO_CONVERSION);
 
 	let audioIndex = 1;
 
 	let progress = 0;
 	const totalAudios = playlist.audios.length;
 
-	setText(`${fsDirHandle ? playlistFolderName : filename} (${progress}/${totalAudios})`);
+	setProgress({ current: 0, total: totalAudios });
 
 	const updateProgress = () => {
-		progress++;
-
-		setText(`${fsDirHandle ? playlistFolderName : filename} (${progress}/${totalAudios})`);
-	};
-
-	for (const audios of arrayUnFlat(playlist.audios, 8)) {
 		if (signal.aborted) return;
 
-		for (const audio of audios) {
-			const zipFilePromise = getBlobAudioFromPlaylist({
+		progress++;
+
+		setProgress({ current: progress, total: totalAudios });
+	};
+
+	const convertMethod = await GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE);
+	const writeTags = await GlobalStorage.getValue('audio_write_id3_tags', true);
+	const writeGeniusLyrics = await GlobalStorage.getValue('audio_write_genius_lyrics', true);
+
+	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
+		try {
+			const blob = await getBlobAudioFromPlaylist({
+				writeGeniusLyrics,
+				writeTags,
+				convertMethod,
 				audio,
-				lastModified,
-				signal,
 				playlist,
-				audioIndex: audioIndex++,
-				isNumTracksInPlaylist: isNumTracks || false,
+				signal,
+			});
+			if (!blob) return;
+
+			const bitrateResult = await getAudioBitrate(audio);
+
+			const index = audioIndex++;
+
+			const trackName = await formatDownloadedTrackName({
+				isPlaylist: true,
+				audio,
+				index: isNumTracks ? index : undefined,
+				bitrate: bitrateResult?.bitrate,
 			});
 
-			zipFilePromise.then(() => {
-				updateProgress();
-			});
+			const zipFile: ClientZipFile = {
+				name: `${trackName}.mp3`,
+				lastModified: audio.date ? new Date(audio.date * 1000) : lastModified,
+				input: blob,
+			};
+
+			updateProgress();
+			setExtraText(lang.use('vms_playlist_track_download_completed', { trackName }));
 
 			if (fsDirHandle) {
-				promises.push(
-					createFileInDirectory({
-						zipFilePromise,
-						dirHandle: fsDirHandle,
-						subFolderName: playlistFolderName,
-					})
-				);
-			} else {
-				promises.push(zipFilePromise);
+				return await createFileInDirectory({
+					zipFile,
+					subFolderName: playlistFolderName,
+					dirHandle: fsDirHandle,
+				});
 			}
-		}
 
-		await Promise.all(promises);
+			return zipFile;
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
+	for (const audio of playlist.audios) {
+		limiter.addTask(() => downloadTrack(audio));
 	}
 
-	const results = await Promise.all(promises);
-
+	const results = await limiter.waitAll();
 	const files = results.filter((f) => !!f);
 
 	if (signal.aborted) return;
 
 	if (fsDirHandle) {
-		await Promise.all(promises);
+		setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
 
-		setText(
-			lang.use('vms_fs_music_playlist_done', {
-				folderName: playlistFolderName,
-			})
-		);
+		await showSnackbar({
+			type: 'done',
+			text: lang.use('vms_fs_music_playlist_done'),
+			subtitle: playlistFolderName,
+		});
 
-		await delay(4000);
+		finish();
 
-		try {
-			window.Notifier.hideEvent(event);
-		} catch (e) {
-			console.error(e);
-		}
+		await incrementDownloadedPlaylistsCount();
 
 		return;
 	}
 
-	setText(`${filename} - ${lang.use('vms_archivation')}`);
+	setExtraText('');
+	startArchiving();
 
 	const { downloadZip } = await import('client-zip');
 
@@ -175,15 +193,16 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	const blobUrl = URL.createObjectURL(blob);
 
-	try {
-		window.Notifier.hideEvent(event);
-	} catch (e) {
-		console.error(e);
-	}
+	const onSave = () => saveFileAs(blobUrl, filename);
+	const onRemove = () => URL.revokeObjectURL(blobUrl);
 
-	await saveFileAs(blobUrl, filename);
+	await onSave();
 
-	URL.revokeObjectURL(blobUrl);
+	finish({ onSave, onRemove });
+
+	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
+
+	await incrementDownloadedPlaylistsCount();
 };
 
 export default downloadPlaylist;

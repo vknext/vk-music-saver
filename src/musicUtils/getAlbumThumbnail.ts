@@ -1,4 +1,4 @@
-import type { AudioObject } from 'global';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import { AudioAudio, AudioPlaylist } from 'src/schemas/objects';
 import getAlbumId from './getAlbumId';
 

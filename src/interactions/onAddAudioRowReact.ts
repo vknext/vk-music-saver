@@ -1,11 +1,11 @@
-import ListenerRegistry from 'src/common/ListenerRegistry';
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
+import { delay } from '@vknext/shared/utils/delay';
+import { getReactAttrs } from '@vknext/shared/utils/getReactAttrs';
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
+import { waitRIC } from '@vknext/shared/utils/waitRIC';
 import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
-import type { ObservedHTMLElement } from 'src/global';
-import delay from 'src/lib/delay';
-import getReactAttrs from 'src/lib/getReactAttrs';
-import onDocumentComplete from 'src/lib/onDocumentComplete';
-import waitRAF from 'src/lib/waitRAF';
-import waitRIC from 'src/lib/waitRIC';
+import type { ObservedHTMLElement } from 'src/types/global';
 import type { AudioAudio } from 'src/schemas/objects';
 import onOpenPlaylistModal from './onOpenPlaylistModal';
 import onOpenPlaylistPage from './onOpenPlaylistPage';

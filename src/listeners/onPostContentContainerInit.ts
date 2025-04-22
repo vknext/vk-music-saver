@@ -1,5 +1,5 @@
-import ListenerRegistry from 'src/common/ListenerRegistry';
-import type { HTMLHeadTaskQueueS } from 'src/lib/waitHTMLHead';
+import type { HTMLHeadTaskQueueS } from '@vknext/shared/utils/waitHTMLHead';
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
 import onAddTaskQueueS from './onAddTaskQueueS';
 
 type CallbackFunc = (payload: any) => Promise<void> | void;

@@ -1,5 +1,5 @@
-import CustomModalPageProvider from '../components/CustomModalPage/CustomModalPageContext';
-import initReactApp from '../initReactApp';
+import { CustomModalPageProvider } from '@vknext/shared/components/CustomModalPage/CustomModalPageContext';
+import initReactApp from 'src/react/initReactApp';
 import styles from './index.module.scss';
 import { disableBodyScroll, enableBodyScroll } from './scroll';
 import type { ShowReactModalFunc } from './types';

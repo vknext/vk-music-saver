@@ -74,6 +74,25 @@
 	}
 }
 
+// треки из вложений чата
+:global(.ConvoProfileTabs__tab) {
+	.DownloadAudioButton {
+		min-width: 24px;
+		gap: 0px;
+		border-radius: calc(var(--vkui--size_border_radius--regular) / 2);
+	}
+
+	.DownloadAudioButton__icons {
+		color: var(--vkui--color_icon_secondary);
+	}
+
+	&:global(.vkuiTabsItem__selected.vkuiTabsItem__modeAccent) {
+		.DownloadAudioButton__icon--download {
+			color: var(--vkui--color_icon_accent);
+		}
+	}
+}
+
 .DownloadAudioButton__icons {
 	display: flex;
 	align-items: center;

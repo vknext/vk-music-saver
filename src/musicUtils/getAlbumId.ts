@@ -1,4 +1,4 @@
-import type { AudioObject } from 'global';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import { AudioAudio } from 'src/schemas/objects';
 
 export type AlbumId = [owner_id: number, id: number];

@@ -1,6 +1,6 @@
+import { useColorScheme } from '@vknext/shared/vkcom/hooks/useColorScheme';
 import { AdaptivityProvider, AppRoot, ConfigProvider, Platform, type AppRootProps } from '@vkontakte/vkui';
 
-import useColorScheme from '../hooks/useColorScheme';
 import styles from './initReactApp.module.scss';
 
 interface ConfigProps

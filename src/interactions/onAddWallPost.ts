@@ -1,16 +1,16 @@
-import ListenerRegistry from 'src/common/ListenerRegistry';
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
+import { DOMContentLoaded } from '@vknext/shared/utils/DOMContentLoaded';
+import { delay } from '@vknext/shared/utils/delay';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
+import { waitRIC } from '@vknext/shared/utils/waitRIC';
+import { waitCur } from '@vknext/shared/vkcom/globalVars/waitCur';
+import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import {
 	generateObservedElementIBSKey,
 	generateObservedElementMBSKey,
 } from 'src/common/observedHTMLElements/generateKeys';
-import type { ObservedHTMLElement } from 'src/global';
-import waitCur from 'src/globalVars/waitCur';
-import waitNav from 'src/globalVars/waitNav';
-import delay from 'src/lib/delay';
-import DOMContentLoaded from 'src/lib/DOMContentLoaded';
-import waitRAF from 'src/lib/waitRAF';
-import waitRIC from 'src/lib/waitRIC';
+import type { ObservedHTMLElement } from 'src/types/global';
 import onPostContentContainerInit from 'src/listeners/onPostContentContainerInit';
 
 type CallbackFunc = (node: HTMLElement) => void;

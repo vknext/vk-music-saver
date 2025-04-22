@@ -1,4 +1,4 @@
-import type { CustomModalPageEvents } from '../components/CustomModalPage/CustomModalPage';
+import type { CustomModalPageEvents } from '@vknext/shared/components/CustomModalPage/CustomModalPage';
 
 export type ReactModalProps = CustomModalPageEvents;
 

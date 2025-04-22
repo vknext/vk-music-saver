@@ -1,4 +1,4 @@
-import type { VKNext } from 'src/global';
+import type { VKNext } from 'src/types/global';
 
 const vknextObject = {};
 

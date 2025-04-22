@@ -1,0 +1,11 @@
+.Wrapper {
+	position: absolute;
+	bottom: 0;
+	right: 56px;
+}
+
+:global(.HeaderNav__item):has(:global(.TopNavBtn__icon)) {
+	.Wrapper {
+		right: 39px;
+	}
+}

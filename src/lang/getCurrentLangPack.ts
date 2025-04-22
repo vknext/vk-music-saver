@@ -1,7 +1,7 @@
-import waitVK from 'src/globalVars/waitVK';
-import defaultLang from '../langPack/default';
-import LangsCodeEnum from './LangsCodeEnum';
-import getCodeLangFromNavigator from './getCodeLangFromNavigator';
+import { LangsCodeEnum } from '@vknext/shared/lib/lang/LangsCodeEnum';
+import { getCodeLangFromNavigator } from '@vknext/shared/lib/lang/getCodeLangFromNavigator';
+import { waitVK } from '@vknext/shared/vkcom/globalVars/waitVK';
+import defaultLang from 'src/langPack/default';
 
 const langNameMap: Record<LangsCodeEnum, string> = {
 	[LangsCodeEnum.Russian]: 'default',
@@ -28,9 +28,9 @@ const getTargetPack = async (code: LangsCodeEnum) => {
 };
 
 const getCurrentLangPack = async (): Promise<typeof defaultLang> => {
-	await waitVK();
+	const vk = await waitVK();
 
-	const code = typeof window.vk?.lang === 'number' ? window.vk.lang : getCodeLangFromNavigator();
+	const code = typeof vk?.lang === 'number' ? vk.lang : getCodeLangFromNavigator();
 
 	const targetLangPack = await getTargetPack(code);
 

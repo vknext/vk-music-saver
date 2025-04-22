@@ -1,5 +1,5 @@
-import type { Iajax } from 'src/global';
-import waitAjax from '../globalVars/waitAjax';
+import { waitAjax } from '@vknext/shared/vkcom/globalVars/waitAjax';
+import type { Iajax } from '@vknext/shared/vkcom/types';
 
 type AjaxPostArgs = Parameters<Iajax['post']>;
 type AjaxInterceptor = (args: AjaxPostArgs) => AjaxPostArgs | boolean | Promise<void> | void;

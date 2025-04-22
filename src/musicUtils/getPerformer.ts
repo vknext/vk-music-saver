@@ -1,4 +1,4 @@
-import type { AudioObject } from 'src/global';
+import type { AudioObject } from '@vknext/shared/vkcom/types';
 import type { AudioArtist, AudioAudio } from 'src/schemas/objects';
 
 const getArtistTitle = (artists: AudioArtist[] = []) => artists.map((artist) => artist.name).join(', ');

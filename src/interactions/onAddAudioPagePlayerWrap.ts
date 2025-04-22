@@ -1,8 +1,8 @@
-import ListenerRegistry from 'src/common/ListenerRegistry';
-import waitAudioUtils from 'src/globalVars/waitAudioUtils';
-import waitNav from 'src/globalVars/waitNav';
+import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
+import { waitAudioUtils } from '@vknext/shared/vkcom/globalVars/waitAudioUtils';
+import { waitNav } from '@vknext/shared/vkcom/globalVars/waitNav';
 import objectHook from 'src/lib/objectHook';
-import onDocumentComplete from 'src/lib/onDocumentComplete';
 
 type CallbackFunc = (el: HTMLElement) => void;
 

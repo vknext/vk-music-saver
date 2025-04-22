@@ -1,0 +1,32 @@
+.EcoPlateItem {
+	border-radius: 0 !important;
+	color: #000;
+	color: var(--vkui--color_text_primary);
+
+	:global([class*='vkuiSimpleCell__middle']) {
+		padding-block: 0 !important;
+	}
+}
+
+a.EcoPlateItem:hover {
+	text-decoration: none;
+}
+
+div[data-is-vkcom='true'] .EcoPlateItem {
+	min-height: 34px;
+	--vkui--spacing_size_l: 8px;
+}
+
+.EcoPlateItem__icon {
+	color: var(--vkui_internal--icon_color);
+}
+
+.EcoPlateItem__text {
+	line-height: calc(var(--vkui--font_text--line_height--regular) + 1px) !important;
+}
+
+@media (pointer: fine) and (min-width: 768px), (max-height: 414.9px) {
+	.EcoPlateItem__text {
+		line-height: calc(var(--vkui--font_text--line_height--compact) + 1px) !important;
+	}
+}

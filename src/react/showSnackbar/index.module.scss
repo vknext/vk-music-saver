@@ -1,0 +1,15 @@
+.Snackbars {
+	position: fixed;
+	bottom: 0;
+	z-index: var(--vkui--z_index_popout);
+	inline-size: 100%;
+	max-inline-size: 351px;
+}
+
+.BaseSnackbar {
+	position: unset !important;
+
+	& > div[role='alert'] {
+		padding-top: 0px;
+	}
+}
