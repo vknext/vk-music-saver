@@ -34,7 +34,7 @@ const init = async () => {
 
 	const config = await getVMSConfig();
 
-	if (config.alerts.rating && (await waitForDownloadMilestone(10, 4))) {
+	if (config.alerts.donut && (await waitForDownloadMilestone(10, 4))) {
 		await showAlert();
 	}
 };
