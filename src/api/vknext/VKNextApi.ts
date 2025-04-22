@@ -73,7 +73,7 @@ export class VKNextApi {
 		return view_url;
 	}
 
-	private async getVKId(): Promise<number> {
+	async getVKId(): Promise<number> {
 		const vk = await waitVK();
 		return vk.id || 0;
 	}

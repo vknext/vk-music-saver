@@ -28,5 +28,5 @@ export const formatTrackName = ({
 		result = `${index}. ${result}`;
 	}
 
-	return fixFilename(result);
+	return fixFilename(result.trim());
 };
