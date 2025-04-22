@@ -1,6 +1,6 @@
-import { Icon28LogoMiniVkMusicSaverColor } from '@vknext/icons';
 import { Button, type ButtonProps } from '@vkontakte/vkui';
 
+import { Icon24DownloadOutline } from '@vkontakte/icons';
 import { ActionsMenuAction, ActionsMenuPopover } from 'src/components/ActionsMenu';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import downloadPlaylistCover from 'src/downloaders/downloadPlaylistCover';
@@ -60,7 +60,7 @@ const DownloadButton = ({ playlistFullId, ...props }: DownloadButtonProps) => {
 			}
 		>
 			<Button size="m" className={styles.DownloadButton} {...props}>
-				<Icon28LogoMiniVkMusicSaverColor width={24} height={24} />
+				<Icon24DownloadOutline />
 			</Button>
 		</ActionsMenuPopover>
 	);
