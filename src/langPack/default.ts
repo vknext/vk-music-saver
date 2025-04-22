@@ -47,7 +47,7 @@ const lang = {
 		'ВКонтакте отдает треки в формате m3u8, а расширение конвертирует в привычный mp3',
 	vms_sett_audio_convert_mode_vknext: 'Сервер VK Next',
 	vms_sett_audio_convert_mode_vknext_desc:
-		'Использует FFmpeg для конвертации. Лучше других подходит для загрузки больших плейлистов, так как конвертация не занимает оперативную память. Однако может работать медленно, если этим способом одновременно пользуется много пользователей.',
+		'Использует FFmpeg для конвертации. Лучше других подходит для загрузки больших плейлистов, так как конвертация не занимает оперативную память. Однако может работать медленно, если этот способ одновременно использует большое количество пользователей.',
 	vms_settings_title: 'Настройки VK Music Saver',
 	vms_settings_review_in_firefox: 'Оценить в Firefox Add-ons',
 	vms_settings_review_in_chrome: 'Оценить в Chrome Web Store',
@@ -59,12 +59,12 @@ const lang = {
 	vms_badges_deluxe_function_warning: 'Функция доступна для обладателей подписки Прайм Де Люкс.',
 	vms_onboarding_settings_hint_title: 'Настройки VK Music Saver',
 	vms_onboarding_settings_hint_description: 'В них можно настроить скачивание так, как удобно именно вам',
-	vms_sett_single_track_template: 'Формат названия одиночного трека',
+	vms_sett_single_track_template: 'Формат названия отдельного трека',
 	vms_sett_playlist_track_template: 'Формат названия трека в плейлисте',
 	vms_sett_audio_write_id3_tags: 'Добавлять ID3 теги к музыке',
 	vms_sett_audio_write_id3_tags_desc:
 		'Треки и альбомы будут скачиваться с метаданными, такими как имя исполнителя, название, дата выпуска и обложка',
-	vms_sett_audio_write_genius_lyrics: 'Вставлять в метаданные треков тексты с Genius',
+	vms_sett_audio_write_genius_lyrics: 'Вставлять в метаданные треков тексты из Genius',
 	vms_sett_audio_write_genius_lyrics_desc:
 		'VK Music Saver не связан с этим сайтом и не несет ответственности за точность текстов песен',
 	vms_alert_rating_title: 'Вам нравится VK Music Saver?',
