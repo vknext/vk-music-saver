@@ -1,6 +1,6 @@
 import type { AudioPlaylist } from 'src/schemas/objects';
 import type { AudioGetPlaylistByIdParams } from 'src/schemas/params';
-import type { AudioGetResponse } from 'src/schemas/responses';
+import type { AudioGetAudioIdsBySourceResponse, AudioGetByIdResponse, AudioGetResponse } from 'src/schemas/responses';
 
 interface OldPlaylist {
 	type: 'playlist';
@@ -123,17 +123,23 @@ const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 
 	if (!playlist) return null;
 
-	if (window.vk.id === 0) return playlist;
-
 	try {
-		const audios = await vkApi.api<AudioGetResponse>('audio.get', {
-			owner_id: playlist.owner_id || playlist.ownerId,
-			playlist_id: playlist.id,
-			access_key: params.access_key,
-			count: 10000,
+		const entity_id: (string | number)[] = [playlist.owner_id, playlist.id];
+
+		if (playlist.access_key) {
+			entity_id.push(playlist.access_key);
+		}
+
+		const { audios: audioIds } = await vkApi.api<AudioGetAudioIdsBySourceResponse>('audio.getAudioIdsBySource', {
+			source: 'playlist',
+			entity_id: entity_id.join('_'),
 		});
 
-		playlist.audios = audios.items;
+		const items = await vkApi.api<AudioGetByIdResponse>('audio.getById', {
+			audios: audioIds.map((e) => e.audio_id).join(','),
+		});
+
+		playlist.audios = items;
 	} catch (e) {
 		console.error(e);
 	}

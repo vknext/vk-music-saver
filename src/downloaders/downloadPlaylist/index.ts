@@ -20,14 +20,6 @@ import formatDownloadedTrackName from './formatDownloadedTrackName';
 import getBlobAudioFromPlaylist from './getBlobAudioFromPlaylist';
 
 const downloadPlaylist = async (playlistFullId: string) => {
-	if (window.vk.id === 0) {
-		return await showSnackbar({
-			type: 'warning',
-			text: 'VK Music Saver',
-			subtitle: lang.use('vms_playlist_download_auth_required'),
-		});
-	}
-
 	const fsDirHandle = await getFSDirectoryHandle({
 		id: 'playlist_music',
 		startIn: 'music',

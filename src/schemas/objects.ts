@@ -1039,3 +1039,11 @@ export interface MessagesHistoryAttachment {
 	was_listened?: boolean | number;
 	attachment?: MessagesMessageAttachment;
 }
+
+export interface AudioAudioRawIdTracked {
+	/**
+	 * Audio id
+	 */
+	audio_id: string;
+	track_code: string;
+}

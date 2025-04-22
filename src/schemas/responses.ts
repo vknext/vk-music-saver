@@ -15,6 +15,10 @@ export interface AudioGetResponse {
 	groups?: Objects.GroupsGroupFull[];
 }
 
+export interface AudioGetAudioIdsBySourceResponse {
+	audios: Objects.AudioAudioRawIdTracked[];
+}
+
 export type UsersGetResponse = Objects.UsersUserFull[];
 
 export type MessagesGetConversationsByIdResponse = Objects.MessagesGetConversationById;
