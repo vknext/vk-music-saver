@@ -68,6 +68,7 @@ DOMContentLoaded(() => {
 });
 
 onDocumentComplete(() => {
+	import('src/modules/settingsInLeftMenu').catch((e) => console.error('[VMS/settingsInLeftMenu]', e));
 	import('src/modules/settingsHint').catch((e) => console.error('[VMS/settingsHint]', e));
 
 	import('src/modules/ratingAlert').catch((e) => console.error('[VMS/ratingAlert]', e));
