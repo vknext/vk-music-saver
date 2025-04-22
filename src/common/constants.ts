@@ -12,7 +12,7 @@ export const FIREFOX_REVIEW_URL = 'https://addons.mozilla.org/ru/firefox/addon/v
 export const VKNEXT_SITE_URL = 'https://vknext.net';
 
 export const VKNEXT_GROUP_DOMAIN = 'vknext';
-export const VKNEXT_DONUT_URL = `https://vk.com/donut/vknext`;
+export const VKNEXT_DONUT_URL = `https://vknext.net/donate`;
 
 export const enum TrackTemplateVariable {
 	ARTIST = '{artist}',

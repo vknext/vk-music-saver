@@ -71,4 +71,5 @@ onDocumentComplete(() => {
 	import('src/modules/settingsHint').catch((e) => console.error('[VMS/settingsHint]', e));
 
 	import('src/modules/ratingAlert').catch((e) => console.error('[VMS/ratingAlert]', e));
+	import('src/modules/donutAlert').catch((e) => console.error('[VMS/donutAlert]', e));
 });

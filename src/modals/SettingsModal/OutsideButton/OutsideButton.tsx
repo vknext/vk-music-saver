@@ -54,14 +54,6 @@ const OutsideButton = () => {
 		}
 	};
 
-	const onDonateClick: React.MouseEventHandler<HTMLElement> = (event) => {
-		cancelEvent(event);
-
-		window.nav.go(VKNEXT_DONUT_URL);
-
-		closeModal();
-	};
-
 	const onClearStorage: React.MouseEventHandler<HTMLElement> = async (event) => {
 		cancelEvent(event);
 
@@ -93,8 +85,8 @@ const OutsideButton = () => {
 						size="large"
 						multiline
 						leftIcon={<Icon20DonateOutline />}
-						onClick={onDonateClick}
 						href={VKNEXT_DONUT_URL}
+						target="_blank"
 					>
 						{lang.use('vms_settings_donate')}
 					</ActionsMenuAction>

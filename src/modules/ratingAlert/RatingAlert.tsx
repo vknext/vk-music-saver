@@ -15,21 +15,21 @@ export const RatingAlert = ({ onDestroy, onButtonClick }: RatingAlertProps) => {
 		<Alert
 			className={styles.RatingAlert}
 			onClose={onDestroy}
-			title={lang.use('vms_rating_title')}
-			description={lang.use('vms_rating_desc', {
+			title={lang.use('vms_alert_rating_title')}
+			description={lang.use('vms_alert_rating_desc', {
 				storeName: IS_FIREFOX ? 'Firefox Add-ons' : 'Chrome Web Store',
 			})}
 			actionsLayout="vertical"
 			actions={[
 				{
-					title: lang.use('vms_rating_yes'),
+					title: lang.use('vms_alert_rating_yes'),
 					mode: 'cancel',
 					href: IS_FIREFOX ? FIREFOX_REVIEW_URL : CHROME_REVIEW_URL,
 					target: '_blank',
 					action: onButtonClick,
 				},
 				{
-					title: lang.use('vms_rating_no'),
+					title: lang.use('vms_alert_base_no'),
 					mode: 'default',
 					action: onButtonClick,
 				},

@@ -9,6 +9,10 @@ export interface VMSGetConfigResponse {
 		vk_donut: boolean;
 		url?: string;
 	};
+	alerts: {
+		rating: boolean;
+		donut: boolean;
+	};
 	ffmpegConfig?: {
 		method: `vms.${string}`;
 		force: boolean;

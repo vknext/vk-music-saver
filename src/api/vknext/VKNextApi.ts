@@ -25,6 +25,7 @@ export class VKNextApi {
 				'Api-Version': 'vms-1',
 			},
 			body: JSON.stringify(params),
+			credentials: 'include',
 			signal,
 		});
 
