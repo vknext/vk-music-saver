@@ -61,6 +61,10 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		});
 	}
 
+	if (await GlobalStorage.getValue('download_playlist_in_reverse', false)) {
+		playlist.audios.reverse();
+	}
+
 	const controller = new AbortController();
 	const { signal } = controller;
 	const lastModified = new Date();
@@ -113,7 +117,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	const writeTags = await GlobalStorage.getValue('audio_write_id3_tags', true);
 	const writeGeniusLyrics = await GlobalStorage.getValue('audio_write_genius_lyrics', true);
 
-	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
+	const downloadTrack = async (audio: AudioAudio, index: number): Promise<void | ClientZipFile> => {
 		try {
 			const blob = await getBlobAudioFromPlaylist({
 				writeGeniusLyrics,
@@ -126,8 +130,6 @@ const downloadPlaylist = async (playlistFullId: string) => {
 			if (!blob) return;
 
 			const bitrateResult = await getAudioBitrate(audio);
-
-			const index = audioIndex++;
 
 			const trackName = await formatDownloadedTrackName({
 				isPlaylist: true,
@@ -160,7 +162,9 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	};
 
 	for (const audio of playlist.audios) {
-		limiter.addTask(() => downloadTrack(audio));
+		const position = audioIndex++;
+
+		limiter.addTask(() => downloadTrack(audio, position));
 	}
 
 	const results = await limiter.waitAll();

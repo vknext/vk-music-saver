@@ -29,6 +29,9 @@ const SettingsModal = () => {
 				<SettControl option="num_tracks_in_playlist" defaultValue={true}>
 					{lang.use('vms_sett_num_tracks_in_playlist')}
 				</SettControl>
+				<SettControl option="download_playlist_in_reverse" defaultValue={false}>
+					{lang.use('vms_sett_download_playlist_in_reverse')}
+				</SettControl>
 				<Spacing size={12}>
 					<Separator />
 				</Spacing>

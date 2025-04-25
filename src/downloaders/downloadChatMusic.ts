@@ -133,14 +133,12 @@ const downloadChatMusic = async (peerId: number) => {
 	const writeTags = await GlobalStorage.getValue('audio_write_id3_tags', true);
 	const writeGeniusLyrics = await GlobalStorage.getValue('audio_write_genius_lyrics', true);
 
-	const downloadTrack = async (audio: AudioAudio): Promise<void | ClientZipFile> => {
+	const downloadTrack = async (audio: AudioAudio, index: number): Promise<void | ClientZipFile> => {
 		try {
 			const blob = await getBlobAudioFromPlaylist({ writeGeniusLyrics, writeTags, convertMethod, audio, signal });
 			if (!blob) return;
 
 			const bitrateResult = await getAudioBitrate(audio);
-
-			const index = audioIndex++;
 
 			const trackName = await formatDownloadedTrackName({
 				isPlaylist: true,
@@ -178,7 +176,9 @@ const downloadChatMusic = async (peerId: number) => {
 
 				if (attachment?.type !== 'audio') continue;
 
-				limiter.addTask(() => downloadTrack(attachment.audio));
+				const position = audioIndex++;
+
+				limiter.addTask(() => downloadTrack(attachment.audio, position));
 			}
 
 			await limiter.waitAll();
