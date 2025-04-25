@@ -14,6 +14,7 @@ export interface GlobalStorageBaseValues {
 	downloaded_playlists_count: number;
 	rate_extension_alert_shown: boolean;
 	donut_alert_shown: boolean;
+	download_playlist_in_reverse: boolean;
 	[key: `view_url_${number}`]: string | null;
 }
 
