@@ -68,6 +68,6 @@ const lang = {
   vms_alert_donate_desc: "VK Music Saver is built with passion — no ads, no hidden data collection, and open-source. If you like it, support us with a donation",
   vms_alert_donate_yes: "Donate",
   vms_alert_base_no: "No, thanks",
-  vms_sett_download_playlist_in_reverse: 'Скачивать плейлисты в обратном порядке — с последнего трека к первому'
+  vms_sett_download_playlist_in_reverse: "Download playlists in reverse order - from the last track to the first track"
 };
 export default lang;
