@@ -15,7 +15,7 @@ export interface GlobalStorageBaseValues {
 	rate_extension_alert_shown: boolean;
 	donut_alert_shown: boolean;
 	download_playlist_in_reverse: boolean;
-	[key: `view_url_${number}`]: string | null;
+	[key: `params_${number}`]: string | null;
 }
 
 export type GlobalStorageBaseKeys = keyof GlobalStorageBaseValues;
