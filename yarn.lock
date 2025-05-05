@@ -1151,10 +1151,10 @@
   dependencies:
     "@vkontakte/icons-sprite" "^2.0.0"
 
-"@vknext/shared@^1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@vknext/shared/-/shared-1.3.2.tgz#5f93fe61122baf5369b034fc51d4e841eebb3828"
-  integrity sha512-dN7kTpJE8+EH4y1/t8Oitv+IgPNQM90/3sqNrQ6WVhZGi1WABfS2yS0xrdnj+qNv3PXouMbfQZekqseKcONweQ==
+"@vknext/shared@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@vknext/shared/-/shared-1.3.3.tgz#aaa0318f250c04f1d241eabaa6b7c013e3ea8471"
+  integrity sha512-C9GAQxHWkpBgEN9GUldO885C4k3MlpMIn1Q9HbNBWn1XX+hUZwEpusjX2kzecL0bGQlApalPe5MnJmNoj1Iytw==
   dependencies:
     iframe-message-bridge "^1.1.1"
 
