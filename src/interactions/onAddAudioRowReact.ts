@@ -22,6 +22,9 @@ const findApiAudio = (el: HTMLElement): AudioAudio | null => {
 	const { fiber, props: audioRowProps } = getReactAttrs(el);
 
 	const apiAudio =
+		fiber?.return?.return?.return?.return?.memoizedProps?.audio?.apiAudio ||
+		fiber?.return?.return?.return?.return?.return?.memoizedProps?.audio?.apiAudio ||
+		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.audio?.apiAudio ||
 		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.audio?.apiAudio ||
 		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return
 			?.memoizedProps?.audio?.apiAudio ||
