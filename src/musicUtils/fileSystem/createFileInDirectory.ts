@@ -1,28 +1,54 @@
 import type { ClientZipFile } from 'src/types';
 
-interface createFileInDirectoryProps {
+interface CreateFileInDirectoryOptions {
 	dirHandle: FileSystemDirectoryHandle;
 	zipFile: ClientZipFile;
 	subFolderName?: string;
 }
 
-const createFileInDirectory = async ({ dirHandle, zipFile, subFolderName }: createFileInDirectoryProps) => {
+const getTargetDirectory = async (
+	dirHandle: FileSystemDirectoryHandle,
+	subFolderName?: string
+): Promise<FileSystemDirectoryHandle> => {
+	if (!subFolderName) {
+		return dirHandle;
+	}
+
 	try {
-		const { name, input } = zipFile;
+		return await dirHandle.getDirectoryHandle(subFolderName, { create: true });
+	} catch (error) {
+		console.error(`[VK Music Saver] Failed to create/access subdirectory "${subFolderName}":`, error);
+	}
 
-		const subDirHandle = subFolderName
-			? await dirHandle.getDirectoryHandle(subFolderName, { create: true })
-			: dirHandle;
+	return dirHandle;
+};
 
-		const fileHandle = await subDirHandle.getFileHandle(name, { create: true });
+const writeFileToDirectory = async (dirHandle: FileSystemDirectoryHandle, zipFile: ClientZipFile): Promise<void> => {
+	const { name, input } = zipFile;
 
+	try {
+		const fileHandle = await dirHandle.getFileHandle(name, { create: true });
 		const writableStream = await fileHandle.createWritable();
 
-		await writableStream.write(input);
-		await writableStream.close();
-	} catch (e) {
-		console.error(e);
+		try {
+			await writableStream.write(input);
+		} finally {
+			await writableStream.close();
+		}
+	} catch (error) {
+		console.error(`[VK Music Saver] Failed to write file "${name}":`, error);
+		throw error;
 	}
+};
+
+const createFileInDirectory = async ({
+	dirHandle,
+	zipFile,
+	subFolderName,
+}: CreateFileInDirectoryOptions): Promise<void> => {
+	const targetDirectory = await getTargetDirectory(dirHandle, subFolderName);
+
+	await writeFileToDirectory(targetDirectory, zipFile);
 };
 
 export default createFileInDirectory;
