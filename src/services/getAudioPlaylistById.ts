@@ -1,3 +1,4 @@
+import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import type { AudioPlaylist } from 'src/schemas/objects';
 import type { AudioGetPlaylistByIdParams } from 'src/schemas/params';
 import type { AudioGetAudioIdsBySourceResponse, AudioGetByIdResponse, AudioGetResponse } from 'src/schemas/responses';
@@ -135,11 +136,21 @@ const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 			entity_id: entity_id.join('_'),
 		});
 
-		const items = await vkApi.api<AudioGetByIdResponse>('audio.getById', {
-			audios: audioIds.map((e) => e.audio_id).join(','),
-		});
+		const promises: Promise<AudioGetByIdResponse>[] = [];
 
-		playlist.audios = items;
+		for (const ids of arrayUnFlat(audioIds, 100)) {
+			const promise = vkApi.api<AudioGetByIdResponse>('audio.getById', {
+				audios: ids.map((e) => e.audio_id).join(','),
+			});
+
+			promises.push(promise);
+
+			if (promises.length % 10 === 0) {
+				await Promise.all(promises);
+			}
+		}
+
+		playlist.audios = (await Promise.all(promises)).flat();
 	} catch (e) {
 		console.error(e);
 	}
