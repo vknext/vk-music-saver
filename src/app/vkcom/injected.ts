@@ -1,6 +1,6 @@
-import './public-path';
+import '../public-path';
 
-import './index.scss';
+import './injected.scss';
 
 import { DOMContentLoaded } from '@vknext/shared/utils/DOMContentLoaded';
 import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';

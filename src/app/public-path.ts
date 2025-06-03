@@ -1,7 +1,5 @@
-/**
- * требуется для подключения динамических скриптов
- */
-const getPublicPath = () => {
+// @ts-expect-error требуется для подключения динамических скриптов
+__webpack_public_path__ = (() => {
 	try {
 		const item = window.sessionStorage.getItem('vms_public_path');
 		if (item) {
@@ -20,7 +18,4 @@ const getPublicPath = () => {
 	}
 
 	return '';
-};
-
-// @ts-ignore
-__webpack_public_path__ = getPublicPath();
+})();

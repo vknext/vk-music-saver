@@ -14,6 +14,8 @@ const browser_action = {
 	default_popup: 'popup.html',
 };
 
+const VK_HOST = ['https://vk.com/*', 'https://vk.ru/*', 'https://m.vk.com/*', 'https://m.vk.ru/*'];
+
 const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 	const manifest: Record<string, any> = {
 		manifest_version: 3,
@@ -34,7 +36,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		web_accessible_resources: [
 			{
 				resources: ['*'],
-				matches: ['https://vk.com/*', 'https://vk.ru/*'],
+				matches: VK_HOST,
 			},
 		],
 		permissions: ['declarativeNetRequestWithHostAccess'],
@@ -47,7 +49,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 				},
 			],
 		},
-		host_permissions: ['https://api.genius.com/*', 'https://vk.com/*', 'https://vk.ru/*'],
+		host_permissions: VK_HOST.concat('https://api.genius.com/*'),
 	};
 
 	if (isDev) {
