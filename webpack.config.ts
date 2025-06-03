@@ -43,13 +43,23 @@ const getEntry = () => {
 	const entryConfig: Entry = {};
 
 	const defaultEntries: Entry = {
-		content: {
-			import: path.resolve('./', 'src', 'app', 'content.ts'),
+		vkcom_content: {
+			import: path.resolve('./', 'src', 'app', 'vkcom', 'content.ts'),
 			chunkLoading: false,
 			runtime: false,
 		},
-		injected: {
-			import: path.resolve('./', 'src', 'app', 'injected', 'index.ts'),
+		vkcom_injected: {
+			import: path.resolve('./', 'src', 'app', 'vkcom', 'injected.ts'),
+			publicPath: './',
+			runtime: false,
+		},
+		mvk_content: {
+			import: path.resolve('./', 'src', 'app', 'mvk', 'content.ts'),
+			chunkLoading: false,
+			runtime: false,
+		},
+		mvk_injected: {
+			import: path.resolve('./', 'src', 'app', 'mvk', 'injected.ts'),
 			publicPath: './',
 			runtime: false,
 		},
@@ -248,6 +258,10 @@ const options: Configuration = {
 
 					if (rtArray.includes('vkcom_content')) {
 						entrypoints.vkcom_content.unshift(...chunks);
+					}
+
+					if (rtArray.includes('mvk_content')) {
+						entrypoints.mvk_content.unshift(...chunks);
 					}
 				}
 

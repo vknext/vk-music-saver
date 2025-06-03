@@ -5,6 +5,7 @@ import type { Compiler } from 'webpack';
 import webpackSources from 'webpack-sources';
 
 const VKCOM_MATCHES = ['https://vk.com/*', 'https://vk.ru/*'];
+const MVK_MATCHES = ['https://m.vk.com/*', 'https://m.vk.ru/*'];
 
 interface Options {
 	buildPath: string;
@@ -89,35 +90,48 @@ export default class UpdateManifestPlugin {
 			const entrypoints = JSON.parse(entry);
 
 			const vkComContentScript = this.convertEntryToContentScript({
-				entry: entrypoints.content,
+				entry: entrypoints.vkcom_content,
 				matches: VKCOM_MATCHES,
 				runAt: 'document_start',
 			});
 
-			const vkComInjectedScript = this.convertEntryToContentScript({
-				entry: entrypoints.injected,
+			const mvkContentScript = this.convertEntryToContentScript({
+				entry: entrypoints.mvk_content,
+				matches: MVK_MATCHES,
+				runAt: 'document_start',
 			});
 
-			if (vkComInjectedScript.css) {
-				vkComContentScript.css = Array.from(
-					new Set((vkComContentScript.css || []).concat(vkComInjectedScript.css))
-				);
+			const vkComInjectedScript = this.convertEntryToContentScript({
+				entry: entrypoints.vkcom_injected,
+			});
+
+			const mvkInjectedScript = this.convertEntryToContentScript({
+				entry: entrypoints.mvk_injected,
+			});
+
+			for (const [contentScript, injectedScript] of [
+				[vkComContentScript, vkComInjectedScript],
+				[mvkContentScript, mvkInjectedScript],
+			]) {
+				if (injectedScript.css) {
+					contentScript.css = Array.from(new Set((contentScript.css || []).concat(injectedScript.css)));
+				}
+
+				if (contentScript.js?.[0]) {
+					const firstScript = contentScript.js[0];
+					const code = readFileSync(join(buildPath, firstScript), { encoding: 'utf-8' });
+
+					writeFileSync(
+						resolve(buildPath, firstScript),
+						`window.vms=${JSON.stringify(injectedScript.js)};${code}`,
+						{ encoding: 'utf-8' }
+					);
+				} else {
+					console.warn(`content script not found`);
+				}
 			}
 
-			if (vkComContentScript.js?.[0]) {
-				const firstScript = vkComContentScript.js[0];
-				const code = readFileSync(join(buildPath, firstScript), { encoding: 'utf-8' });
-
-				writeFileSync(
-					resolve(buildPath, firstScript),
-					`window.vms=${JSON.stringify(vkComInjectedScript.js)};${code}`,
-					{ encoding: 'utf-8' }
-				);
-			} else {
-				throw new Error('"vkcom_content" not found');
-			}
-
-			const contentScriptsList = [vkComContentScript];
+			const contentScriptsList = [vkComContentScript, mvkContentScript];
 
 			if (manifest.content_scripts) {
 				manifest.content_scripts.push(...contentScriptsList);
