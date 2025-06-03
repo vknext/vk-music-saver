@@ -69,7 +69,7 @@ const lang = {
   vms_alert_donate_yes: "Підтримати",
   vms_alert_base_no: "Ні, дякую",
   vms_sett_download_playlist_in_reverse: "Завантажувати плейлисти у зворотному порядку - з останнього треку до першого",
-  vms_vmk_warning_title: 'Расширение не работает в мобильной версии сайта',
-  vms_vmk_warning_go_vkcom: 'Перейти на компьютерную версию сайта'
+  vms_vmk_warning_title: "Додаток не працює в мобільній версії сайту",
+  vms_vmk_warning_go_vkcom: "Перейти на комп'ютерну версію сайту"
 };
 export default lang;
