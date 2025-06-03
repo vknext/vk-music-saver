@@ -6,7 +6,7 @@ import getGlobalVKNext from 'src/getGlobalVKNext';
 // сообщаем VK Next, что нужно отключить отображение кнопок скачивания даже если он не работает на mvk
 getGlobalVKNext().vms_installed = true;
 
-const STORAGE_KEY = 'vms_vmk_warning';
+const STORAGE_KEY = 'vms_mvk_warning';
 const MAX_SHOWS = 10;
 
 const currentCount = Number(window.localStorage.getItem(STORAGE_KEY)) || 0;
