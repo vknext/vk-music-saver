@@ -163,3 +163,46 @@
 		line-height: 14px;
 	}
 }
+
+// список треков в постах
+:global([class*='MusicCell__musicCell']) {
+	.DownloadAudioButton {
+		position: relative;
+		margin-top: -4px;
+		margin-bottom: -4px;
+		right: -7px;
+		border-radius: var(--vkui--size_border_radius_paper--regular);
+	}
+}
+
+:global([class*='PrimaryAttachmentAudio__buttonGroup']) {
+	// одиночный трек из поста
+	.DownloadAudioButton {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		transition: background-color 0.15s ease-out, color 0.15s ease-out;
+		display: inline-block;
+		position: relative;
+		box-shadow: var(--vkui--elevation3);
+		color: var(--vkui--color_text_primary_invariably);
+		background-color: var(--vkui--color_background_contrast);
+		width: 48px;
+		--vkui--size_button_minimum_width--regular: 48px;
+		--vkui--size_button_base_large_padding_horizontal--regular: 0;
+		flex-grow: 1;
+		flex-basis: 0;
+		width: 100%;
+		border-radius: var(--vkui--size_border_radius--regular);
+		box-sizing: border-box;
+		max-width: 100%;
+		min-height: var(--vkui--size_button_large_height--compact);
+		min-width: var(--vkui--size_button_minimum_width--regular);
+	}
+
+	.DownloadAudioButton,
+	.DownloadAudioButton__size,
+	.DownloadAudioButton__icons {
+		color: var(--vkui--color_text_primary_invariably);
+	}
+}

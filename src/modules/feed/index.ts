@@ -1,12 +1,13 @@
 import { getReactAttrs } from '@vknext/shared/utils/getReactAttrs';
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
 import { waitRAF } from '@vknext/shared/utils/waitRAF';
+import { waitBoxQueue } from '@vknext/shared/vkcom/globalVars/waitBoxQueue';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
 import observedElementsCleaner from 'src/common/observedElementsCleaner';
 import { generateObservedElementMBSKey } from 'src/common/observedHTMLElements/generateKeys';
 import downloadAudio from 'src/downloaders/downloadAudio';
 import downloadPlaylist from 'src/downloaders/downloadPlaylist';
 import createDownloadAudioButton from 'src/elements/createDownloadAudioButton';
-import type { ObservedHTMLElement } from 'src/types/global';
 import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
@@ -14,6 +15,7 @@ import humanFileSize from 'src/lib/humanFileSize';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import showSnackbar from 'src/react/showSnackbar';
 import type { DownloadTargetElement } from 'src/types';
+import type { ObservedHTMLElement } from 'src/types/global';
 
 const LIST_MBS = generateObservedElementMBSKey();
 
@@ -182,6 +184,48 @@ const onAddSecondaryAttachRoot = async (attach: DownloadTargetElement) => {
 	}
 };
 
+const onAddPrimaryAttach = async (attach: DownloadTargetElement) => {
+	const { fiber } = getReactAttrs(attach);
+	const audio = fiber?.return?.return?.memoizedProps?.audio;
+	if (!audio) return;
+
+	const buttons = attach.querySelector('.vkuiButtonGroup__host');
+	if (!buttons) {
+		console.error('[onAddPrimaryAttach] buttons not found');
+		return;
+	}
+
+	if (attach.vms_down_inj) return;
+	attach.vms_down_inj = true;
+
+	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({
+		iconSize: 24,
+		enableDefaultText: false,
+	});
+
+	element.addEventListener('click', (event) => {
+		cancelEvent(event);
+
+		if (getIsLoading()) return;
+
+		setIsLoading(true);
+		setText(lang.use('vms_loading'));
+
+		downloadAudio({
+			audioObject: audio,
+			onProgress: (progress) => {
+				setText(`${progress}%`);
+			},
+		}).finally(() => {
+			setIsLoading(false);
+
+			setText('');
+		});
+	});
+
+	buttons.appendChild(element);
+};
+
 const onAddPost = (post: HTMLElement) => {
 	// аудио
 	for (const attach of post.querySelectorAll<HTMLElement>('.SecondaryAttachment[data-audio]')) {
@@ -219,10 +263,99 @@ const onAddPost = (post: HTMLElement) => {
 
 		observedElementsCleaner.add(list);
 	}
+
+	// primary музыка
+	for (const attach of post.querySelectorAll<HTMLElement>('[class*="PrimaryAttachmentAudio__container"]')) {
+		onAddPrimaryAttach(attach);
+	}
+};
+
+const onAddBoxNode = async (layoutNode: HTMLElement) => {
+	for (const musicCell of layoutNode.querySelectorAll<DownloadTargetElement>('[class*="MusicCell__musicCell"]')) {
+		const { fiber } = getReactAttrs(musicCell);
+		const apiAudio =
+			fiber?.return?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.audio?.entity
+				?.apiAudio;
+		if (!apiAudio) continue;
+
+		if (musicCell.vms_down_inj) continue;
+		musicCell.vms_down_inj = true;
+
+		const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
+
+		const updateBitrate = async () => {
+			const result = await getAudioBitrate(apiAudio);
+
+			const text = [];
+
+			if (result?.bitrate) {
+				text.push(`${result.bitrate} kb/s`);
+			}
+
+			if (result?.size) {
+				text.push(humanFileSize(result.size, 2));
+			}
+
+			setText(text.join('\n'));
+		};
+
+		updateBitrate().catch(console.error);
+
+		element.addEventListener('click', (event) => {
+			cancelEvent(event);
+
+			if (getIsLoading()) return;
+
+			setIsLoading(true);
+			setText(lang.use('vms_loading'));
+
+			downloadAudio({
+				audioObject: apiAudio,
+				onProgress: (progress) => {
+					setText(`${progress}%`);
+				},
+			}).finally(() => {
+				setIsLoading(false);
+
+				updateBitrate().catch(console.error);
+			});
+		});
+
+		musicCell.appendChild(element);
+	}
 };
 
 const initFeed = () => {
 	onAddWallPost(onAddPost);
+
+	waitBoxQueue().then(() => {
+		const _show = window.boxQueue._show;
+
+		window.boxQueue._show = function (...rest) {
+			const r = Reflect.apply(_show, window.boxQueue, rest);
+
+			try {
+				const [boxId] = rest;
+				const currentBox = window._message_boxes[boxId];
+
+				if (currentBox?.boxLayoutNode) {
+					requestAnimationFrame(() => onAddBoxNode(currentBox.boxLayoutNode));
+				}
+			} catch (e) {
+				console.error(e);
+			}
+
+			return r;
+		};
+	});
+
+	onDocumentComplete(() => {
+		const boxLayoutNode = document.querySelector<HTMLElement>('.box_layout');
+
+		if (boxLayoutNode) {
+			requestAnimationFrame(() => onAddBoxNode(boxLayoutNode));
+		}
+	});
 };
 
 export default initFeed;
