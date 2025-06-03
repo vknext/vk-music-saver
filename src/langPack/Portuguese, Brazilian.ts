@@ -68,6 +68,8 @@ const lang = {
   vms_alert_donate_desc: 'VK Music Saver создаётся на энтузиазме — без рекламы, без скрытых сборов данных и с открытым исходным кодом. Если расширение вам нравится, поддержите нас донатом',
   vms_alert_donate_yes: 'Поддержать',
   vms_alert_base_no: 'Нет, спасибо',
-  vms_sett_download_playlist_in_reverse: 'Скачивать плейлисты в обратном порядке — с последнего трека к первому'
+  vms_sett_download_playlist_in_reverse: 'Скачивать плейлисты в обратном порядке — с последнего трека к первому',
+  vms_vmk_warning_title: 'Расширение не работает в мобильной версии сайта',
+  vms_vmk_warning_go_vkcom: 'Перейти на компьютерную версию сайта'
 };
 export default lang;
