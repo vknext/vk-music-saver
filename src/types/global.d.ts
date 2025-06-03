@@ -1,6 +1,6 @@
 /* eslint-disable no-var */
 
-import type { AudioLayer } from '@vknext/shared/vkcom/types';
+import type { AudioLayer, MessageBoxObject } from '@vknext/shared/vkcom/types';
 
 export interface stManager {
 	add(statics: string | string[]): Promise<void>;
@@ -33,6 +33,7 @@ declare global {
 	var stDeps: { [script: string]: string[] };
 	var showTooltip: (el: HTMLElement, opts: Record<string, any>) => void;
 	var TopMenu: TopMenu;
+	var _message_boxes: Record<string, MessageBoxObject>;
 
 	namespace NodeJS {
 		interface ProcessEnv {
