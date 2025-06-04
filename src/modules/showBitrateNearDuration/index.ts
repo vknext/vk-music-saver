@@ -3,6 +3,7 @@ import type { AudioObject } from '@vknext/shared/vkcom/types';
 import onAddAudioRow from 'src/interactions/onAddAudioRow';
 import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
+import { formatBitrate } from 'src/musicUtils/formatBitrate';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
 import styles from './index.module.scss';
@@ -18,11 +19,7 @@ const createBitrateElement = (audio: AudioAudio | AudioObject) => {
 				if (entry.isIntersecting) {
 					const result = await getAudioBitrate(audio);
 
-					if (result?.bitrate) {
-						bitrateEl.innerText = `${result.bitrate}`;
-					} else {
-						bitrateEl.innerText = lang.use('vms_error');
-					}
+					bitrateEl.innerText = formatBitrate(result?.bitrate);
 
 					observer.unobserve(bitrateEl);
 				}
