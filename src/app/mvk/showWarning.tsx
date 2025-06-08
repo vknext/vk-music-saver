@@ -9,7 +9,6 @@ interface AlertErrorProps {
 }
 
 const getFVLink = (): string | null => {
-	// @ts-expect-error TODO: добавить в типы @vknext/shared
 	const navFvLink = window.nav.fv_link;
 
 	if (navFvLink) {

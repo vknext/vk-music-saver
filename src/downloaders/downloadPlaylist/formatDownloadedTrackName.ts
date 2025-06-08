@@ -8,7 +8,7 @@ import GlobalStorage from 'src/storages/GlobalStorage';
 interface formatTrackFilenameProps {
 	isPlaylist: boolean;
 	audio: AudioAudio | AudioObject;
-	index?: number;
+	index?: string | number;
 	bitrate?: number;
 }
 

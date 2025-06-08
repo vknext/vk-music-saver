@@ -71,7 +71,9 @@ const getAudioBitrate = async (audioObj: AudioAudio | AudioObject): Promise<GetT
 
 			resolve(result);
 
-			await TrackDetailsStorage.set(audioKey, result);
+			if (result.bitrate !== -1) {
+				await TrackDetailsStorage.set(audioKey, result);
+			}
 		} catch (e) {
 			console.error(e);
 

@@ -12,6 +12,7 @@ import onAddWallPost from 'src/interactions/onAddWallPost';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
 import humanFileSize from 'src/lib/humanFileSize';
+import { formatBitrate } from 'src/musicUtils/formatBitrate';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import showSnackbar from 'src/react/showSnackbar';
 import type { DownloadTargetElement } from 'src/types';
@@ -46,7 +47,7 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 		const text = [];
 
 		if (result?.bitrate) {
-			text.push(`${result.bitrate} kb/s`);
+			text.push(formatBitrate(result.bitrate));
 		}
 
 		if (result?.size) {

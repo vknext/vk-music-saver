@@ -7,7 +7,7 @@ export interface formatTrackFilenameProps {
 	title?: string;
 	subtitle?: string;
 	bitrate?: number;
-	index?: number;
+	index?: number | string;
 }
 
 export const formatTrackName = ({
@@ -24,7 +24,7 @@ export const formatTrackName = ({
 		.replace(TrackTemplateVariable.SUBTITLE, subtitle ? `(${subtitle})` : '')
 		.replace(TrackTemplateVariable.BITRATE, bitrate ? `[${bitrate}kbps]` : '');
 
-	if (typeof index === 'number') {
+	if (typeof index === 'number' || typeof index === 'string') {
 		result = `${index}. ${result}`;
 	}
 

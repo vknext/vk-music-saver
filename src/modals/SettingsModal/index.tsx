@@ -29,6 +29,13 @@ const SettingsModal = () => {
 				<SettControl option="num_tracks_in_playlist" defaultValue={true}>
 					{lang.use('vms_sett_num_tracks_in_playlist')}
 				</SettControl>
+				<SettControl
+					option="add_leading_zeros"
+					defaultValue={false}
+					subtitle={lang.use('vms_sett_add_leading_zeros_desc')}
+				>
+					{lang.use('vms_sett_add_leading_zeros')}
+				</SettControl>
 				<SettControl option="download_playlist_in_reverse" defaultValue={false}>
 					{lang.use('vms_sett_download_playlist_in_reverse')}
 				</SettControl>
