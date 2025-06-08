@@ -67,7 +67,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.browser_specific_settings = {
 			gecko: {
 				id: 'vknext-vms@vknext.net',
-				strict_min_version: '113.0',
+				strict_min_version: '115.0',
 			},
 		};
 
