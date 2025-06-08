@@ -65,11 +65,13 @@ const lang = {
   vms_alert_rating_desc: "Please support the extension on {storeName}",
   vms_alert_rating_yes: "Rate the extension",
   vms_alert_donate_title: "Support the developers",
-  vms_alert_donate_desc: "VK Music Saver is built with passion — no ads, no hidden data collection, and open-source. If you like it, support us with a donation",
+  vms_alert_donate_desc: 'VK Music Saver создаётся на энтузиазме — бесплатно, без рекламы, без скрытых сборов данных и с открытым исходным кодом. Если расширение вам нравится, поддержите нас донатом',
   vms_alert_donate_yes: "Donate",
   vms_alert_base_no: "No, thanks",
   vms_sett_download_playlist_in_reverse: "Download playlists in reverse order - from the last track to the first track",
   vms_vmk_warning_title: "The extension does not work in the mobile version of the site",
-  vms_vmk_warning_go_vkcom: "Go to the computer version of the site"
+  vms_vmk_warning_go_vkcom: "Go to the computer version of the site",
+  vms_sett_add_leading_zeros: 'Форматировать номера треков с ведущими нулями',
+  vms_sett_add_leading_zeros_desc: 'Например: 01, 02, 03 … вместо 1, 2, 3'
 };
 export default lang;
