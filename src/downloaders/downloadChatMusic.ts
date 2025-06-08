@@ -2,6 +2,7 @@ import { Ranges } from '@vknext/shared/lib/Ranges';
 import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import { MAX_PARALLEL_AUDIO_CONVERSION } from 'src/common/constants';
 import lang from 'src/lang';
+import { padWithZeros } from 'src/lib/padWithZeros';
 import saveFileAs from 'src/lib/saveFileAs';
 import TaskLimiter from 'src/lib/TaskLimiter';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
@@ -60,7 +61,10 @@ const downloadChatMusic = async (peerId: number) => {
 		startIn: 'music',
 	});
 
-	const isNumTracks = await GlobalStorage.getValue('num_tracks_in_playlist', true);
+	const [isNumTracks, isAddLeadingZeros] = await Promise.all([
+		GlobalStorage.getValue('num_tracks_in_playlist', true),
+		GlobalStorage.getValue('add_leading_zeros', false),
+	]);
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
@@ -143,7 +147,7 @@ const downloadChatMusic = async (peerId: number) => {
 			const trackName = await formatDownloadedTrackName({
 				isPlaylist: true,
 				audio,
-				index: isNumTracks ? index : undefined,
+				index: isNumTracks ? (isAddLeadingZeros ? padWithZeros(index, totalAudios) : index) : undefined,
 				bitrate: bitrateResult?.bitrate,
 			});
 			const zipFile: ClientZipFile = {
