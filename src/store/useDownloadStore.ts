@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { DownloadStatus, DownloadType } from './constants';
+import type { DownloadType } from './constants';
+import { DownloadStatus } from './constants';
 import {
 	DownloadTaskAlreadyFinishedError,
 	DownloadTaskNotFoundError,

@@ -1,4 +1,3 @@
-import { DownloadStatus } from './constants';
 import { useDownloadStore, type StartDownloadInput } from './useDownloadStore';
 
 export { DownloadStatus, DownloadType } from './constants';
