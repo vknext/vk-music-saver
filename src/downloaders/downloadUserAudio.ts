@@ -1,4 +1,4 @@
-import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
+import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import { MAX_PARALLEL_AUDIO_CONVERSION } from 'src/common/constants';
 import lang from 'src/lang';
 import { padWithZeros } from 'src/lib/padWithZeros';
@@ -9,7 +9,11 @@ import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import showSnackbar from 'src/react/showSnackbar';
 import type { AudioAudio } from 'src/schemas/objects';
-import { UsersGetResponse, type AudioGetResponse } from 'src/schemas/responses';
+import {
+	UsersGetResponse,
+	type AudioGetAudioIdsBySourceResponse,
+	type AudioGetByIdResponse,
+} from 'src/schemas/responses';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import { DownloadType, startDownload } from 'src/store';
@@ -18,27 +22,28 @@ import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackN
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
 import { incrementDownloadedPlaylistsCount } from './utils';
 
-async function* getAudios(ownerId: number) {
-	let offset = 0;
-	let count = 200;
-	let allAudiosCount = count + 1;
+const getAudios = async (ownerId: number) => {
+	const { audios: audioIds } = await vkApi.api<AudioGetAudioIdsBySourceResponse>('audio.getAudioIdsBySource', {
+		source: 'playlist',
+		entity_id: `${ownerId}_-1`,
+	});
 
-	const vkApi = await waitVKApi();
+	const promises: Promise<AudioGetByIdResponse>[] = [];
 
-	do {
-		const response = await vkApi.api<AudioGetResponse>('audio.get', {
-			owner_id: ownerId,
-			offset,
-			count,
+	for (const ids of arrayUnFlat(audioIds, 100)) {
+		const promise = vkApi.api<AudioGetByIdResponse>('audio.getById', {
+			audios: ids.map((e) => e.audio_id).join(','),
 		});
 
-		allAudiosCount = response.count;
-		offset += count;
+		promises.push(promise);
 
-		yield response;
-	} while (offset === 0 || offset < allAudiosCount);
-}
+		if (promises.length % 10 === 0) {
+			await Promise.all(promises);
+		}
+	}
 
+	return (await Promise.all(promises)).flat();
+};
 const downloadUserAudio = async (ownerId: number) => {
 	if (window.vk.id === 0) {
 		return await showSnackbar({
@@ -146,21 +151,19 @@ const downloadUserAudio = async (ownerId: number) => {
 	};
 
 	try {
-		for await (const { count, items } of getAudios(ownerId)) {
-			if (signal.aborted) return;
+		const audios = await getAudios(ownerId);
 
-			if (totalAudios !== count) {
-				totalAudios = count;
-			}
+		totalAudios = audios.length;
 
-			for (const audio of items) {
-				const position = audioIndex++;
+		if (signal.aborted) return;
 
-				limiter.addTask(() => downloadTrack(audio, position));
-			}
+		for (const audio of audios) {
+			const position = audioIndex++;
 
-			await limiter.waitAll();
+			limiter.addTask(() => downloadTrack(audio, position));
 		}
+
+		await limiter.waitAll();
 	} catch (e) {
 		console.error(e);
 
