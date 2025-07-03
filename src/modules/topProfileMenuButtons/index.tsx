@@ -1,3 +1,4 @@
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
 import waitVariable from '@vknext/shared/vkcom/globalVars/utils/waitVariable';
 import initReactApp from 'src/react/initReactApp';
 import getTopMenu from './getTopMenu';
@@ -34,6 +35,8 @@ const initApp = async () => {
 };
 
 const initTopMenuButtons = async () => {
+	onDocumentComplete(initApp);
+
 	const TopMenu = await waitVariable('TopMenu');
 
 	if (document.querySelector('#top_profile_menu.shown')) {
