@@ -1,4 +1,6 @@
 import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
+import { waitRAF } from '@vknext/shared/utils/waitRAF';
+import { waitRIC } from '@vknext/shared/utils/waitRIC';
 import waitVariable from '@vknext/shared/vkcom/globalVars/utils/waitVariable';
 import initReactApp from 'src/react/initReactApp';
 import getTopMenu from './getTopMenu';
@@ -6,6 +8,9 @@ import getTopMenu from './getTopMenu';
 const wrapper = document.createElement('div');
 
 const initApp = async () => {
+	await waitRAF();
+	await waitRIC();
+
 	const topMenu = await getTopMenu();
 	if (!topMenu) {
 		return;
