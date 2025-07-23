@@ -1,6 +1,6 @@
 {
 	"name": "vk-music-saver",
-	"version": "2.3.5",
+	"version": "2.3.6",
 	"type": "module",
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS=\"--import=tsx/esm\" webpack serve --config webpack.config.ts --env --dev",
@@ -54,7 +54,7 @@
 		"yargs-parser": "^21.1.1"
 	},
 	"dependencies": {
-		"@vknext/icons": "^1.33.0",
+		"@vknext/icons": "^2.15.1",
 		"@vknext/shared": "^1.4.0",
 		"@vkontakte/icons": "^2.150.0",
 		"@vkontakte/vkui": "^7.2.0",
@@ -66,5 +66,6 @@
 		"react-dom": "^19.1.0",
 		"use-async-effect": "^2.2.7",
 		"zustand": "^5.0.3"
-	}
+	},
+	"packageManager": "yarn@4.9.2+sha512.1fc009bc09d13cfd0e19efa44cbfc2b9cf6ca61482725eb35bbc5e257e093ebf4130db6dfe15d604ff4b79efd8e1e8e99b25fa7d0a6197c9f9826358d4d65c3c"
 }

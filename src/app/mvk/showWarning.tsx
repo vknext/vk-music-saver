@@ -1,8 +1,10 @@
+import { IconLogoVkMusicSaverColorWithText38h } from '@vknext/icons';
 import { waitHTMLBody } from '@vknext/shared/utils/waitHTMLBody';
-import { Button, ModalPage, ModalPageHeader, Placeholder } from '@vkontakte/vkui';
+import { Button, Checkbox, FormItem, ModalPage, ModalPageHeader, Placeholder } from '@vkontakte/vkui';
 import { useEffect, useState } from 'react';
 import useLang from 'src/hooks/useLang';
 import initReactApp from 'src/react/initReactApp';
+import { MVK_WARNING_STORAGE_KEY } from './constants';
 
 interface AlertErrorProps {
 	onClosed?: () => void;
@@ -19,6 +21,41 @@ const getFVLink = (): string | null => {
 	if (!desktopVersion) return null;
 
 	return desktopVersion.getAttribute('href');
+};
+
+const HideWarningFormItem = () => {
+	const [isHidden, setIsHidden] = useState(localStorage.getItem(MVK_WARNING_STORAGE_KEY) === 'true');
+	const lang = useLang();
+
+	const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		const isHidden = e.target.checked;
+
+		localStorage.setItem(MVK_WARNING_STORAGE_KEY, isHidden ? 'true' : 'false');
+
+		setIsHidden(isHidden);
+	};
+
+	useEffect(() => {
+		const listener = (event: StorageEvent) => {
+			if (event.key === MVK_WARNING_STORAGE_KEY) {
+				setIsHidden(event.newValue === 'true');
+			}
+		};
+
+		window.addEventListener('storage', listener);
+
+		return () => {
+			window.removeEventListener('storage', listener);
+		};
+	}, []);
+
+	return (
+		<FormItem>
+			<Checkbox checked={isHidden} onChange={onChange} style={{ borderRadius: 'inherit' }}>
+				{lang.use('vms_vmk_warning_hide')}
+			</Checkbox>
+		</FormItem>
+	);
 };
 
 const AlertError = ({ onClosed }: AlertErrorProps) => {
@@ -49,17 +86,22 @@ const AlertError = ({ onClosed }: AlertErrorProps) => {
 			onClosed={() => {
 				onClosed?.();
 			}}
-			header={<ModalPageHeader>VK Music Saver</ModalPageHeader>}
+			header={
+				<ModalPageHeader>
+					<IconLogoVkMusicSaverColorWithText38h />
+				</ModalPageHeader>
+			}
 			size={500}
 		>
 			<Placeholder
 				title={lang.use('vms_vmk_warning_title')}
 				action={
-					<Button onClick={onClick} size="m">
+					<Button onClick={onClick} size="l">
 						{lang.use('vms_vmk_warning_go_vkcom')}
 					</Button>
 				}
-			></Placeholder>
+			/>
+			<HideWarningFormItem />
 		</ModalPage>
 	);
 };
