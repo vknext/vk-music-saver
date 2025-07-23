@@ -18,12 +18,12 @@
 ## Requirements
 
 -   Install Ubuntu latest
--   Install [Node.js](https://nodejs.org/) version 22.2.0
--   Install [Yarn](https://classic.yarnpkg.com/) version 1.22.22
+-   Install [Node.js](https://nodejs.org/) version 22.12.0
+-   Install [Yarn](https://classic.yarnpkg.com/) version 4.9.2
 
 ## Install dependencies
 
-    $ yarn install --frozen-lockfile
+    $ yarn install --immutable
 
 ## Build production
 

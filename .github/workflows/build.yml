@@ -12,11 +12,14 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: '22.2.0'
-                  cache: 'yarn'
+                  node-version: '22.12.0'
+                  cache: 'npm'
+
+            - name: Enable Corepack
+              run: corepack enable
 
             - name: Install dependencies
-              run: yarn install --frozen-lockfile
+              run: yarn install --immutable
 
             - name: Build
               run: yarn build:ext
