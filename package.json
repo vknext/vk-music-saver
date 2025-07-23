@@ -42,21 +42,21 @@
 		"tsconfig-paths-webpack-plugin": "^4.2.0",
 		"tsx": "^4.19.3",
 		"typescript": "^5.8.3",
-		"typescript-plugin-css-modules": "^5.1.0",
+		"typescript-plugin-css-modules": "^5.2.0",
 		"webextension-polyfill": "^0.12.0",
-		"webpack": "^5.99.5",
+		"webpack": "^5.100.2",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^5.2.1",
 		"webpack-extension-manifest-plugin": "^0.8.0",
 		"webpack-manifest-plugin": "^5.0.1",
-		"webpack-sources": "^3.2.3",
+		"webpack-sources": "^3.3.3",
 		"webpack-utf8-bom": "^1.4.0",
 		"yargs-parser": "^21.1.1"
 	},
 	"dependencies": {
 		"@vknext/icons": "^2.15.1",
-		"@vknext/shared": "^1.4.0",
-		"@vkontakte/icons": "^2.150.0",
+		"@vknext/shared": "^1.4.3",
+		"@vkontakte/icons": "^3.13.0",
 		"@vkontakte/vkui": "^7.2.0",
 		"browser-id3-writer": "^6.2.0",
 		"client-zip": "^2.5.0",
@@ -66,6 +66,9 @@
 		"react-dom": "^19.1.0",
 		"use-async-effect": "^2.2.7",
 		"zustand": "^5.0.3"
+	},
+	"resolutions": {
+		"stylus": "0.0.1-security"
 	},
 	"packageManager": "yarn@4.9.2+sha512.1fc009bc09d13cfd0e19efa44cbfc2b9cf6ca61482725eb35bbc5e257e093ebf4130db6dfe15d604ff4b79efd8e1e8e99b25fa7d0a6197c9f9826358d4d65c3c"
 }
