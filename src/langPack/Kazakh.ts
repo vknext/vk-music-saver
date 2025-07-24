@@ -71,6 +71,7 @@ const lang = {
   vms_sett_download_playlist_in_reverse: 'Скачивать плейлисты в обратном порядке — с последнего трека к первому',
   vms_vmk_warning_title: 'Расширение не работает в мобильной версии сайта',
   vms_vmk_warning_go_vkcom: 'Перейти на компьютерную версию сайта',
+  vms_vmk_warning_hide: 'Не показывать снова',
   vms_sett_add_leading_zeros: 'Форматировать номера треков с ведущими нулями',
   vms_sett_add_leading_zeros_desc: 'Например: 01, 02, 03 … вместо 1, 2, 3'
 };
