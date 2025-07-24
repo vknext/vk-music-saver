@@ -71,6 +71,7 @@ const lang = {
   vms_sett_download_playlist_in_reverse: "Download playlists in reverse order - from the last track to the first track",
   vms_vmk_warning_title: "The extension does not work in the mobile version of the site",
   vms_vmk_warning_go_vkcom: "Go to the computer version of the site",
+  vms_vmk_warning_hide: 'Не показывать снова',
   vms_sett_add_leading_zeros: "Format track numbers with leading zeros",
   vms_sett_add_leading_zeros_desc: "For example: 01, 02, 03 ... instead of 1, 2, 3"
 };
