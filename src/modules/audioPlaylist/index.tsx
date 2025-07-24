@@ -142,6 +142,12 @@ const injectToAudioPlaylistPage = () => {
 	uiMenu.prepend(item);
 };
 
+const ACTIONS_NEW_SELECTOR = [
+	'[class*="AudioListHeader__actions--"]',
+	'[class*="AudioListBoxHeader__actions--"]',
+	'[class*="AudioListModalHeader__actions--"]',
+].join(',');
+
 const injectToAudioPlaylistPageNew = async (retry = 0) => {
 	if (retry > 10) {
 		throw new Error('[VMS/audioPlaylist] Failed to inject');
@@ -155,7 +161,7 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 		return injectToAudioPlaylistPageNew(retry + 1);
 	}
 
-	const actions = spaRoot.querySelector<DownloadTargetElement>('[class*="AudioListHeader__actions--"]');
+	const actions = spaRoot.querySelector<DownloadTargetElement>(ACTIONS_NEW_SELECTOR);
 	if (!actions) return;
 	if (actions.vms_down_inj) return;
 	actions.vms_down_inj = true;
@@ -187,9 +193,7 @@ const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) 
 		return injectToAudioPlaylistModalNew(playlistFullId, retry + 1);
 	}
 
-	for (const actions of document.querySelectorAll<DownloadTargetElement>(
-		'[class*="AudioListModalHeader__actions--"]'
-	)) {
+	for (const actions of document.querySelectorAll<DownloadTargetElement>(ACTIONS_NEW_SELECTOR)) {
 		if (!actions) return;
 		if (actions.vms_down_inj) return;
 		actions.vms_down_inj = true;
