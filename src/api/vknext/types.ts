@@ -12,6 +12,8 @@ export interface VMSGetConfigResponse {
 	alerts: {
 		rating: boolean;
 		donut: boolean;
+		subscribe: boolean;
+		vmp: boolean;
 	};
 	ffmpegConfig?: {
 		method: `vms.${string}`;

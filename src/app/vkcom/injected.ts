@@ -73,4 +73,6 @@ onDocumentComplete(() => {
 
 	import('src/modules/ratingAlert').catch((e) => console.error('[VMS/ratingAlert]', e));
 	import('src/modules/donutAlert').catch((e) => console.error('[VMS/donutAlert]', e));
+	import('src/modules/vmpOnboarding').catch((e) => console.error('[VMS/vmpOnboarding]', e));
+	import('src/modules/subscribeAlert').catch((e) => console.error('[VMS/subscribeAlert]', e));
 });

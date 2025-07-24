@@ -17,6 +17,8 @@ export interface GlobalStorageBaseValues {
 	download_playlist_in_reverse: boolean;
 	add_leading_zeros: boolean;
 	[key: `params_${number}`]: string | null;
+	vmp_onboarding_shown: boolean;
+	subscribe_alert_shown: boolean;
 }
 
 export type GlobalStorageBaseKeys = keyof GlobalStorageBaseValues;

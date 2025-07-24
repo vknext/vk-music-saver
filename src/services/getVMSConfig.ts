@@ -5,7 +5,7 @@ import type { VMSGetConfigResponse } from 'src/api/vknext/types';
 const configMock: VMSGetConfigResponse = {
 	prime: { enabled: false, vk_donut: false },
 	deluxe: { enabled: false, vk_donut: false },
-	alerts: { rating: true, donut: true },
+	alerts: { rating: true, donut: true, subscribe: false, vmp: false },
 };
 
 let savedPromise: Promise<VMSGetConfigResponse> | null = null;
