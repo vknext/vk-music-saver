@@ -1,0 +1,15 @@
+.InstallGuide {
+	margin-top: 0;
+	-webkit-padding-start: 28px;
+	padding-inline-start: 28px;
+	margin-right: 10px;
+	font-size: var(--vkui--font_paragraph--font_size--regular);
+
+	& > li {
+		margin-bottom: 7px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}

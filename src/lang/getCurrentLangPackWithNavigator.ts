@@ -1,16 +1,13 @@
 import { getCodeLangFromNavigator } from '@vknext/shared/lib/lang/getCodeLangFromNavigator';
-import { waitVK } from '@vknext/shared/vkcom/globalVars/waitVK';
 import defaultLang from 'src/langPack/default';
 import { getTargetLangPack } from './getTargetLangPack';
 
-const getCurrentLangPack = async (): Promise<typeof defaultLang> => {
-	const vk = await waitVK();
-
-	const code = typeof vk?.lang === 'number' ? vk.lang : getCodeLangFromNavigator();
+const getCurrentLangPackWithNavigator = async (): Promise<typeof defaultLang> => {
+	const code = getCodeLangFromNavigator();
 
 	const targetLangPack = await getTargetLangPack(code);
 
 	return { ...defaultLang, ...targetLangPack };
 };
 
-export default getCurrentLangPack;
+export default getCurrentLangPackWithNavigator;

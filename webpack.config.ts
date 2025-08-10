@@ -36,7 +36,7 @@ const PORT = process.env.PORT || 4001;
 const manifest = getManifest({ isFirefox: IS_FIREFOX, isDev: IS_DEV });
 
 const getEntry = () => {
-	const entriesForHotReload = ['popup'];
+	const entriesForHotReload = ['popup', 'installed'];
 
 	type Entry = EntryObject | string;
 
@@ -69,6 +69,7 @@ const getEntry = () => {
 			chunkLoading: false,
 		},
 		popup: path.resolve('./', 'src', 'app', 'popup', 'index.ts'),
+		installed: path.resolve('./', 'src', 'app', 'installed', 'index.tsx'),
 	};
 
 	if (!IS_DEV) {
@@ -226,6 +227,14 @@ const options: Configuration = {
 			template: path.resolve('./', 'src', 'app', 'popup', 'index.html'),
 			filename: 'popup.html',
 			chunks: ['popup'],
+			inject: true,
+			hash: true,
+			title: packageJson.name,
+		}),
+		new HtmlWebpackPlugin({
+			template: path.resolve('./', 'src', 'app', 'installed', 'index.html'),
+			filename: 'installed.html',
+			chunks: ['installed'],
 			inject: true,
 			hash: true,
 			title: packageJson.name,

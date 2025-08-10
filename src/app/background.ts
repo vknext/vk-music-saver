@@ -1,4 +1,4 @@
-const runtime = (chrome || browser).runtime;
+import { runtime, tabs } from 'webextension-polyfill';
 
 const getUninstallUrl = (): string => {
 	const url = new URL('https://vknext.net/uninstall/vms');
@@ -13,3 +13,11 @@ const getUninstallUrl = (): string => {
 };
 
 runtime.setUninstallURL(getUninstallUrl());
+
+runtime.onInstalled.addListener(async ({ reason }) => {
+	if (reason === 'install') {
+		const url = runtime.getURL('installed.html');
+
+		await tabs.create({ url, active: true });
+	}
+});
