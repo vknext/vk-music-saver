@@ -1,6 +1,6 @@
 {
 	"name": "vk-music-saver",
-	"version": "2.4.0",
+	"version": "2.5.0",
 	"type": "module",
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS=\"--import=tsx/esm\" webpack serve --config webpack.config.ts --env --dev",
