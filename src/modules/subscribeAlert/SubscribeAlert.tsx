@@ -18,8 +18,8 @@ export const SubscribeAlert = ({ onDestroy, onButtonClick }: SubscribeAlertProps
 					mode: 'cancel',
 					action: () => {
 						try {
-							window.vkApi.api('wall.subscribe', {
-								owner_id: -207165415,
+							window.vkApi.api('groups.join', {
+								group_id: 207165415,
 							});
 						} catch (error) {
 							console.error(error);
