@@ -71,7 +71,22 @@ const lang = {
   vms_sett_download_playlist_in_reverse: "Download playlists in reverse order - from the last track to the first track",
   vms_vmk_warning_title: "The extension does not work in the mobile version of the site",
   vms_vmk_warning_go_vkcom: "Go to the computer version of the site",
+  vms_vmk_warning_hide: "Do not show again",
   vms_sett_add_leading_zeros: "Format track numbers with leading zeros",
-  vms_sett_add_leading_zeros_desc: "For example: 01, 02, 03 ... instead of 1, 2, 3"
+  vms_sett_add_leading_zeros_desc: "For example: 01, 02, 03 ... instead of 1, 2, 3",
+  installed_header_title: "Extension installed",
+  installed_how_title: "How the extension works:",
+  installed_step_1: "Go to the music page",
+  installed_step_2: "A download button and bitrate information will appear next to each track.",
+  installed_step_3: "Click the button to download the track.",
+  installed_reload_notice: "If the {site} website is already open, you need to reload the tab for the extension to start working.",
+  installed_attention: "Please note",
+  installed_pc_version_only: "The extension works only in the full version of {site}. When using the mobile version m.vk.com, the extension will not work.",
+  installed_follow_community: "Subscribe to {link}. Important information for extension users is posted there promptly!",
+  installed_follow_community_link: "our VK community",
+  installed_ffmpeg_notice_1: "If you are using Firefox and tracks are not downloading, the problem is most likely with ffmpeg (track conversion).",
+  installed_ffmpeg_notice_2: "VK provides tracks in m3u8 format, and the extension converts them to the usual mp3.",
+  installed_ffmpeg_notice_3: "In Firefox, the extension by default uses FFmpeg hosted on our website {site}. If the site is unavailable, conversion will not work and the extension will not be able to download the track.",
+  installed_ffmpeg_notice_4: "In the extension settings, you can switch to the hls.js method. It does not depend on our site, but in Firefox it works unstably — clicks or sound distortions are possible."
 };
 export default lang;
