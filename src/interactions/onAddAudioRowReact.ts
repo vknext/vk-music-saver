@@ -28,6 +28,8 @@ const findApiAudio = (el: HTMLElement): AudioAudio | null => {
 		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.audio?.apiAudio ||
 		fiber?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return?.return
 			?.memoizedProps?.audio?.apiAudio ||
+		fiber?.return?.return?.return?.return?.return?.memoizedProps?.actions?.props?.track?.data?.apiAudio ||
+		fiber?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.value?.track?.data?.apiAudio ||
 		audioRowProps?.children?.props?.audio?.apiAudio;
 
 	if (apiAudio) return apiAudio as AudioAudio;
