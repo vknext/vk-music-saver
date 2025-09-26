@@ -56,7 +56,17 @@ export class VKNextApi {
 		const viewUrlCache = await GlobalStorage.getValue(`params_${appId}`, null);
 
 		if (viewUrlCache) {
-			return viewUrlCache;
+			try {
+				const vkUserId = parseInt(new URLSearchParams(viewUrlCache).get('vk_user_id') || '');
+
+				if (vkUserId && vkUserId === (await this.getVKId())) {
+					return viewUrlCache;
+				}
+			} catch (e) {
+				console.error(e);
+
+				return viewUrlCache;
+			}
 		}
 
 		const vkApi = await waitVKApi();
