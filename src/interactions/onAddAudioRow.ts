@@ -11,6 +11,7 @@ import {
 } from 'src/common/observedHTMLElements/generateKeys';
 import type { ObservedHTMLElement } from 'src/types/global';
 import hookAjaxPost from 'src/interceptors/hookAjaxPost';
+import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
 
 type CallbackFunc = (el: HTMLElement) => void;
 
@@ -144,6 +145,7 @@ const onAddAudioRow = (callback: CallbackFunc) => {
 	}
 
 	DOMContentLoaded(findAllAudioRows);
+	onDocumentComplete(findAllAudioRows);
 
 	if (!inited) {
 		inited = true;
