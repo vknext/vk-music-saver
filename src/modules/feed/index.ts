@@ -151,7 +151,10 @@ const onAddAttachPlaylist = async (attach: DownloadTargetElement, playlistId?: s
 const onAddSecondaryAttachRoot = async (attach: DownloadTargetElement) => {
 	const { fiber } = getReactAttrs(attach);
 
-	const originalAttachment = fiber.return.return.return.return.return.return.memoizedProps.originalAttachment;
+	const originalAttachment =
+		fiber.return.return.return.return.return.return.memoizedProps.originalAttachment ||
+		fiber.return.return.return.return.return.memoizedProps.originalAttachment ||
+		fiber.return.return.return.return.memoizedProps.originalAttachment;
 
 	if (originalAttachment?.audio) {
 		const audioObject = window.AudioUtils.audioTupleToAudioObject(originalAttachment.audio);
