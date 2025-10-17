@@ -14,19 +14,34 @@ const renderManager = async () => {
 
 	const headerNav = document.querySelector<HTMLElement>('.HeaderNav,#top_nav');
 
-	if (!headerNav) {
-		console.error('HeaderNav not found');
-		return;
-	}
+	if (headerNav) {
+		const audioEl = headerNav.querySelector<HTMLElement>('.HeaderNav__audio');
 
-	const audioEl = headerNav.querySelector<HTMLElement>('.HeaderNav__audio');
-
-	if (audioEl) {
-		audioEl.insertAdjacentElement('afterend', wrapper);
-		wrapper.style.order = '';
+		if (audioEl) {
+			audioEl.insertAdjacentElement('afterend', wrapper);
+			wrapper.style.order = '';
+		} else {
+			headerNav.appendChild(wrapper);
+			wrapper.style.order = '-1';
+		}
 	} else {
-		headerNav.appendChild(wrapper);
-		wrapper.style.order = '-1';
+		const pageHeaderWrap = document.getElementById('page_header_wrap');
+		if (!pageHeaderWrap) {
+			console.error('HeaderNav not found');
+			return;
+		}
+
+		const player = pageHeaderWrap.querySelector('[class*="TopNavigation__player--"]');
+		const flexGrow =
+			player?.nextElementSibling || pageHeaderWrap.querySelector<HTMLElement>('.vkuiFlexItem__flexGrow');
+
+		const targetNode = flexGrow || player;
+
+		if (targetNode) {
+			targetNode.insertAdjacentElement('afterend', wrapper);
+		} else {
+			pageHeaderWrap.appendChild(wrapper);
+		}
 	}
 
 	if (unmountApp) {
