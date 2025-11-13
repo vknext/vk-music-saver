@@ -81,7 +81,7 @@ const lang = {
   installed_step_3: "Click the button to download the track.",
   installed_reload_notice: "If the {site} website is already open, you need to reload the tab for the extension to start working.",
   installed_attention: "Please note",
-  installed_pc_version_only: 'Расширение работает только в полной версии сайта {site}. При использовании мобильной версии m.vk.ru, расширение не будет работать.',
+  installed_pc_version_only: "The extension works only in the full version of {site}. When using the mobile version m.vk.ru, the extension will not work.",
   installed_follow_community: "Subscribe to {link}. Important information for extension users is posted there promptly!",
   installed_follow_community_link: "our VK community",
   installed_ffmpeg_notice_1: "If you are using Firefox and tracks are not downloading, the problem is most likely with ffmpeg (track conversion).",
