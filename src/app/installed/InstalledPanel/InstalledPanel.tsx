@@ -17,8 +17,8 @@ export const InstalledPanel = () => {
 				<ol className={styles.InstallGuide}>
 					<li>
 						{lang.use('installed_step_1')}{' '}
-						<Link href="https://vk.com/audio" target="_blank">
-							vk.com/audio
+						<Link href="https://vk.ru/audio" target="_blank">
+							vk.ru/audio
 						</Link>
 						.
 					</li>
@@ -29,8 +29,8 @@ export const InstalledPanel = () => {
 					<Text>
 						{lang.use('installed_reload_notice', {
 							site: (
-								<Link href="https://vk.com/audio" target="_blank">
-									vk.com
+								<Link href="https://vk.ru/audio" target="_blank">
+									vk.ru
 								</Link>
 							),
 						})}
@@ -65,8 +65,8 @@ export const InstalledPanel = () => {
 				<MiniInfoCell textWrap="full" mode="accent" before={<Icon20ErrorCircleOutline />}>
 					{lang.use('installed_pc_version_only', {
 						site: (
-							<Link href="https://vk.com/audio" target="_blank">
-								vk.com
+							<Link href="https://vk.ru/audio" target="_blank">
+								vk.ru
 							</Link>
 						),
 					})}
@@ -74,7 +74,7 @@ export const InstalledPanel = () => {
 				<MiniInfoCell textWrap="full" mode="accent" before={<Icon20AdvertisingOutline />}>
 					{lang.use('installed_follow_community', {
 						link: (
-							<Link href="https://vk.com/vknext" target="_blank">
+							<Link href="https://vk.ru/vknext" target="_blank">
 								{lang.use('installed_follow_community_link')}
 							</Link>
 						),

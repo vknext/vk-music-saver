@@ -74,7 +74,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.browser_action = browser_action;
 
 		if (manifest.web_accessible_resources) {
-			const resources = manifest.web_accessible_resources.map((e) => {
+			const resources = manifest.web_accessible_resources.map((e: any) => {
 				if (typeof e === 'string') {
 					return e;
 				}

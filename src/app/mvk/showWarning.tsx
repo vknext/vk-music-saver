@@ -72,7 +72,7 @@ const AlertError = ({ onClosed }: AlertErrorProps) => {
 		if (fvLink) {
 			window.location.href = fvLink;
 		} else {
-			window.location.href = 'https://vk.com';
+			window.location.href = 'https://vk.ru';
 		}
 	};
 

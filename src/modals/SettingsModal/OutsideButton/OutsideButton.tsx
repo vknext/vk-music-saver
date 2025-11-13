@@ -119,7 +119,7 @@ const OutsideButton = () => {
 					>
 						{lang.use('vms_created_by', {
 							name: (
-								<Link href="https://vk.com/vknext" className={styles.Link} onClick={onCreatorClick}>
+								<Link href="https://vk.ru/vknext" className={styles.Link} onClick={onCreatorClick}>
 									VK Next
 								</Link>
 							),
