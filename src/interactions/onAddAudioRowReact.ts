@@ -30,7 +30,9 @@ const findApiAudio = (el: HTMLElement): AudioAudio | null => {
 			?.memoizedProps?.audio?.apiAudio ||
 		fiber?.return?.return?.return?.return?.return?.memoizedProps?.actions?.props?.track?.data?.apiAudio ||
 		fiber?.return?.return?.return?.return?.return?.return?.return?.memoizedProps?.value?.track?.data?.apiAudio ||
-		audioRowProps?.children?.props?.audio?.apiAudio;
+		audioRowProps?.children?.props?.audio?.apiAudio ||
+		fiber?.return?.return?.return?.memoizedProps?.actions?.props?.track?.entity?.apiAudio ||
+		fiber?.return?.return?.return?.return?.return?.return?.memoizedProps?.value?.track?.entity?.apiAudio;
 
 	if (apiAudio) return apiAudio as AudioAudio;
 
@@ -91,7 +93,7 @@ const findAudioList = async () => {
 };
 
 const findAllAudioRows = async (retry = 0) => {
-	if (document.querySelector(`.vkui__root .vkuiFlex__host [class*="Skeleton__skeleton"]`)) {
+	if (document.querySelector(`.vkui__root .vkuiFlex__host [class*="SkeletonComponent__skeleton"]`)) {
 		await delay(1000);
 		return findAllAudioRows(retry + 1);
 	}

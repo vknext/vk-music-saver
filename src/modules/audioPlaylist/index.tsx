@@ -156,7 +156,7 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 	const spaRoot = document.getElementById('spa_root');
 	if (!spaRoot) return;
 
-	if (spaRoot.querySelector(`[class*="Skeleton__skeleton"]`)) {
+	if (spaRoot.querySelector(`[class*="SkeletonComponent__skeleton"]`)) {
 		await delay(1000);
 		return injectToAudioPlaylistPageNew(retry + 1);
 	}
@@ -188,7 +188,7 @@ const injectToAudioPlaylistPageNew = async (retry = 0) => {
 };
 
 const injectToAudioPlaylistModalNew = async (playlistFullId: string, retry = 0) => {
-	if (document.querySelector(`.vkui__root .vkuiFlex__host [class*="Skeleton__skeleton"]`)) {
+	if (document.querySelector(`.vkui__root .vkuiFlex__host [class*="SkeletonComponent__skeleton"]`)) {
 		await delay(1000);
 		return injectToAudioPlaylistModalNew(playlistFullId, retry + 1);
 	}

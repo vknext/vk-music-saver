@@ -9,12 +9,19 @@ import onAddAudioRowReact from 'src/interactions/onAddAudioRowReact';
 import lang from 'src/lang';
 import cancelEvent from 'src/lib/cancelEvent';
 import humanFileSize from 'src/lib/humanFileSize';
+import onCurBackHide from 'src/listeners/onCurBackHide';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
 
 interface RowInnerElement extends HTMLElement {
 	_vms_inj?: boolean;
 }
+
+interface AudioRowElement extends HTMLElement {
+	_vms_obs?: MutationObserver;
+}
+
+const ACTIONS_SELECTOR = ['[class*="AudioRow__actions--"]', '[data-testid="audiorow-actions"]'].join(',');
 
 const createDownloadButton = (
 	audio: AudioAudio | AudioObject,
@@ -85,30 +92,51 @@ const onAddRow = async (row: HTMLElement) => {
 	const rowInnerEl = row.querySelector<RowInnerElement>('.audio_row__inner');
 	if (!rowInnerEl) return;
 
-	if (rowInnerEl._vms_inj) {
-		return;
-	}
+	if (rowInnerEl._vms_inj) return;
 	rowInnerEl._vms_inj = true;
 
 	rowInnerEl.appendChild(createDownloadButton(audioObject));
 };
 
-const onAddReactRow = async (audioRow: HTMLElement, audio: AudioAudio | null) => {
-	if (!audio) {
-		console.error('no audio', { audioRow });
-		return;
-	}
-
-	const actions = audioRow.querySelector<RowInnerElement>('[class*="AudioRow__actions--"]');
-	if (!actions) return;
+const onAddReactRowActions = (actions: RowInnerElement, audio: AudioAudio) => {
 	if (actions._vms_inj) return;
 	actions._vms_inj = true;
 
 	const vkuiButtonGroup = actions.querySelector<HTMLElement>('.vkuiButtonGroup,.vkuiButtonGroup__host');
 
-	const downloadItem = createDownloadButton(audio, 24);
+	const downloadItem = createDownloadButton(audio, 20);
 
 	(vkuiButtonGroup || actions).prepend(downloadItem);
+};
+
+const onAddReactRow = async (audioRow: AudioRowElement, audio: AudioAudio | null) => {
+	if (!audio) {
+		console.error('no audio', { audioRow });
+		return;
+	}
+
+	const actions = audioRow.querySelector<RowInnerElement>(ACTIONS_SELECTOR);
+
+	if (actions) {
+		return onAddReactRowActions(actions, audio);
+	}
+
+	if (audioRow._vms_obs) return;
+
+	const obs = new MutationObserver(() => {
+		const actions = audioRow.querySelector<RowInnerElement>(ACTIONS_SELECTOR);
+
+		if (actions) {
+			onAddReactRowActions(actions, audio);
+			obs.disconnect();
+		}
+	});
+
+	audioRow._vms_obs = obs;
+
+	obs.observe(audioRow, { subtree: true, childList: true });
+
+	onCurBackHide(() => obs.disconnect());
 };
 
 const injectDownloadButtonInAudioRow = () => {
