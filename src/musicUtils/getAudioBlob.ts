@@ -76,18 +76,35 @@ export const getAudioBlob = async ({
 	}
 
 	if (!blob) {
-		blob = await convertTrackToBlob({
-			url: audioUnmaskSource(audio.url),
-			forceHls:
-				(convertMethod === AudioConvertMethod.VKNEXT ? AUDIO_CONVERT_METHOD_DEFAULT_VALUE : convertMethod) ===
-				AudioConvertMethod.HLS,
-			onProgress(current) {
-				if (!onProgress) return;
+		const curMethod =
+			convertMethod === AudioConvertMethod.VKNEXT ? AUDIO_CONVERT_METHOD_DEFAULT_VALUE : convertMethod;
+		const forceHls = curMethod === AudioConvertMethod.HLS;
 
-				// ffmpeg отдает значение от 0 до 1
-				onProgress(Math.round(current * 100), 100);
-			},
-		});
+		try {
+			blob = await convertTrackToBlob({
+				url: audioUnmaskSource(audio.url),
+				forceHls,
+				onProgress(current) {
+					if (!onProgress) return;
+
+					// ffmpeg отдает значение от 0 до 1
+					onProgress(Math.round(current * 100), 100);
+				},
+			});
+		} catch (e) {
+			console.error(e);
+
+			blob = await convertTrackToBlob({
+				url: audioUnmaskSource(audio.url),
+				forceHls: true,
+				onProgress(current) {
+					if (!onProgress) return;
+
+					// ffmpeg отдает значение от 0 до 1
+					onProgress(Math.round(current * 100), 100);
+				},
+			});
+		}
 	}
 
 	if (!blob) {
