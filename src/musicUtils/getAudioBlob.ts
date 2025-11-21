@@ -15,6 +15,7 @@ import convertUnixTimestampToTDAT from './convertUnixTimestampToTDAT';
 import getAlbumId from './getAlbumId';
 import getAlbumThumbnail from './getAlbumThumbnail';
 import getPerformer from './getPerformer';
+import vkDomain from 'src/common/vkDomain';
 
 export interface GetAudioBlobParams {
 	audio: AudioObject | AudioAudio;
@@ -25,6 +26,30 @@ export interface GetAudioBlobParams {
 	writeTags: boolean;
 	writeGeniusLyrics: boolean;
 }
+
+const customGenresMap: Record<number, string> = {
+	1: 'Rock',
+	2: 'Pop',
+	3: 'Rap & Hip-Hop',
+	4: 'Easy Listening',
+	5: 'Dance & House',
+	6: 'Instrumental',
+	7: 'Metal',
+	21: 'Alternative',
+	8: 'Dubstep',
+	1001: 'Jazz & Blues',
+	10: 'Drum & Bass',
+	11: 'Trance',
+	12: 'Chanson',
+	13: 'Ethnic',
+	14: 'Acoustic & Vocal',
+	15: 'Reggae',
+	16: 'Classical',
+	17: 'Indie Pop',
+	18: 'Other',
+	19: 'Speech',
+	22: 'Electropop & Disco',
+};
 
 export const getAudioBlob = async ({
 	signal,
@@ -137,8 +162,8 @@ export const getAudioBlob = async ({
 		// comments
 		writer.setFrame('COMM', {
 			description: VKNEXT_SITE_URL,
-			text: `Track downloaded from VK via VK Music Saver: ${VKNEXT_SITE_URL}`,
-			language: 'eng',
+			text: `Трек скачан из ВКонтакте через VK Music Saver: ${VKNEXT_SITE_URL}`,
+			language: 'rus',
 		});
 
 		if (thumbBuffer !== null) {
@@ -191,21 +216,55 @@ export const getAudioBlob = async ({
 			}
 		}
 
+		// song artists (array of strings)
+		let tpe1: string[] | null = null;
+
 		if (audioArtists.length) {
 			const artistNames = audioArtists.map((performer) => performer.name) || [];
 
-			// song artists (array of strings)
-			writer.setFrame('TPE1', artistNames);
+			tpe1 = artistNames;
+
+			const firstArtist = audioArtists.find((artist) => !!artist.id || !!artist.domain);
+
+			if (firstArtist) {
+				// official artist/performer webpage
+				writer.setFrame('WOAR', `https://${vkDomain}/artist/${firstArtist.domain || firstArtist.id}`);
+			}
+		} else if (audio.artist) {
+			tpe1 = audio.artist.split(',').map((e: string) => e.trim());
+		} else if (audio.performer) {
+			tpe1 = audio.performer.split(',').map((e: string) => e.trim());
+		}
+
+		if (tpe1) {
+			writer.setFrame('TPE1', tpe1);
+
+			if (!playlist?.main_artists) {
+				writer.setFrame('TPE2', tpe1.join(', '));
+			}
+		}
+
+		if (audio.release_audio_id) {
+			// official audio file webpage
+			writer.setFrame('WOAF', `https://${vkDomain}/audio${audio.release_audio_id}`);
 		}
 
 		if (playlist) {
 			// album title
 			writer.setFrame('TALB', playlist.title);
-
-			// album release year
 			if (playlist.year) {
+				// album release year
 				writer.setFrame('TYER', playlist.year);
 			}
+
+			const albumId: (string | number)[] = [playlist.owner_id, playlist.id];
+
+			if (playlist.access_key) {
+				albumId.push(playlist.access_key);
+			}
+
+			// official audio source webpage
+			writer.setFrame('WOAS', `https://${vkDomain}/music/album/${albumId.join('_')}`);
 
 			if (playlist.genres) {
 				const genres = playlist.genres.map((genre) => genre.name);
@@ -233,7 +292,13 @@ export const getAudioBlob = async ({
 				const albumArtists = playlist.main_artists.map((performer) => performer.name);
 
 				// album artist
-				writer.setFrame('TPE2', albumArtists.join(' '));
+				writer.setFrame('TPE2', albumArtists.join(', '));
+			}
+		} else {
+			const customGenre = customGenresMap[audio.genre_id];
+
+			if (customGenre) {
+				writer.setFrame('TCON', [customGenre]);
 			}
 		}
 
