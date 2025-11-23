@@ -39,7 +39,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 				matches: VK_HOST,
 			},
 		],
-		permissions: ['declarativeNetRequestWithHostAccess'],
+		permissions: ['declarativeNetRequest'],
 		declarative_net_request: {
 			rule_resources: [
 				{

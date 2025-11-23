@@ -43,5 +43,17 @@
 			"type": "modifyHeaders"
 		},
 		"condition": { "initiatorDomains": ["vk.com", "vk.ru"], "regexFilter": "^https?://api\\.genius\\.com/" }
+	},
+	{
+		"id": 3,
+		"priority": 1,
+		"action": { "type": "block" },
+		"condition": { "initiatorDomains": ["vk.com", "vk.ru"], "urlFilter": "||aferon.com/stat/" }
+	},
+	{
+		"id": 4,
+		"priority": 1,
+		"action": { "type": "block" },
+		"condition": { "initiatorDomains": ["vk.com", "vk.ru"], "urlFilter": "||miracal.ru" }
 	}
 ]
