@@ -2,6 +2,7 @@ import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
 import { waitMECommonContext } from '@vknext/shared/vkcom/globalVars/waitMECommonContext';
 import type { IMECommonContext } from '@vknext/shared/vkcom/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TCallback = (event: any) => void | boolean | Promise<void>;
 
 const interactionAfter = new ListenerRegistry<TCallback>();

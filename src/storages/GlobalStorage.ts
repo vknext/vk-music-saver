@@ -8,6 +8,7 @@ interface ListenersProps<Value> {
 
 class GlobalStorage {
 	private idb: IndexedDBWrapper;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private listeners: Map<string, Set<(props: any) => void>> = new Map();
 
 	constructor() {

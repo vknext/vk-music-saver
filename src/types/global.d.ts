@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { AudioLayer, MessageBoxObject } from '@vknext/shared/vkcom/types';
 

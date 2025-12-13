@@ -6,7 +6,9 @@
 		"dev": "cross-env NODE_OPTIONS=\"--import=tsx/esm\" webpack serve --config webpack.config.ts --env --dev",
 		"dev:firefox": "cross-env NODE_OPTIONS=\"--import=tsx/esm\" webpack serve --config webpack.dev.ts --env --firefox",
 		"build": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --import=tsx/esm\" webpack --config webpack.config.ts",
-		"build:ext": "yarn build && yarn build --env --firefox --env --noclear"
+		"build:ext": "yarn build && yarn build --env --firefox --env --noclear",
+		"lint": "eslint --debug src/",
+		"lint:write": "eslint --debug src/ --fix"
 	},
 	"author": "vknext",
 	"license": "MIT",

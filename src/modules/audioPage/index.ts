@@ -13,6 +13,7 @@ import getAudioPlayerUserControlsContainer from './getAudioPlayerUserControlsCon
 import styles from './index.module.scss';
 
 interface WrapElement extends HTMLElement {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[key: string | symbol]: any;
 }
 

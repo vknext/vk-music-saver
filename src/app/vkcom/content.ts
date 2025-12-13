@@ -7,11 +7,11 @@ if (process.env.NODE_ENV === 'development') {
 if (document.documentElement instanceof HTMLHtmlElement) {
 	try {
 		window.sessionStorage.setItem('vms_public_path', chrome.runtime.getURL(''));
-	} catch (e) {
+	} catch {
 		document.documentElement.dataset['vms_public_path'] = chrome.runtime.getURL('');
 	}
 
-	// @ts-ignore
+	// @ts-expect-error window.vms не типизирован
 	const scripts: string[] = window.vms;
 
 	if (scripts && document.documentElement instanceof HTMLHtmlElement) {

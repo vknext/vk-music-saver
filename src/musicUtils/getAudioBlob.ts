@@ -205,7 +205,7 @@ export const getAudioBlob = async ({
 		}
 
 		if (!audioArtists.length) {
-			let artistTitle = audio.performer || audio.artist;
+			const artistTitle = audio.performer || audio.artist;
 
 			if (artistTitle) {
 				for (const artist of artistTitle.split(',')) {

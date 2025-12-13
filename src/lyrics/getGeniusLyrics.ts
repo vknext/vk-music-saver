@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { AudioObject } from '@vknext/shared/vkcom/types';
 
 const cache = new Map<string, string>();

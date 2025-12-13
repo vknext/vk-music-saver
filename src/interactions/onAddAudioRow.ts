@@ -123,7 +123,7 @@ const initAjaxHook = () => {
 		if (isLoadAudioBlocks && callbackFunctions.onDone) {
 			const originalOnDone = callbackFunctions.onDone;
 
-			callbackFunctions.onDone = function (...onDoneArgs: any[]) {
+			callbackFunctions.onDone = function (...onDoneArgs: unknown[]) {
 				const result = Reflect.apply(originalOnDone, this, onDoneArgs);
 
 				if (result instanceof Promise) {

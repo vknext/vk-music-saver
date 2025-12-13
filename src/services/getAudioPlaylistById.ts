@@ -22,7 +22,7 @@ interface OldPlaylist {
 	accessHash: string;
 	isBlocked: string;
 	expire: number;
-	list: any[];
+	list: unknown[];
 	hasMore: number;
 	nextOffset: number;
 	totalCount: number;
@@ -32,7 +32,7 @@ interface OldPlaylist {
 	noDiscover: boolean | null;
 }
 
-const getLargePhotoUrl = (photoData: Record<string, any>): string | undefined => {
+const getLargePhotoUrl = (photoData: Record<string, unknown>): string | undefined => {
 	let largestSize = 0;
 	let largestUrl: string | undefined;
 

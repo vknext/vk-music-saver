@@ -1,4 +1,3 @@
-import { createPromise } from '@vknext/shared/utils/createPromise';
 import { onDocumentComplete } from '@vknext/shared/utils/onDocumentComplete';
 import { waitHTMLBody } from '@vknext/shared/utils/waitHTMLBody';
 

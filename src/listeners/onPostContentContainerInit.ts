@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { HTMLHeadTaskQueueS } from '@vknext/shared/utils/waitHTMLHead';
 import { ListenerRegistry } from '@vknext/shared/common/ListenerRegistry';
 import onAddTaskQueueS from './onAddTaskQueueS';

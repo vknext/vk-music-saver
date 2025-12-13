@@ -24,7 +24,7 @@ import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylis
 import { incrementDownloadedPlaylistsCount } from './utils';
 
 async function* getAudios(ownerId: number) {
-	let count = 100;
+	const count = 100;
 	let next_from: string | undefined;
 
 	let isBreak = false;

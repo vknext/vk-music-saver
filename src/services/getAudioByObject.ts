@@ -41,6 +41,7 @@ const getAudioByObject = async (audioObject: AudioAudio | AudioObject): Promise<
 		}
 
 		// всегда возвращает m3u8
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const [response] = await window.ajax.promisifiedPost<any[]>('al_audio.php', {
 			act: 'reload_audio',
 			ids: [audioObject.owner_id, audioObject.id, actionHash, urlHash].join('_'),

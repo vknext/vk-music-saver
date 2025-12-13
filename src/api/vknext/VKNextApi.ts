@@ -14,6 +14,7 @@ export class VKNextApi {
 	private appId: number | null = null;
 	private params: string | null = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	async call<T>(method: `vms.${string}`, params?: Record<string, any>, signal?: AbortSignal): Promise<T> {
 		const response = await fetch(`${vknextApiUrl}/${method}`, {
 			method: 'POST',
