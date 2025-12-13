@@ -9,6 +9,7 @@ import webpack, { type Configuration, type EntryObject } from 'webpack';
 import 'webpack-dev-server'; // для исправления типов
 import WebpackExtensionManifestPlugin from 'webpack-extension-manifest-plugin';
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
+// @ts-expect-error нет типов :(
 import BomPlugin from 'webpack-utf8-bom';
 import yargsParser from 'yargs-parser';
 
@@ -212,7 +213,7 @@ const options: Configuration = {
 					from: path.resolve('./', 'src', 'dnr_rules.json'),
 					to: path.join(BUILD_PATH, 'dnr_rules.vms.json'),
 					// бюджетная минификация .json
-					transform(content, absoluteFrom) {
+					transform(content) {
 						if (IS_DEV) return content.toString();
 
 						const json = JSON.parse(content.toString());
@@ -251,12 +252,12 @@ const options: Configuration = {
 			fileName: 'entrypoints.json',
 			generate: (seed, files, entrypoints) => {
 				for (const file of files) {
-					let runtime = new Set([file.chunk?.runtime]);
+					const runtime = new Set([file.chunk?.runtime]);
 					const chunks = file.chunk?.files;
 
 					if (!chunks) continue;
 
-					// @ts-ignore _groups is private
+					// @ts-expect-error _groups is private
 					for (const item of file.chunk._groups) {
 						for (const entry of item._parents) {
 							runtime.add(entry.options?.name);
@@ -312,7 +313,15 @@ const options: Configuration = {
 							},
 						},
 					},
-					{ loader: 'sass-loader', options: { sourceMap: true } },
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: true,
+							sassOptions: {
+								silenceDeprecations: ['import'],
+							},
+						},
+					},
 				],
 			},
 			{
@@ -339,7 +348,15 @@ const options: Configuration = {
 							},
 						},
 					},
-					{ loader: 'sass-loader', options: { sourceMap: true } },
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: true,
+							sassOptions: {
+								silenceDeprecations: ['import'],
+							},
+						},
+					},
 				],
 				sideEffects: true,
 			},
@@ -349,7 +366,7 @@ const options: Configuration = {
 					{
 						loader: 'style-loader',
 						options: {
-							insert: (element, options) => {
+							insert: (element: HTMLElement, options: { target?: HTMLElement }) => {
 								const parent = options?.target || document.head || document.documentElement;
 
 								parent.appendChild(element);
@@ -368,7 +385,15 @@ const options: Configuration = {
 						},
 					},
 					{ loader: 'postcss-loader', options: { sourceMap: true, postcssOptions } },
-					{ loader: 'sass-loader', options: { sourceMap: true } },
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: true,
+							sassOptions: {
+								silenceDeprecations: ['import'],
+							},
+						},
+					},
 				],
 			},
 			{
