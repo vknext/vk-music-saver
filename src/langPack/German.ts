@@ -61,6 +61,7 @@ const lang = {
   vms_sett_audio_write_id3_tags_desc: 'Треки и альбомы будут скачиваться с метаданными, такими как имя исполнителя, название, дата выпуска и обложка',
   vms_sett_audio_write_genius_lyrics: 'Вставлять в метаданные треков тексты из Genius',
   vms_sett_audio_write_genius_lyrics_desc: 'VK Music Saver не связан с этим сайтом и не несет ответственности за точность текстов песен',
+  vms_sett_show_bitrate_near_duration: 'Показывать битрейт трека возле длительности',
   vms_alert_rating_title: 'Вам нравится VK Music Saver?',
   vms_alert_rating_desc: 'Пожалуйста, поддержите расширение в рейтинге {storeName}',
   vms_alert_rating_yes: 'Оценить расширение',
@@ -87,6 +88,8 @@ const lang = {
   installed_ffmpeg_notice_1: 'Если у вас Firefox и не скачиваются треки скорее всего проблема в ffmpeg (конвертация треков).',
   installed_ffmpeg_notice_2: 'ВКонтакте отдает треки в формате m3u8, а расширение конвертирует в привычный mp3.',
   installed_ffmpeg_notice_3: 'В Firefox по умолчанию расширение использует FFmpeg, размещённый на нашем сайте {site}. Если сайт недоступен — конвертация не работает, и расширение не сможет скачать трек.',
-  installed_ffmpeg_notice_4: 'В настройках расширения можно переключиться на метод hls.js. Он не зависит от нашего сайта, но в Firefox работает нестабильно — возможны щелчки или искажения в звуке.'
+  installed_ffmpeg_notice_4: 'В настройках расширения можно переключиться на метод hls.js. Он не зависит от нашего сайта, но в Firefox работает нестабильно — возможны щелчки или искажения в звуке.',
+  vms_concurrent_downloads_recommendation: 'Скачивайте не больше двух плейлистов сразу, иначе браузер может зависнуть',
+  vms_settings_need_reload_page: 'Перезагрузите страницу, чтобы изменения вступили в силу'
 };
 export default lang;
