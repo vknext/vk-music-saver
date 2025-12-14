@@ -14,7 +14,7 @@ import type { AudioAudio } from 'src/schemas/objects';
 import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
 import GlobalStorage from 'src/storages/GlobalStorage';
-import { DownloadType, startDownload } from 'src/store';
+import { DownloadType, getDownloadActiveTasksCount, startDownload } from 'src/store';
 import type { ClientZipFile } from 'src/types';
 import { incrementDownloadedPlaylistsCount } from '../utils';
 import formatDownloadedTrackName from './formatDownloadedTrackName';
@@ -90,6 +90,12 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	const filename = `${playlistFolderName}.zip`;
 
 	const taskId = `playlist${playlistFullId}`;
+
+	const activeTasksCount = getDownloadActiveTasksCount();
+
+	if (activeTasksCount > (fsDirHandle ? 2 : 1)) {
+		await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_concurrent_downloads_recommendation') });
+	}
 
 	const { setProgress, startArchiving, finish, setExtraText } = startDownload({
 		id: taskId,

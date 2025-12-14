@@ -72,6 +72,7 @@ interface DownloadStore {
 	startDownload: (input: StartDownloadInput) => { id: string } & DownloadTaskHandlers;
 	getTask: (id: string) => Omit<DownloadTask, 'onCancel' | 'timeoutId'> | undefined;
 	getTaskHandlersById: (id: string) => DownloadTaskHandlers;
+	getActiveTasksCount: () => number;
 }
 
 export const useDownloadStore = create<DownloadStore>((set, get) => {
@@ -263,5 +264,12 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 		},
 
 		getTaskHandlersById,
+
+		getActiveTasksCount: () => {
+			const tasks = get().tasks.values();
+			const activeTasks = Array.from(tasks).filter((task) => task.status !== DownloadStatus.FINISHED);
+
+			return activeTasks.length;
+		},
 	};
 });
