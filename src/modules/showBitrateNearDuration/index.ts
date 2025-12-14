@@ -7,6 +7,7 @@ import { formatBitrate } from 'src/musicUtils/formatBitrate';
 import getAudioBitrate from 'src/musicUtils/getAudioBitrate';
 import type { AudioAudio } from 'src/schemas/objects';
 import styles from './index.module.scss';
+import globalStorage from 'src/storages/GlobalStorage';
 
 const createBitrateElement = (audio: AudioAudio | AudioObject) => {
 	const bitrateEl = document.createElement('span');
@@ -75,7 +76,11 @@ const onAddRowReact = async (row: HTMLElement, audio: AudioAudio | null) => {
 	rowAfter.appendChild(bitrateEl);
 };
 
-const initShowBitrateNearDuration = () => {
+const initShowBitrateNearDuration = async () => {
+	const isShown = await globalStorage.getValue('show_bitrate_near_duration', true);
+
+	if (!isShown) return;
+
 	onAddAudioRow(onAddRow);
 	onAddAudioRowReact(onAddRowReact);
 };

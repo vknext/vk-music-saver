@@ -55,6 +55,12 @@ const SettingsModal = () => {
 					{lang.use('vms_sett_audio_write_id3_tags')}
 				</SettControl>
 				<WriteGeniusLyrics />
+				<Spacing size={12}>
+					<Separator />
+				</Spacing>
+				<SettControl option="show_bitrate_near_duration" defaultValue={true} needReloadPage>
+					{lang.use('vms_sett_show_bitrate_near_duration')}
+				</SettControl>
 			</Div>
 		</CustomModalPage>
 	);

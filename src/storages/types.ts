@@ -19,6 +19,7 @@ export interface GlobalStorageBaseValues {
 	[key: `params_${number}`]: string | null;
 	vmp_onboarding_shown: boolean;
 	subscribe_alert_shown: boolean;
+	show_bitrate_near_duration: boolean;
 }
 
 export type GlobalStorageBaseKeys = keyof GlobalStorageBaseValues;

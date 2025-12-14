@@ -3,6 +3,8 @@ import useStorageValue from 'src/hooks/useStorageValue';
 import type { GlobalStorageBooleanKeys, GlobalStorageBooleanValues } from 'src/storages/types';
 import AndroidSwitch from 'src/components/AndroidSwitch/AndroidSwitch';
 import styles from './SettControl.module.scss';
+import showSnackbar from 'src/react/showSnackbar';
+import useLang from 'src/hooks/useLang';
 
 interface SettControlProps<Key extends GlobalStorageBooleanKeys> {
 	option: Key;
@@ -10,6 +12,7 @@ interface SettControlProps<Key extends GlobalStorageBooleanKeys> {
 	disabled?: boolean;
 	children: React.ReactNode;
 	subtitle?: React.ReactNode;
+	needReloadPage?: boolean;
 }
 
 const SettControl = <Key extends GlobalStorageBooleanKeys>({
@@ -18,8 +21,22 @@ const SettControl = <Key extends GlobalStorageBooleanKeys>({
 	children,
 	subtitle,
 	disabled,
+	needReloadPage,
 }: SettControlProps<Key>) => {
+	const lang = useLang();
 	const { value, setValue, isLoading } = useStorageValue(option, defaultValue);
+
+	const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		setValue(e.target.checked);
+
+		if (needReloadPage) {
+			showSnackbar({
+				type: 'warning',
+				text: 'VK Music Saver',
+				subtitle: lang.use('vms_settings_need_reload_page'),
+			});
+		}
+	};
 
 	return (
 		<SimpleCell
@@ -32,7 +49,7 @@ const SettControl = <Key extends GlobalStorageBooleanKeys>({
 						className={styles.SettControl__skeleton}
 					/>
 				) : (
-					<AndroidSwitch disabled={disabled} checked={value} onChange={(e) => setValue(e.target.checked)} />
+					<AndroidSwitch disabled={disabled} checked={value} onChange={onChange} />
 				)
 			}
 			disabled={isLoading || disabled}
