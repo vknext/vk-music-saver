@@ -1,4 +1,5 @@
 import { IndexedDBWrapper } from '@vknext/shared/lib/IndexedDBWrapper';
+import getGlobalVKNext from 'src/getGlobalVKNext';
 import type { GlobalStorageBaseKeys, GlobalStorageBaseValues } from './types';
 
 interface ListenersProps<Value> {
@@ -69,4 +70,11 @@ class GlobalStorage {
 	}
 }
 
-export default new GlobalStorage();
+const globalStorage = new GlobalStorage();
+
+if (process.env.NODE_ENV === 'development') {
+	// @ts-expect-error мне лень писать тип, извините
+	getGlobalVKNext()._vms_globalStorage = globalStorage;
+}
+
+export default globalStorage;
