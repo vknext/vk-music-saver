@@ -61,7 +61,7 @@ const lang = {
   vms_sett_audio_write_id3_tags_desc: "Tracks and albums will be downloaded with metadata such as artist name, title, release date and artwork",
   vms_sett_audio_write_genius_lyrics: "Insert lyrics into track metadata with Genius",
   vms_sett_audio_write_genius_lyrics_desc: "VK Music Saver is not affiliated with this site and is not responsible for the accuracy of lyrics",
-  vms_sett_show_bitrate_near_duration: 'Показывать битрейт трека возле длительности',
+  vms_sett_show_bitrate_near_duration: "Show track bitrate near duration",
   vms_alert_rating_title: "Do you like VK Music Saver?",
   vms_alert_rating_desc: "Please support the extension on {storeName}",
   vms_alert_rating_yes: "Rate the extension",
@@ -89,7 +89,7 @@ const lang = {
   installed_ffmpeg_notice_2: "VK provides tracks in m3u8 format, and the extension converts them to the usual mp3.",
   installed_ffmpeg_notice_3: "In Firefox, the extension by default uses FFmpeg hosted on our website {site}. If the site is unavailable, conversion will not work and the extension will not be able to download the track.",
   installed_ffmpeg_notice_4: "In the extension settings, you can switch to the hls.js method. It does not depend on our site, but in Firefox it works unstably — clicks or sound distortions are possible.",
-  vms_concurrent_downloads_recommendation: 'Скачивайте не больше двух плейлистов сразу, иначе браузер может зависнуть',
-  vms_settings_need_reload_page: 'Перезагрузите страницу, чтобы изменения вступили в силу'
+  vms_concurrent_downloads_recommendation: "Download no more than two playlists at a time, otherwise your browser may freeze",
+  vms_settings_need_reload_page: "Reload the page for the changes to take effect"
 };
 export default lang;
