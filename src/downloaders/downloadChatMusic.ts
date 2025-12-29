@@ -22,6 +22,7 @@ import type { ClientZipFile } from 'src/types';
 import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
 import getBlobAudioFromPlaylist from './downloadPlaylist/getBlobAudioFromPlaylist';
 import { incrementDownloadedPlaylistsCount } from './utils';
+import { vknextApi } from 'src/api';
 
 async function* getAudios(ownerId: number) {
 	const count = 100;
@@ -233,6 +234,8 @@ const downloadChatMusic = async (peerId: number) => {
 	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
 
 	await incrementDownloadedPlaylistsCount();
+
+	await vknextApi.call('vms.stat', { type: 'acm', data: progress });
 };
 
 export default downloadChatMusic;

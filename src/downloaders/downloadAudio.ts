@@ -1,4 +1,5 @@
 import type { AudioObject } from '@vknext/shared/vkcom/types';
+import { vknextApi } from 'src/api';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
@@ -105,6 +106,8 @@ const downloadAudio = async ({ audioObject, onProgress }: DownloadAudioParams) =
 	finish({ onSave, onRemove });
 
 	await incrementDownloadedTracksCount();
+
+	await vknextApi.call('vms.stat', { type: 'a', data: 1 });
 };
 
 export default downloadAudio;

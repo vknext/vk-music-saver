@@ -1,3 +1,4 @@
+import { vknextApi } from 'src/api';
 import { MAX_PARALLEL_AUDIO_CONVERSION } from 'src/common/constants';
 import lang from 'src/lang';
 import { padWithZeros } from 'src/lib/padWithZeros';
@@ -216,6 +217,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	setExtraText(lang.use('vms_playlist_download_completed', { total: lang.use('vms_tracks_plurals', progress) }));
 
 	await incrementDownloadedPlaylistsCount();
+
+	await vknextApi.call('vms.stat', { type: 'ap', data: progress });
 };
 
 export default downloadPlaylist;

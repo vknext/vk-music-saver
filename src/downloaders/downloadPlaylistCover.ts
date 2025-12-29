@@ -1,9 +1,10 @@
+import { vknextApi } from 'src/api';
 import lang from 'src/lang';
 import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
-import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
 import showSnackbar from 'src/react/showSnackbar';
+import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
 
 const downloadPlaylistCover = async (playlistFullId: string) => {
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
@@ -47,6 +48,8 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 	}
 
 	saveFileAs(albumThumbUrl, unescapeHTML(nameChunks.join('')) + '.jpg');
+
+	await vknextApi.call('vms.stat', { type: 'apc', data: 1 });
 };
 
 export default downloadPlaylistCover;
