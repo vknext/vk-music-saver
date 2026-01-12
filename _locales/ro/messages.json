@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — descarcă muzică de pe VK"
+	},
+	"extDescription": {
+		"message": "Descarcă piese și playlist-uri cu un singur clic. Creat de echipa VK Next."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Susține proiectul"
+	},
+	"popup_feedback": {
+		"message": "Raportează o eroare"
+	}
+}

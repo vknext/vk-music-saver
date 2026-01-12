@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — VK'dan müzik indir"
+	},
+	"extDescription": {
+		"message": "Tek tıkla şarkıları ve çalma listelerini indirin. VK Next ekibi tarafından oluşturuldu."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Projeyi destekle"
+	},
+	"popup_feedback": {
+		"message": "Hata bildir"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — Musik von VK herunterladen"
+	},
+	"extDescription": {
+		"message": "Laden Sie Tracks und Playlists mit einem Klick herunter. Erstellt vom VK Next Team."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Projekt unterstützen"
+	},
+	"popup_feedback": {
+		"message": "Fehler melden"
+	}
+}

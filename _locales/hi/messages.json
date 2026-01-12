@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — VK से संगीत डाउनलोड करें"
+	},
+	"extDescription": {
+		"message": "एक क्लिक में ट्रैक और प्लेलिस्ट डाउनलोड करें। VK Next टीम द्वारा बनाया गया।"
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "प्रोजेक्ट का समर्थन करें"
+	},
+	"popup_feedback": {
+		"message": "बग रिपोर्ट करें"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — VK-дан музыка жүктеу"
+	},
+	"extDescription": {
+		"message": "Тректер мен плейлистерді бір рет басу арқылы жүктеңіз. VK Next тобы жасаған."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Жобаны қолдау"
+	},
+	"popup_feedback": {
+		"message": "Қате туралы хабарлау"
+	}
+}

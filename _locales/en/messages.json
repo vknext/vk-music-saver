@@ -1,9 +1,9 @@
 {
 	"extName": {
-		"message": "VK Music Saver - download music from VKontakte"
+		"message": "VK Music Saver — download music from VK"
 	},
 	"extDescription": {
-		"message": "Download tracks and playlists in one click. Created by VK Next team."
+		"message": "Download tracks and playlists in one click. Created by the VK Next team."
 	},
 	"popup_title": {
 		"message": "VK Music Saver"
@@ -12,6 +12,6 @@
 		"message": "Support the project"
 	},
 	"popup_feedback": {
-		"message": "Report an issue"
+		"message": "Report a bug"
 	}
 }

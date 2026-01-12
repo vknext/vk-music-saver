@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — спампаваць музыку з VK"
+	},
+	"extDescription": {
+		"message": "Спампоўвайце трэкі і плэйлісты ў адзін клік. Створана камандай VK Next."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Падтрымаць праект"
+	},
+	"popup_feedback": {
+		"message": "Паведаміць пра памылку"
+	}
+}

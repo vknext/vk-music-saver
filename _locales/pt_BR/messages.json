@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — baixar músicas do VK"
+	},
+	"extDescription": {
+		"message": "Baixe faixas e playlists com um clique. Criado pela equipe VK Next."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Apoiar o projeto"
+	},
+	"popup_feedback": {
+		"message": "Reportar erro"
+	}
+}

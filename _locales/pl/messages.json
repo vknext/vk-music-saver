@@ -1,0 +1,17 @@
+{
+	"extName": {
+		"message": "VK Music Saver — pobieranie muzyki z VK"
+	},
+	"extDescription": {
+		"message": "Pobieraj utwory i playlisty jednym kliknięciem. Stworzone przez zespół VK Next."
+	},
+	"popup_title": {
+		"message": "VK Music Saver"
+	},
+	"popup_donate": {
+		"message": "Wesprzyj projekt"
+	},
+	"popup_feedback": {
+		"message": "Zgłoś błąd"
+	}
+}
