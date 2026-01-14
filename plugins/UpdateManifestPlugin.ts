@@ -35,7 +35,7 @@ export default class UpdateManifestPlugin {
 	}
 
 	convertEntryToContentScript({ entry, matches, runAt, all_frames }: ConvertEntryToContentScriptProps) {
-		let contentScript: ContentScript = {};
+		const contentScript: ContentScript = {};
 
 		if (matches) {
 			contentScript.matches = matches;
@@ -155,7 +155,7 @@ export default class UpdateManifestPlugin {
 			writeFileSync(join(buildPath, 'manifest.json'), manifestString);
 
 			const manifestSource = new webpackSources.ConcatSource(manifestString);
-			// @ts-ignore
+
 			compilation.assets['manifest.json'] = manifestSource;
 
 			unlinkSync(join(buildPath, 'entrypoints.json'));

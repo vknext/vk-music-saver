@@ -48,6 +48,9 @@ interface DownloadTaskHandlers {
 	setTitle: (title: string) => void;
 	setProgress: (progress: Progress) => void;
 	setPhotoUrl: (photoUrl: string) => void;
+	/**
+	 * @deprecated
+	 */
 	startArchiving: () => void;
 	/**
 	 * Отображается после "title", но над прогрессом

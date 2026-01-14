@@ -71,6 +71,15 @@ const getEntry = () => {
 		},
 		popup: path.resolve('./', 'src', 'app', 'popup', 'index.ts'),
 		installed: path.resolve('./', 'src', 'app', 'installed', 'index.tsx'),
+		streamSaverMitm: {
+			import: path.resolve('./', 'src', 'app', 'streamSaverMitm', 'index.ts'),
+			publicPath: './',
+		},
+		mitmWorker: {
+			import: path.resolve('./', 'src', 'app', 'streamSaverMitm', 'sw.ts'),
+			publicPath: './',
+			runtime: false,
+		},
 	};
 
 	if (!IS_DEV) {
@@ -239,6 +248,15 @@ const options: Configuration = {
 			inject: true,
 			hash: true,
 			title: packageJson.name,
+		}),
+		new HtmlWebpackPlugin({
+			template: path.resolve('./', 'src', 'app', 'streamSaverMitm', 'index.html'),
+			filename: 'mitm.html',
+			chunks: ['streamSaverMitm'],
+			inject: true,
+			hash: true,
+			title: 'Stream Saver | mitm',
+			publicPath: './',
 		}),
 		new BomPlugin(true),
 		new ESLintPlugin({}),

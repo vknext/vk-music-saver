@@ -51,6 +51,9 @@ const customGenresMap: Record<number, string> = {
 	22: 'Electropop & Disco',
 };
 
+/**
+ * @deprecated
+ */
 export const getAudioBlob = async ({
 	signal,
 	audio,

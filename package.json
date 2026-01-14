@@ -1,6 +1,6 @@
 {
 	"name": "vk-music-saver",
-	"version": "2.7.1",
+	"version": "2.8.0",
 	"type": "module",
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS=\"--import=tsx/esm\" webpack serve --config webpack.config.ts --env --dev",
@@ -58,7 +58,7 @@
 	},
 	"dependencies": {
 		"@vknext/icons": "^2.17.0",
-		"@vknext/shared": "^1.4.4",
+		"@vknext/shared": "^1.6.22",
 		"@vkontakte/icons": "^3.29.0",
 		"@vkontakte/vkui": "^7.2.0",
 		"browser-id3-writer": "^6.3.1",

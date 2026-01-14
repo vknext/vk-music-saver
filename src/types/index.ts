@@ -5,5 +5,5 @@ export interface DownloadTargetElement extends HTMLElement {
 export interface ClientZipFile {
 	name: string;
 	lastModified: Date;
-	input: Blob;
+	input: Blob | ReadableStream;
 }
