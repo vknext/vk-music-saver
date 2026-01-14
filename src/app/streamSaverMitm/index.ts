@@ -13,5 +13,5 @@ const mitm = new StreamSaverMitm({
 	scope: 'saver/',
 });
 
-// @ts-expect-error а зачем?
+// @ts-expect-error TODO: типизировать или убрать
 globalThis.mitm = mitm;
