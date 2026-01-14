@@ -3,7 +3,6 @@ import { vknextApi } from 'src/api';
 import lang from 'src/lang';
 import { abortStreamOnUnload } from 'src/lib/abortStreamOnUnload';
 import { streamSaver } from 'src/lib/streamSaver';
-import { type GetAudioBlobParams } from 'src/musicUtils/getAudioBlob';
 import { prepareTrackStream } from 'src/musicUtils/prepareTrackStream';
 import showSnackbar from 'src/react/showSnackbar';
 import { AudioAudio } from 'src/schemas/objects';
@@ -13,8 +12,9 @@ import GlobalStorage from 'src/storages/GlobalStorage';
 import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
 import { incrementDownloadedTracksCount } from './utils';
 
-interface DownloadAudioParams extends Pick<GetAudioBlobParams, 'onProgress'> {
+interface DownloadAudioParams {
 	audioObject: AudioObject | AudioAudio;
+	onProgress?: (current: number, total: number) => void;
 	size?: number;
 }
 

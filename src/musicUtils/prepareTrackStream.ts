@@ -31,6 +31,7 @@ const resolvePlaylist = async (
 			owner_id: ownerId,
 			playlist_id: albumId,
 			access_key: albumAccessKey,
+			withTracks: false,
 		});
 	} catch (error) {
 		console.warn('[VMS/prepareTrackStream] Failed to fetch playlist for tags:', error);

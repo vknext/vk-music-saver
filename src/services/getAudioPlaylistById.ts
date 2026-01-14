@@ -119,21 +119,42 @@ const getBasePlaylist = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 	return null;
 };
 
-const getPlaylistById = async (params: AudioGetPlaylistByIdParams): Promise<AudioPlaylist | null> => {
-	const playlist: AudioPlaylist | null = await getBasePlaylist(params);
+interface GetPlaylistByIdParams extends Pick<AudioGetPlaylistByIdParams, 'playlist_id' | 'owner_id' | 'access_key'> {
+	withTracks?: boolean;
+}
+
+const cachedPlaylists = new Map<string, ReturnType<typeof getBasePlaylist>>();
+
+const getPlaylistById = async ({
+	playlist_id,
+	owner_id,
+	access_key,
+	withTracks = true,
+}: GetPlaylistByIdParams): Promise<AudioPlaylist | null> => {
+	const entityId = `${playlist_id}_${owner_id}` + access_key ? `_${access_key}` : '';
+
+	if (cachedPlaylists.has(entityId)) {
+		return cachedPlaylists.get(entityId)!;
+	}
+
+	const getPlaylistPromise = getBasePlaylist({ playlist_id, owner_id, access_key });
+
+	getPlaylistPromise.catch(() => {
+		cachedPlaylists.delete(entityId);
+	});
+
+	cachedPlaylists.set(entityId, getPlaylistPromise);
+
+	const playlist = await getPlaylistPromise;
 
 	if (!playlist) return null;
 
+	if (!withTracks) return playlist;
+
 	try {
-		const entity_id: (string | number)[] = [playlist.owner_id, playlist.id];
-
-		if (playlist.access_key) {
-			entity_id.push(playlist.access_key);
-		}
-
 		const { audios: audioIds } = await vkApi.api<AudioGetAudioIdsBySourceResponse>('audio.getAudioIdsBySource', {
 			source: 'playlist',
-			entity_id: entity_id.join('_'),
+			entity_id: entityId,
 		});
 
 		const promises: Promise<AudioGetByIdResponse>[] = [];
