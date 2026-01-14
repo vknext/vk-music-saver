@@ -10,6 +10,10 @@ const langNameMap: Record<LangsCodeEnum, string> = {
 	[LangsCodeEnum.Belarusian]: 'Belarusian',
 	[LangsCodeEnum.Soviet]: 'Soviet',
 	[LangsCodeEnum.PortugueseBrazilian]: 'Portuguese, Brazilian',
+	[LangsCodeEnum.Romanian]: 'Romanian',
+	[LangsCodeEnum.Spanish]: 'Spanish',
+	[LangsCodeEnum.Turkish]: 'Turkish',
+	[LangsCodeEnum.Hindi]: 'Hindi',
 };
 
 export const getTargetLangPack = async (code: LangsCodeEnum) => {

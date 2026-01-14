@@ -58,7 +58,7 @@
 	},
 	"dependencies": {
 		"@vknext/icons": "^2.17.0",
-		"@vknext/shared": "^1.4.4",
+		"@vknext/shared": "^1.6.23",
 		"@vkontakte/icons": "^3.29.0",
 		"@vkontakte/vkui": "^7.2.0",
 		"browser-id3-writer": "^6.3.1",
