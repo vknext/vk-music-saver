@@ -28,9 +28,7 @@ const onCallback = async (el: HTMLElement) => {
 	}
 };
 
-const onAddRow = async (el: ObservedHTMLElement) => {
-	await waitRIC();
-
+const onAddRow = (el: ObservedHTMLElement) => {
 	if (el[AUDIO_ROW_IBS_KEY]) return;
 
 	el[AUDIO_ROW_IBS_KEY] = new IntersectionObserver(
@@ -38,6 +36,10 @@ const onAddRow = async (el: ObservedHTMLElement) => {
 			for (const entry of entries) {
 				if (entry.isIntersecting) {
 					await onCallback(el);
+
+					if (el[AUDIO_ROW_IBS_KEY]) {
+						el[AUDIO_ROW_IBS_KEY].unobserve(el);
+					}
 				}
 			}
 		},
@@ -50,7 +52,9 @@ const onAddRow = async (el: ObservedHTMLElement) => {
 };
 
 const findAudioList = () => {
-	const lists = document.querySelectorAll<ObservedHTMLElement>('.audio_pl_snippet__list');
+	const lists = document.querySelectorAll<ObservedHTMLElement>(
+		'.audio_pl_snippet__list,.audio_page__audio_rows_list'
+	);
 
 	for (const list of lists) {
 		if (list[PL_SNIPPET_MBS_KEY]) continue;
@@ -83,11 +87,8 @@ const findAllAudioRows = async (isAjax?: boolean) => {
 	await waitRIC();
 	await waitRAF();
 
-	const rows = document.querySelectorAll<ObservedHTMLElement>('.audio_row');
-
-	for (const row of rows) {
-		await waitRIC();
-		onAddRow(row);
+	for (const row of document.getElementsByClassName('audio_row')) {
+		onAddRow(row as ObservedHTMLElement);
 	}
 
 	findAudioList();
