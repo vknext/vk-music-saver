@@ -9,5 +9,4 @@ export enum DownloadStatus {
 	PREPARING = 'preparing',
 	DOWNLOADING = 'downloading',
 	FINISHED = 'finished',
-	ARCHIVING = 'archiving',
 }

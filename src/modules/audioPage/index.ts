@@ -95,6 +95,8 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 	if (container.getElementsByClassName(element.className).length) return;
 
+	let size: number | undefined = undefined;
+
 	const wrapper = document.createElement('div');
 	wrapper.style.paddingRight = '12px';
 	wrapper.appendChild(element);
@@ -114,6 +116,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 		downloadAudio({
 			audioObject,
+			size,
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},
@@ -134,6 +137,8 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 
 		const result = await getAudioBitrate(currentAudioObject);
 		if (result?.size) {
+			size = result.size;
+
 			setText(humanFileSize(result.size, 2));
 		} else {
 			setText('');

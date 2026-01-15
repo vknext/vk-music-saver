@@ -1,16 +1,6 @@
 import { CustomModalPage } from '@vknext/shared/components/CustomModalPage/CustomModalPage';
 import { useCustomModalControl } from '@vknext/shared/components/CustomModalPage/CustomModalPageContext';
-import {
-	Button,
-	Div,
-	FormStatus,
-	ModalPageHeader,
-	Placeholder,
-	Separator,
-	SimpleCell,
-	Spacing,
-	Tooltip,
-} from '@vkontakte/vkui';
+import { Button, Div, FormStatus, ModalPageHeader, Placeholder, Separator, SimpleCell, Spacing } from '@vkontakte/vkui';
 import { useState } from 'react';
 import AndroidSwitch from 'src/components/AndroidSwitch/AndroidSwitch';
 import SettControl from 'src/components/SettControl/SettControl';
@@ -91,26 +81,15 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 				</Div>
 			)}
 			<Div className={styles.SelectFCDirectory__methods}>
-				<Tooltip
-					defaultShown
-					usePortal={false}
-					appearance="accent"
-					placement="left"
-					description={lang.use('vms_fs_select_recommended')}
-					style={{ maxWidth: 150 }}
-				>
-					<Placeholder.Container noPadding className={styles.Card}>
-						<Placeholder.Title>{lang.use('vms_fs_option_folder_title')}</Placeholder.Title>
-						<Placeholder.Description>
-							{lang.use('vms_fs_option_folder_description')}
-						</Placeholder.Description>
-						<Placeholder.Actions>
-							<Button size="m" onClick={onSelectFolder}>
-								{lang.use('vms_fs_select_folder')}
-							</Button>
-						</Placeholder.Actions>
-					</Placeholder.Container>
-				</Tooltip>
+				<Placeholder.Container noPadding className={styles.Card}>
+					<Placeholder.Title>{lang.use('vms_fs_option_folder_title')}</Placeholder.Title>
+					<Placeholder.Description>{lang.use('vms_fs_option_folder_description')}</Placeholder.Description>
+					<Placeholder.Actions>
+						<Button size="m" onClick={onSelectFolder}>
+							{lang.use('vms_fs_select_folder')}
+						</Button>
+					</Placeholder.Actions>
+				</Placeholder.Container>
 				<Placeholder.Container noPadding className={styles.Card}>
 					<Placeholder.Title>{lang.use('vms_fs_option_zip_title')}</Placeholder.Title>
 					<Placeholder.Description>{lang.use('vms_fs_option_zip_description')}</Placeholder.Description>

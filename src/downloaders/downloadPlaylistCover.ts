@@ -13,6 +13,7 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 		owner_id: parseInt(ownerId),
 		playlist_id: parseInt(playlistId),
 		access_key: playlistAccessKey,
+		withTracks: false,
 	});
 
 	if (!playlist) {

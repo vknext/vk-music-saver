@@ -41,6 +41,8 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
 
+	let size: number | undefined = undefined;
+
 	const updateBitrate = async () => {
 		const result = await getAudioBitrate(audioObject);
 
@@ -51,6 +53,8 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 		}
 
 		if (result?.size) {
+			size = result.size;
+
 			text.push(humanFileSize(result.size, 2));
 		}
 
@@ -69,6 +73,7 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 
 		downloadAudio({
 			audioObject,
+			size,
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},
@@ -287,6 +292,8 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 
 		const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
 
+		let size: number | undefined = undefined;
+
 		const updateBitrate = async () => {
 			const result = await getAudioBitrate(apiAudio);
 
@@ -297,6 +304,8 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 			}
 
 			if (result?.size) {
+				size = result.size;
+
 				text.push(humanFileSize(result.size, 2));
 			}
 
@@ -315,6 +324,7 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 
 			downloadAudio({
 				audioObject: apiAudio,
+				size,
 				onProgress: (progress) => {
 					setText(`${progress}%`);
 				},

@@ -29,9 +29,13 @@ const createDownloadButton = (
 ) => {
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize });
 
+	let size: number | undefined = undefined;
+
 	const updateBitrate = async () => {
 		const result = await getAudioBitrate(audio);
 		if (result?.size) {
+			size = result.size;
+
 			setText(humanFileSize(result.size, 2));
 		} else {
 			setText('');
@@ -48,6 +52,7 @@ const createDownloadButton = (
 
 		downloadAudio({
 			audioObject: audio,
+			size,
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},

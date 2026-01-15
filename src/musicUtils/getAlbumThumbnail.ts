@@ -37,7 +37,7 @@ const getAlbumKey = (audio: AudioObject | AudioAudio) => {
 	return [ownerId, albumId].join('_');
 };
 
-const getAlbumThumbnail = (audio: AudioObject | AudioAudio): Promise<ArrayBuffer> | null => {
+const getAlbumThumbnail = (audio: AudioObject | AudioAudio, signal?: AbortSignal): Promise<ArrayBuffer> | null => {
 	const albumKey = getAlbumKey(audio);
 
 	if (albumThumbnailCache.has(albumKey)) {
@@ -50,7 +50,7 @@ const getAlbumThumbnail = (audio: AudioObject | AudioAudio): Promise<ArrayBuffer
 		return null;
 	}
 
-	const promise = fetch(thumbUrl).then((r) => r.arrayBuffer());
+	const promise = fetch(thumbUrl, { signal }).then((r) => r.arrayBuffer());
 
 	albumThumbnailCache.set(albumKey, promise);
 
