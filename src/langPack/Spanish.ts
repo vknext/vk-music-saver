@@ -17,7 +17,7 @@ const lang = {
   vms_fs_option_zip_title: "Archivo ZIP",
   vms_fs_option_zip_description: 'Скачивание одним файлом. Архивация происходит в процессе скачивания без нагрузки на систему.',
   vms_fs_option_folder_title: "Directamente a carpeta",
-  vms_fs_option_folder_description: 'Вам предложен выбор места для создания новой папки, в которую загрузятся файлы напрямую на диск.',
+  vms_fs_option_folder_description: 'Вам будет предложен выбор места для создания новой папки, в которую загрузятся файлы напрямую на диск.',
   vms_fs_option_unselected_title: "Preguntar siempre",
   vms_fs_download_method_title: "Método de descarga",
   vms_fs_select_zip: "Descargar",
