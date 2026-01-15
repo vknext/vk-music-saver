@@ -13,7 +13,14 @@ export const getRuntimeURL = (path: string = ''): string => {
 		return addPathToUrl(currentScript.src, path);
 	}
 
-	// такого не может быть
-	// TODO: брать url из контент скрипта
-	throw new Error('Runtime URL not found');
+	const item = window.sessionStorage.getItem('vms_public_path');
+	if (item) {
+		return addPathToUrl(item, path);
+	}
+
+	if (document.documentElement.dataset['vms_public_path']) {
+		return addPathToUrl(document.documentElement.dataset['vms_public_path'], path);
+	}
+
+	throw new Error('[VK Music Saver] Runtime URL not found');
 };
