@@ -26,7 +26,6 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 
 	const isPreparing = status === DownloadStatus.PREPARING;
 	const isDownloading = status === DownloadStatus.DOWNLOADING;
-	const isArchiving = status === DownloadStatus.ARCHIVING;
 	const isFinished = status === DownloadStatus.FINISHED;
 
 	return (
@@ -48,11 +47,6 @@ const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
 				{(isPreparing || (isDownloading && !isShownProgress)) && (
 					<Footnote normalize={false} className={styles.DownloadTaskCell__subtitle}>
 						{lang.use('vms_downloading')}
-					</Footnote>
-				)}
-				{isArchiving && (
-					<Footnote normalize={false} className={styles.DownloadTaskCell__subtitle}>
-						{lang.use('vms_archivation')}
 					</Footnote>
 				)}
 				{isDownloading && isShownProgress && (

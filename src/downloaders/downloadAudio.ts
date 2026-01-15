@@ -59,7 +59,7 @@ const downloadAudio = async ({ audioObject, onProgress, size }: DownloadAudioPar
 	});
 
 	if (!stream) {
-		await showSnackbar({ text: 'Audio url not found', type: 'error' });
+		await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_url_not_found') });
 		return;
 	}
 

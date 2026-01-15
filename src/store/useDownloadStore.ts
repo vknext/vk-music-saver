@@ -49,10 +49,6 @@ interface DownloadTaskHandlers {
 	setProgress: (progress: Progress) => void;
 	setPhotoUrl: (photoUrl: string) => void;
 	/**
-	 * @deprecated
-	 */
-	startArchiving: () => void;
-	/**
 	 * Отображается после "title", но над прогрессом
 	 */
 	setExtraText: (text: string) => void;
@@ -185,18 +181,6 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 		});
 	};
 
-	const startArchivingById = (id: string) => {
-		const task = getTaskById(id);
-
-		set((state) => {
-			const tasks = new Map(state.tasks);
-
-			tasks.set(id, { ...task, status: DownloadStatus.ARCHIVING });
-
-			return { tasks };
-		});
-	};
-
 	const setPhotoUrlById = (id: string, photoUrl: string) => {
 		const task = getTaskById(id);
 
@@ -227,7 +211,6 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 			setPhotoUrl: (photoUrl) => setPhotoUrlById(id, photoUrl),
 			setTitle: (title) => setTitleById(id, title),
 			setProgress: (progress) => setProgressById(id, progress),
-			startArchiving: () => startArchivingById(id),
 			finish: (callbacks) => finishTaskById(id, callbacks),
 			cancel: () => cancelDownloadById(id),
 			remove: () => removeDownloadById(id),
