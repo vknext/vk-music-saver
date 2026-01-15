@@ -120,7 +120,7 @@ const getBasePlaylist = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 };
 
 interface GetPlaylistByIdParams extends Pick<AudioGetPlaylistByIdParams, 'playlist_id' | 'owner_id' | 'access_key'> {
-	withTracks?: boolean;
+	withTracks: boolean;
 }
 
 const cachedPlaylists = new Map<string, ReturnType<typeof getBasePlaylist>>();
@@ -129,21 +129,21 @@ const getPlaylistById = async ({
 	playlist_id,
 	owner_id,
 	access_key,
-	withTracks = true,
+	withTracks,
 }: GetPlaylistByIdParams): Promise<AudioPlaylist | null> => {
-	const entityId = `${playlist_id}_${owner_id}` + access_key ? `_${access_key}` : '';
+	const entityId = `${owner_id}_${playlist_id}${access_key ? `_${access_key}` : ''}`;
 
-	if (cachedPlaylists.has(entityId)) {
-		return cachedPlaylists.get(entityId)!;
+	let getPlaylistPromise = cachedPlaylists.get(entityId);
+
+	if (!getPlaylistPromise) {
+		getPlaylistPromise = getBasePlaylist({ playlist_id, owner_id, access_key });
+
+		getPlaylistPromise.catch(() => {
+			cachedPlaylists.delete(entityId);
+		});
+
+		cachedPlaylists.set(entityId, getPlaylistPromise);
 	}
-
-	const getPlaylistPromise = getBasePlaylist({ playlist_id, owner_id, access_key });
-
-	getPlaylistPromise.catch(() => {
-		cachedPlaylists.delete(entityId);
-	});
-
-	cachedPlaylists.set(entityId, getPlaylistPromise);
 
 	const playlist = await getPlaylistPromise;
 

@@ -39,6 +39,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 			owner_id: parseInt(ownerId),
 			playlist_id: parseInt(playlistId),
 			access_key: playlistAccessKey,
+			withTracks: true,
 		}),
 		GlobalStorage.getValue('download_playlist_in_reverse', false),
 		GlobalStorage.getValue('num_tracks_in_playlist', true),
@@ -193,7 +194,9 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		const zipStream = makeZip(trackGenerator());
 
-		const fileStream = streamSaver.createWriteStream(filename);
+		const fileStream = streamSaver.createWriteStream(filename, {
+			size: Math.round(playlist.audios.reduce((acc, audio) => acc + audio.duration, 0) * 40152),
+		});
 
 		await zipStream.pipeTo(fileStream, { signal });
 	}

@@ -43,7 +43,7 @@ const downloadAudio = async ({ audioObject, onProgress, size }: DownloadAudioPar
 	const filename = `${trackName}.mp3`;
 
 	const fileStream = streamSaver.createWriteStream(filename, {
-		size: size ? Math.round(size) : undefined,
+		size: Math.round(size || audio.duration * 40152),
 	});
 
 	const cleanup = abortStreamOnUnload(fileStream);
