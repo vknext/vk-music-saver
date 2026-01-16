@@ -2123,16 +2123,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vknext/shared@npm:^1.6.23":
-  version: 1.6.23
-  resolution: "@vknext/shared@npm:1.6.23"
+"@vknext/shared@npm:^1.6.24":
+  version: 1.6.24
+  resolution: "@vknext/shared@npm:1.6.24"
   dependencies:
     iframe-message-bridge: "npm:^1.1.1"
   peerDependencies:
     "@vkontakte/vkui": ^7.10.2
     hls.js: ^1.6.15
     react: ^19.0.0
-  checksum: 10c0/9dcec3a1834526b871ab8105b39a934a81e03a3efced31a780d291eb31183b3cb324435b064f87f90869e70d249fcbab7b13d3843188c951d3527a171c78789b
+  checksum: 10c0/3f63f78d099f7e3d74bfe4671f59bbc0811dcdc96c42f40ec0245ad76e81da33fa1fcb52895245907f0cf369132b469bcaa2b0e2b6a755aba9550c551de82425
   languageName: node
   linkType: hard
 
@@ -7854,7 +7854,7 @@ __metadata:
     "@types/webpack-sources": "npm:^3.2.3"
     "@types/wicg-file-system-access": "npm:^2023.10.7"
     "@vknext/icons": "npm:^2.17.0"
-    "@vknext/shared": "npm:^1.6.23"
+    "@vknext/shared": "npm:^1.6.24"
     "@vkontakte/icons": "npm:^3.29.0"
     "@vkontakte/vkui": "npm:^7.2.0"
     archiver: "npm:^7.0.1"
