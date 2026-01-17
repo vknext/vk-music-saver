@@ -11,6 +11,22 @@ import initReactApp from 'src/react/initReactApp';
 import showSnackbar from 'src/react/showSnackbar';
 import { DownloadTargetElement } from 'src/types';
 import styles from './index.module.scss';
+import { downloadPlaylistTracklist } from 'src/downloaders/downloadPlaylistTracklist';
+
+interface CreateItemProps {
+	text?: string;
+}
+
+const createItem = ({ text }: CreateItemProps) => {
+	const item = document.createElement('div');
+	item.className = 'ui_actions_menu_item';
+
+	if (text) {
+		item.innerText = text;
+	}
+
+	return item;
+};
 
 const injectPopupDownloadCell = async (el: HTMLElement) => {
 	if (!el.classList.contains('audio_pl_snippet__action_btn')) return;
@@ -20,9 +36,7 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 	if (!uiMenu || uiMenu.vms_down_inj) return;
 	uiMenu.vms_down_inj = true;
 
-	const item = document.createElement('div');
-	item.className = 'ui_actions_menu_item';
-	item.innerText = lang.use('vms_download');
+	const item = createItem({ text: lang.use('vms_download') });
 
 	item.addEventListener('click', async () => {
 		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
@@ -38,9 +52,7 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 		await downloadPlaylist(snippet.dataset.playlistId.replace('playlist_', ''));
 	});
 
-	const itemDownCover = document.createElement('div');
-	itemDownCover.className = 'ui_actions_menu_item';
-	itemDownCover.innerText = lang.use('vms_download_cover');
+	const itemDownCover = createItem({ text: lang.use('vms_download_cover') });
 
 	itemDownCover.addEventListener('click', async () => {
 		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
@@ -56,7 +68,23 @@ const injectPopupDownloadCell = async (el: HTMLElement) => {
 		await downloadPlaylistCover(snippet.dataset.playlistId.replace('playlist_', ''));
 	});
 
-	uiMenu.prepend(item, itemDownCover);
+	const itemDownTracklist = createItem({ text: lang.use('vms_download_tracklist') });
+
+	itemDownTracklist.addEventListener('click', async () => {
+		const snippet = el.closest<HTMLElement>('.audio_pl_snippet2');
+
+		if (!snippet?.dataset?.playlistId) {
+			return await showSnackbar({
+				type: 'error',
+				text: 'VK Music Saver',
+				subtitle: lang.use('vms_playlist_not_found'),
+			});
+		}
+
+		await downloadPlaylistTracklist(snippet.dataset.playlistId.replace('playlist_', ''));
+	});
+
+	uiMenu.prepend(item, itemDownCover, itemDownTracklist);
 };
 
 const injectToAudioPlaylistModal = async () => {

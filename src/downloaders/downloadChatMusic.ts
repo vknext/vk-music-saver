@@ -2,7 +2,6 @@ import { Ranges } from '@vknext/shared/lib/Ranges';
 import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import { vknextApi } from 'src/api';
 import lang from 'src/lang';
-import { padWithZeros } from 'src/lib/padWithZeros';
 import { streamSaver } from 'src/lib/streamSaver';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
@@ -94,28 +93,20 @@ const getChatDetails = async (peerId: number) => {
 };
 
 const downloadChatMusic = async (peerId: number) => {
-	const [
-		fsDirHandle,
-		{ subFolderName, photoUrl },
-		isNumTracks,
-		isAddLeadingZeros,
-		convertMethod,
-		embedTags,
-		enableLyricsTags,
-	] = await Promise.all([
-		await getFSDirectoryHandle({
-			id: `chat_music_${peerId}`,
-			startIn: 'music',
-		}),
-		getChatDetails(peerId),
-		GlobalStorage.getValue('num_tracks_in_playlist', true),
-		GlobalStorage.getValue('add_leading_zeros', false),
-		GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
-		GlobalStorage.getValue('audio_write_id3_tags', true),
-		GlobalStorage.getValue('audio_write_genius_lyrics', true),
-	]);
-
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
+
+	const [fsDirHandle, { subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] =
+		await Promise.all([
+			await getFSDirectoryHandle({
+				id: `chat_music_${peerId}`,
+				startIn: 'music',
+			}),
+			getChatDetails(peerId),
+			GlobalStorage.getValue('num_tracks_in_playlist', true),
+			GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+			GlobalStorage.getValue('audio_write_id3_tags', true),
+			GlobalStorage.getValue('audio_write_genius_lyrics', true),
+		]);
 
 	const filename = `${subFolderName}.zip`;
 
@@ -157,7 +148,8 @@ const downloadChatMusic = async (peerId: number) => {
 		const trackName = await formatDownloadedTrackName({
 			isPlaylist: true,
 			audio,
-			index: isNumTracks ? (isAddLeadingZeros ? padWithZeros(index, totalAudios) : index) : undefined,
+			index: isNumTracks ? index : undefined,
+			totalAudios,
 		});
 
 		const zipFile: ClientZipFile = {
