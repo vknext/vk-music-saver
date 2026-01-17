@@ -1,8 +1,6 @@
 import { vknextApi } from 'src/api';
 import lang from 'src/lang';
-import { padWithZeros } from 'src/lib/padWithZeros';
 import { streamSaver } from 'src/lib/streamSaver';
-import unescapeHTML from 'src/lib/unescapeHTML';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
@@ -17,39 +15,31 @@ import { DownloadType, getDownloadActiveTasksCount, startDownload } from 'src/st
 import type { ClientZipFile } from 'src/types';
 import { incrementDownloadedPlaylistsCount } from '../utils';
 import formatDownloadedTrackName from './formatDownloadedTrackName';
+import { formatPlaylistName } from './formatPlaylistName';
 
 const downloadPlaylist = async (playlistFullId: string) => {
 	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
 
-	const [
-		fsDirHandle,
-		playlist,
-		playlistIsReverse,
-		isNumTracks,
-		isAddLeadingZeros,
-		convertMethod,
-		embedTags,
-		enableLyricsTags,
-	] = await Promise.all([
-		getFSDirectoryHandle({
-			id: 'playlist_music',
-			startIn: 'music',
-		}),
-		getAudioPlaylistById({
-			owner_id: parseInt(ownerId),
-			playlist_id: parseInt(playlistId),
-			access_key: playlistAccessKey,
-			withTracks: true,
-		}),
-		GlobalStorage.getValue('download_playlist_in_reverse', false),
-		GlobalStorage.getValue('num_tracks_in_playlist', true),
-		GlobalStorage.getValue('add_leading_zeros', false),
-		GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
-		GlobalStorage.getValue('audio_write_id3_tags', true),
-		GlobalStorage.getValue('audio_write_genius_lyrics', true),
-	]);
-
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
+
+	const [fsDirHandle, playlist, playlistIsReverse, isNumTracks, convertMethod, embedTags, enableLyricsTags] =
+		await Promise.all([
+			getFSDirectoryHandle({
+				id: 'playlist_music',
+				startIn: 'music',
+			}),
+			getAudioPlaylistById({
+				owner_id: parseInt(ownerId),
+				playlist_id: parseInt(playlistId),
+				access_key: playlistAccessKey,
+				withTracks: true,
+			}),
+			GlobalStorage.getValue('download_playlist_in_reverse', false),
+			GlobalStorage.getValue('num_tracks_in_playlist', true),
+			GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+			GlobalStorage.getValue('audio_write_id3_tags', true),
+			GlobalStorage.getValue('audio_write_genius_lyrics', true),
+		]);
 
 	if (!playlist) {
 		return await showSnackbar({
@@ -83,21 +73,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	const { signal } = controller;
 	const lastModified = new Date();
 
-	const albumArtists = (playlist.main_artists || []).map((performer) => performer.name);
-
-	const nameChunks = [];
-
-	if (albumArtists.length) {
-		nameChunks.push(`${albumArtists.join(', ')} - `);
-	}
-
-	if (playlist.title) {
-		nameChunks.push(playlist.title);
-	} else {
-		nameChunks.push('playlist');
-	}
-
-	const playlistFolderName = sanitizeFolderName(unescapeHTML(nameChunks.join('')));
+	const playlistFolderName = formatPlaylistName(playlist);
 	const filename = `${playlistFolderName}.zip`;
 
 	const taskId = `playlist${playlistFullId}`;
@@ -110,7 +86,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	const { setProgress, finish, setExtraText } = startDownload({
 		id: taskId,
-		title: fsDirHandle ? playlistFolderName : `${unescapeHTML(nameChunks.join(''))}.zip`,
+		title: fsDirHandle ? sanitizeFolderName(playlistFolderName) : `${playlistFolderName}.zip`,
 		type: DownloadType.PLAYLIST,
 		onCancel: () => controller.abort(),
 		photoUrl: getAlbumThumbUrl(playlist) || undefined,
@@ -143,7 +119,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		const trackName = await formatDownloadedTrackName({
 			isPlaylist: true,
 			audio,
-			index: isNumTracks ? (isAddLeadingZeros ? padWithZeros(index, totalAudios) : index) : undefined,
+			index: isNumTracks ? index : undefined,
+			totalAudios,
 		});
 
 		const zipFile: ClientZipFile = {

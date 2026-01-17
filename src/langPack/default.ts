@@ -4,6 +4,7 @@ const lang = {
 	vms_error: 'Ошибка',
 	vms_download_cover: 'Скачать обложку',
 	vms_download_playlist: 'Скачать плейлист',
+	vms_download_tracklist: 'Скачать список треков (.txt)',
 	vms_downloading: 'Скачивается...',
 	vms_playlist_is_empty: 'Плейлист пуст.',
 	vms_playlist_not_found: 'Плейлист не найден',
@@ -104,6 +105,7 @@ const lang = {
 	vms_concurrent_downloads_recommendation:
 		'Скачивайте не больше двух плейлистов сразу, иначе браузер может зависнуть',
 	vms_settings_need_reload_page: 'Перезагрузите страницу, чтобы изменения вступили в силу',
+	vms_preparing_tracklist: 'Получаем список треков...',
 };
 
 export default lang;
