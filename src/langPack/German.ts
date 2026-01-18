@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["Titel", "Titel", "Titel"],
   vms_sett_audio_convert_mode_title: "Konvertierungsmethode",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Funktioniert möglicherweise nicht auf älteren Systemen.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "Kann in Firefox Probleme verursachen.",
   vms_sett_audio_convert_mode_desc: "VK liefert Titel im m3u8-Format, die Erweiterung konvertiert sie in das gewohnte MP3-Format",
   vms_sett_audio_convert_mode_vknext: "VK Next Server",
   vms_sett_audio_convert_mode_vknext_desc: "Verwendet FFmpeg auf dem Server. Ideal für große Playlists, da Ihr Prozessor nicht belastet wird. Bei hoher Serverlast kann die Geschwindigkeit sinken.",
