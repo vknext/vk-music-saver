@@ -25,6 +25,8 @@ const TrackDetailsStorage = {
 	set: async (audioFullId: string, data: GetTrackDetailsResult): Promise<void> => {
 		await idb.set(audioFullId, { ...data, timestamp: getUnix() });
 	},
+
+	clearDatabase: () => idb.clearDatabase(),
 };
 
 export default TrackDetailsStorage;

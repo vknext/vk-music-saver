@@ -6,6 +6,7 @@ import {
 	Icon20DonateOutline,
 	Icon20FavoriteOutline,
 	Icon20More,
+	Icon20MusicNoteWaveOutline,
 	Icon20ShareOutline,
 } from '@vkontakte/icons';
 import { Link, ModalOutsideButton } from '@vkontakte/vkui';
@@ -22,6 +23,7 @@ import useLang from 'src/hooks/useLang';
 import cancelEvent from 'src/lib/cancelEvent';
 import showSnackbar from 'src/react/showSnackbar';
 import GlobalStorage from 'src/storages/GlobalStorage';
+import TrackDetailsStorage from 'src/storages/TrackDetailsStorage';
 import styles from './OutsideButton.module.scss';
 
 const OutsideButton = () => {
@@ -58,6 +60,14 @@ const OutsideButton = () => {
 		cancelEvent(event);
 
 		await GlobalStorage.clearDatabase();
+
+		window.location.reload();
+	};
+
+	const onClearTrackDetailsStorage: React.MouseEventHandler<HTMLElement> = async (event) => {
+		cancelEvent(event);
+
+		await TrackDetailsStorage.clearDatabase();
 
 		window.location.reload();
 	};
@@ -108,6 +118,16 @@ const OutsideButton = () => {
 						onClick={onClearStorage}
 					>
 						{lang.use('vms_clear_storage')}
+					</ActionsMenuAction>
+					<ActionsMenuAction
+						type="danger"
+						size="large"
+						multiline
+						leftIcon={<Icon20MusicNoteWaveOutline />}
+						onClick={onClearTrackDetailsStorage}
+						subtitle={lang.use('vms_clear_track_details_storage_description')}
+					>
+						{lang.use('vms_clear_track_details_storage')}
 					</ActionsMenuAction>
 					<ActionsMenuSeparator />
 					<ActionsMenuAction
