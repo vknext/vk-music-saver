@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["track", "tracks", "tracks"],
   vms_sett_audio_convert_mode_title: "Track conversion method",
   vms_sett_audio_convert_mode_ffmpeg_desc: "May not work on older systems.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "Issues may occur in Firefox.",
   vms_sett_audio_convert_mode_desc: "VK provides tracks in m3u8 format, and the extension converts them to standard mp3.",
   vms_sett_audio_convert_mode_vknext: "VK Next Server",
   vms_sett_audio_convert_mode_vknext_desc: "Uses FFmpeg on the server. Ideal for large playlists as it does not load your processor. Speed may decrease under high server load.",
