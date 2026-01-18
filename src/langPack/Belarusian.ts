@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["трэк", "трэка", "трэкаў"],
   vms_sett_audio_convert_mode_title: "Метад канвертацыі трэкаў",
   vms_sett_audio_convert_mode_ffmpeg_desc: "На старых сістэмах можа не працаваць.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "У Firefox могуць быць праблемы.",
   vms_sett_audio_convert_mode_desc: "УКантакце аддае трэкі ў фармаце m3u8, а пашырэнне канвертуе ў звыклы mp3",
   vms_sett_audio_convert_mode_vknext: 'Сервер VK Next',
   vms_sett_audio_convert_mode_vknext_desc: "Выкарыстоўвае FFmpeg на серверы. Ідэальна для вялікіх плэйлістоў, бо не нагружае ваш працэсар. Пры высокай нагрузцы на сервер хуткасць можа зніжацца.",
