@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["utwór", "utwory", "utworów"],
   vms_sett_audio_convert_mode_title: "Metoda konwersji utworów",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Może nie działać na starszych systemach.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "W Firefox mogą występować problemy.",
   vms_sett_audio_convert_mode_desc: "VK udostępnia utwory w formacie m3u8, a rozszerzenie konwertuje je do zwykłego mp3",
   vms_sett_audio_convert_mode_vknext: "Serwer VK Next",
   vms_sett_audio_convert_mode_vknext_desc: 'Использует FFmpeg на сервере. Идеально для больших плейлистов так как не нагружает ваш процессор. При высокой нагрузке на сервер скорость может снижаться.',
