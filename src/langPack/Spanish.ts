@@ -48,6 +48,8 @@ const lang = {
   vms_settings_donate: "Apoyar a los desarrolladores",
   vms_share: "Compartir",
   vms_clear_storage: "Restablecer configuración",
+  vms_clear_track_details_storage: 'Очистить кэш треков',
+  vms_clear_track_details_storage_description: 'Размер и битрейт',
   vms_created_by: "Creado por el equipo {name}",
   vms_link_copied: "Enlace copiado",
   vms_badges_deluxe_function_warning: "Función disponible para suscriptores Prime Deluxe.",
