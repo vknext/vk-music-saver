@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ['трек', "треки", "треків"],
   vms_sett_audio_convert_mode_title: "Метод конвертації треків",
   vms_sett_audio_convert_mode_ffmpeg_desc: "На старих системах може не працювати.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "У Firefox можуть бути проблеми.",
   vms_sett_audio_convert_mode_desc: "ВКонтакте віддає треки у форматі m3u8, а додаток конвертує у звичний mp3",
   vms_sett_audio_convert_mode_vknext: 'Сервер VK Next',
   vms_sett_audio_convert_mode_vknext_desc: "Використовує FFmpeg на сервері. Ідеально для великих плейлистів, оскільки не навантажує ваш процесор. При високому навантаженні на сервер швидкість може знижуватися.",
