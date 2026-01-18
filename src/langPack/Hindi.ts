@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["ट्रैक", "ट्रैक", "ट्रैक"],
   vms_sett_audio_convert_mode_title: "ट्रैक कंवर्ज़न का तरीका",
   vms_sett_audio_convert_mode_ffmpeg_desc: "पुराने सिस्टम पर शायद काम न करे।",
-  vms_sett_audio_convert_mode_hlsjs_desc: "Firefox में समस्याएं हो सकती हैं।",
   vms_sett_audio_convert_mode_desc: "VK ट्रैक m3u8 फॉर्मेट में देता है, और एक्सटेंशन उसे सामान्य mp3 में बदल देता है",
   vms_sett_audio_convert_mode_vknext: "VK Next सर्वर",
   vms_sett_audio_convert_mode_vknext_desc: 'Использует FFmpeg на сервере. Идеально для больших плейлистов так как не нагружает ваш процессор. При высокой нагрузке на сервер скорость может снижаться.',
