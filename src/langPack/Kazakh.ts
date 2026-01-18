@@ -48,6 +48,8 @@ const lang = {
   vms_settings_donate: "Әзірлеушілерге қолдау көрсету",
   vms_share: "Бөлісу",
   vms_clear_storage: "Баптауларды қайтару",
+  vms_clear_track_details_storage: 'Очистить кэш треков',
+  vms_clear_track_details_storage_description: 'Размер и битрейт',
   vms_created_by: "{name} командасы жасаған",
   vms_link_copied: "Сілтеме көшірілді",
   vms_badges_deluxe_function_warning: "Бұл функция Prime Deluxe жазылымы иелеріне қолжетімді.",
