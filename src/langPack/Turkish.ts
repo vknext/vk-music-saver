@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["parça", "parça", "parça"],
   vms_sett_audio_convert_mode_title: "Dönüştürme yöntemi",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Eski sistemlerde çalışmayabilir.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "Firefox'ta sorunlar olabilir.",
   vms_sett_audio_convert_mode_desc: "VK parçaları m3u8 formatında verir, uzantı mp3'e dönüştürür.",
   vms_sett_audio_convert_mode_vknext: "VK Next Sunucusu",
   vms_sett_audio_convert_mode_vknext_desc: "Sunucuda FFmpeg kullanır. İşlemcinizi yormadığı için büyük çalma listeleri için idealdir. Sunucu yükü yüksek olduğunda hız düşebilir.",
