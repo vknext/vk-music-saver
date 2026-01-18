@@ -81,22 +81,21 @@ const AudioConvertMethodSelect = () => {
 								multiline
 								type="primary"
 								size="large"
-								rightIcon={<Icon20Check visibility={isFFmpeg ? 'visible' : 'hidden'} />}
-								onClick={() => setValue(AudioConvertMethod.FFMPEG)}
-								subtitle={lang.use('vms_sett_audio_convert_mode_ffmpeg_desc')}
+								rightIcon={<Icon20Check visibility={isHLS ? 'visible' : 'hidden'} />}
+								onClick={() => setValue(AudioConvertMethod.HLS)}
 							>
-								FFmpeg
+								hls.js
 							</ActionsMenuAction>
 							<ActionsMenuSeparator />
 							<ActionsMenuAction
 								multiline
 								type="primary"
 								size="large"
-								rightIcon={<Icon20Check visibility={isHLS ? 'visible' : 'hidden'} />}
-								onClick={() => setValue(AudioConvertMethod.HLS)}
-								subtitle={lang.use('vms_sett_audio_convert_mode_hlsjs_desc')}
+								rightIcon={<Icon20Check visibility={isFFmpeg ? 'visible' : 'hidden'} />}
+								onClick={() => setValue(AudioConvertMethod.FFMPEG)}
+								subtitle={lang.use('vms_sett_audio_convert_mode_ffmpeg_desc')}
 							>
-								hls.js
+								FFmpeg
 							</ActionsMenuAction>
 							{vknextServerIsAvailable && (
 								<>
