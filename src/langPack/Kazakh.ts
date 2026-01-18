@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ['трек', "трек", "трек"],
   vms_sett_audio_convert_mode_title: "Тректерді түрлендіру әдісі",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Ескі жүйелерде жұмыс істемеуі мүмкін.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "Firefox-та қиындықтар туындауы мүмкін.",
   vms_sett_audio_convert_mode_desc: "ВКонтакте тректерді m3u8 форматында береді, ал кеңейтім оларды үйреншікті mp3-ке түрлендіреді",
   vms_sett_audio_convert_mode_vknext: "VK Next сервері",
   vms_sett_audio_convert_mode_vknext_desc: 'Использует FFmpeg на сервере. Идеально для больших плейлистов так как не нагружает ваш процессор. При высокой нагрузке на сервер скорость может снижаться.',
