@@ -48,6 +48,8 @@ const lang = {
   vms_settings_donate: "Підтримати розробників",
   vms_share: "Поширити",
   vms_clear_storage: "Скинути налаштування",
+  vms_clear_track_details_storage: 'Очистить кэш треков',
+  vms_clear_track_details_storage_description: 'Размер и битрейт',
   vms_created_by: "Створено командою {name}",
   vms_link_copied: "Посилання скопійовано",
   vms_badges_deluxe_function_warning: "Функція доступна для власників підписки Прайм Де Люкс.",
