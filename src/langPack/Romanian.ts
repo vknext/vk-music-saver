@@ -38,7 +38,6 @@ const lang = {
   vms_tracks_plurals: ["piesă", "piese", "piese"],
   vms_sett_audio_convert_mode_title: "Metodă conversie",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Posibil să nu funcționeze pe sisteme vechi.",
-  vms_sett_audio_convert_mode_hlsjs_desc: "Pot apărea probleme în Firefox.",
   vms_sett_audio_convert_mode_desc: "VK oferă piese în m3u8, extensia le convertește în mp3.",
   vms_sett_audio_convert_mode_vknext: "Server VK Next",
   vms_sett_audio_convert_mode_vknext_desc: 'Использует FFmpeg на сервере. Идеально для больших плейлистов так как не нагружает ваш процессор. При высокой нагрузке на сервер скорость может снижаться.',
