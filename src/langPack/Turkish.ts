@@ -48,6 +48,8 @@ const lang = {
   vms_settings_donate: "Geliştiricileri destekle",
   vms_share: "Paylaş",
   vms_clear_storage: "Ayarları sıfırla",
+  vms_clear_track_details_storage: 'Очистить кэш треков',
+  vms_clear_track_details_storage_description: 'Размер и битрейт',
   vms_created_by: "{name} ekibi tarafından oluşturuldu",
   vms_link_copied: "Bağlantı kopyalandı",
   vms_badges_deluxe_function_warning: "Özellik Prime Deluxe aboneleri içindir.",
