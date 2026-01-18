@@ -48,6 +48,8 @@ const lang = {
   vms_settings_donate: "डेवलपर्स का समर्थन करें",
   vms_share: "शेयर करें",
   vms_clear_storage: "सेटिंग्स रीसेट करें",
+  vms_clear_track_details_storage: 'Очистить кэш треков',
+  vms_clear_track_details_storage_description: 'Размер и битрейт',
   vms_created_by: "{name} टीम द्वारा निर्मित",
   vms_link_copied: "लिंक कॉपी किया गया",
   vms_badges_deluxe_function_warning: "यह फ़ीचर Prime Deluxe सब्सक्राइबर्स के लिए उपलब्ध है।",
