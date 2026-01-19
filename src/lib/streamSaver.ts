@@ -3,6 +3,7 @@ import { getRuntimeURL } from 'src/common/getRuntimeURL';
 
 export const streamSaver = new StreamSaver({
 	getMitmUrl: async () => {
-		return getRuntimeURL('mitm.html');
+		// hotfix TODO: придумать как определять динамически доступен ли navigator.serviceWorker для расширений
+		return process.env.IS_FIREFOX ? 'https://vknext.net/saver' : getRuntimeURL('mitm.html');
 	},
 });

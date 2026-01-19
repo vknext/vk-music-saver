@@ -197,6 +197,9 @@ const options: Configuration = {
 		allowCollectingMemory: true,
 	},
 	plugins: [
+		new webpack.DefinePlugin({
+			'process.env.IS_FIREFOX': IS_FIREFOX,
+		}),
 		new UpdateManifestPlugin({
 			buildPath: BUILD_PATH,
 			isFirefox: IS_FIREFOX,
