@@ -2,7 +2,7 @@ import type { AudioObject } from '@vknext/shared/vkcom/types';
 import { AudioAudio, AudioPlaylist } from 'src/schemas/objects';
 import getAlbumId from './getAlbumId';
 
-const albumThumbnailCache = new Map<string, Promise<ArrayBuffer>>();
+const albumThumbnailCache = new Map<string, Promise<ArrayBuffer | null>>();
 
 export const getAlbumThumbUrl = (audio: AudioObject | AudioAudio | AudioPlaylist): string | null => {
 	if (audio.coverUrl_l) return audio.coverUrl_l;
@@ -37,7 +37,21 @@ const getAlbumKey = (audio: AudioObject | AudioAudio) => {
 	return [ownerId, albumId].join('_');
 };
 
-const getAlbumThumbnail = (audio: AudioObject | AudioAudio, signal?: AbortSignal): Promise<ArrayBuffer> | null => {
+const fetchThumb = async (url: string, signal?: AbortSignal): Promise<ArrayBuffer | null> => {
+	try {
+		const response = await fetch(url, { signal });
+
+		return response.arrayBuffer();
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+};
+
+const getAlbumThumbnail = (
+	audio: AudioObject | AudioAudio,
+	signal?: AbortSignal
+): Promise<ArrayBuffer | null> | null => {
 	const albumKey = getAlbumKey(audio);
 
 	if (albumThumbnailCache.has(albumKey)) {
@@ -50,7 +64,7 @@ const getAlbumThumbnail = (audio: AudioObject | AudioAudio, signal?: AbortSignal
 		return null;
 	}
 
-	const promise = fetch(thumbUrl, { signal }).then((r) => r.arrayBuffer());
+	const promise = fetchThumb(thumbUrl, signal);
 
 	albumThumbnailCache.set(albumKey, promise);
 
