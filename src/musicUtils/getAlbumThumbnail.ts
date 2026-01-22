@@ -41,9 +41,14 @@ const fetchThumb = async (url: string, signal?: AbortSignal): Promise<ArrayBuffe
 	try {
 		const response = await fetch(url, { signal });
 
+		if (!response.ok) {
+			console.error(`[VK Music Saver] Failed to fetch thumbnail from ${url}. Status: ${response.status}`);
+			return null;
+		}
+
 		return response.arrayBuffer();
 	} catch (e) {
-		console.error(e);
+		console.error(`[VK Music Saver] Failed to fetch thumbnail from ${url}`, e);
 		return null;
 	}
 };
