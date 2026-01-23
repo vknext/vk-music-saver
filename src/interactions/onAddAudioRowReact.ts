@@ -56,7 +56,7 @@ const onCallback = async (el: HTMLElement) => {
 
 	if (!audio) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error('[VMS/interactions/onAddAudioRowReact] Audio not found', { el, audio });
+			console.error('[VK Music Saver/interactions/onAddAudioRowReact] Audio not found', { el, audio });
 		}
 	}
 
@@ -116,7 +116,7 @@ const onAddAudioRowReact = (callback: CallbackFunc) => {
 	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddAudioRowReact] count: ${registry.listeners.length}`, registry);
+		console.info(`[VK Music Saver/interactions/onAddAudioRowReact] count: ${registry.listeners.length}`, registry);
 	}
 
 	onDocumentComplete(findAllAudioRows);

@@ -15,7 +15,7 @@ const getAuthAppId = async (): Promise<number> => {
 			return parseInt(await response.text());
 		}
 	} catch (e) {
-		console.error(`[VMS/getAuthAppId] Error:`, e);
+		console.error(`[VK Music Saver/getAuthAppId] Error:`, e);
 	}
 
 	return 53448184;

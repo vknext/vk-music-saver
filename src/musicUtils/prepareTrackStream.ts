@@ -3,7 +3,6 @@ import { convertTrackToStream } from '@vknext/shared/vkcom/audio/convertTrackToS
 import type { AudioObject } from '@vknext/shared/vkcom/types';
 import type { AudioAudio, AudioPlaylist } from 'src/schemas/objects';
 import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
-import { createId3TagBuffer } from './createId3TagBuffer';
 import getAlbumId from './getAlbumId';
 import { AudioConvertMethod } from 'src/storages/enums';
 
@@ -34,7 +33,7 @@ const resolvePlaylist = async (
 			withTracks: false,
 		});
 	} catch (error) {
-		console.warn('[VMS/prepareTrackStream] Failed to fetch playlist for tags:', error);
+		console.warn('[VK Music Saver/prepareTrackStream] Failed to fetch playlist for tags:', error);
 		return null;
 	}
 };
@@ -49,6 +48,8 @@ const prepareTagsBuffer = async ({
 	if (!embedTags) return null;
 
 	const playlist = await resolvePlaylist(audio, existingPlaylist);
+
+	const { createId3TagBuffer } = await import('./createId3TagBuffer');
 
 	return createId3TagBuffer({
 		audio,
@@ -98,7 +99,11 @@ export const prepareTrackStream = ({
 				if (tags) {
 					controller.enqueue(tags);
 				}
+			} catch (error) {
+				console.warn('[VK Music Saver/prepareTrackStream] Failed to fetch tags:', error);
+			}
 
+			try {
 				const audioStream = await audioStreamPromise;
 
 				if (isCancelled) {

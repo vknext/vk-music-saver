@@ -112,7 +112,7 @@ const initAjaxHook = () => {
 		const isLoadAudioBlocks = actParam && supportedActions.includes(actParam);
 
 		if (process.env.NODE_ENV === 'development') {
-			console.log('[VMS/ajax/post]', {
+			console.log('[VK Music Saver/ajax/post]', {
 				url,
 				requestData,
 				isAudioRequest,
@@ -142,7 +142,7 @@ const onAddAudioRow = (callback: CallbackFunc) => {
 	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddAudioRow] count: ${registry.listeners.length}`, registry);
+		console.info(`[VK Music Saver/interactions/onAddAudioRow] count: ${registry.listeners.length}`, registry);
 	}
 
 	DOMContentLoaded(findAllAudioRows);

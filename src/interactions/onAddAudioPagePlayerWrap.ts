@@ -37,7 +37,10 @@ const onAddAudioPagePlayerWrap = (callback: CallbackFunc) => {
 	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddAudioPagePlayerWrap] count: ${registry.listeners.length}`, registry);
+		console.info(
+			`[VK Music Saver/interactions/onAddAudioPagePlayerWrap] count: ${registry.listeners.length}`,
+			registry
+		);
 	}
 
 	onDocumentComplete(findPlayerWrap);

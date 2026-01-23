@@ -9,3 +9,5 @@ declare module '*.svg' {
 }
 
 declare module '*.scss';
+
+declare module 'webpack-utf8-bom';

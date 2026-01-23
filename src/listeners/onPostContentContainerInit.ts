@@ -11,7 +11,7 @@ const registryAfter = new ListenerRegistry<CallbackFunc>();
 const postContentContainerInitDecorator = (fn: (...args: any) => void) => {
 	return (...rest: any) => {
 		if (process.env.NODE_ENV === 'development') {
-			console.info('[VMS/onPostContentContainerInit] _tqs/PostContentContainer/init', {
+			console.info('[VK Music Saver/onPostContentContainerInit] _tqs/PostContentContainer/init', {
 				rest,
 			});
 		}
@@ -70,7 +70,7 @@ const onAddTqs = async (tqs: HTMLHeadTaskQueueS) => {
 	const handlersProxy = new Proxy(originalHandlers, {
 		set(target, property: string, value) {
 			if (process.env.NODE_ENV === 'development') {
-				console.info('[VMS/onPostContentContainerInit] _tqs', {
+				console.info('[VK Music Saver/onPostContentContainerInit] _tqs', {
 					property,
 					value,
 					target,

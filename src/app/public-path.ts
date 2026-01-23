@@ -14,7 +14,7 @@ __webpack_public_path__ = (() => {
 			return document.documentElement.dataset['vms_public_path'];
 		}
 	} catch (e) {
-		console.error('[VMS/public-path]', e);
+		console.error('[VK Music Saver/public-path]', e);
 	}
 
 	return '';

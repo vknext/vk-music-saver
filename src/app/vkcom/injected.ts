@@ -20,46 +20,48 @@ const start = async () => {
 	try {
 		initShowBitrateNearDuration();
 	} catch (e) {
-		console.error('[VMS/initShowBitrateNearDuration]', e);
+		console.error('[VK Music Saver/initShowBitrateNearDuration]', e);
 	}
 
 	try {
 		injectDownloadButtonInAudioRow();
 	} catch (e) {
-		console.error('[VMS/injectDownloadButtonInAudioRow]', e);
+		console.error('[VK Music Saver/injectDownloadButtonInAudioRow]', e);
 	}
 
 	try {
 		initAudioPage();
 	} catch (e) {
-		console.error('[VMS/initAudioPage]', e);
+		console.error('[VK Music Saver/initAudioPage]', e);
 	}
 
 	try {
 		await initAudioPlaylist();
 	} catch (e) {
-		console.error('[VMS/initAudioPlaylist]', e);
+		console.error('[VK Music Saver/initAudioPlaylist]', e);
 	}
 
 	try {
 		initFeed();
 	} catch (e) {
-		console.error('[VMS/initFeed]', e);
+		console.error('[VK Music Saver/initFeed]', e);
 	}
 
 	try {
 		initConvoProfile();
 	} catch (e) {
-		console.error(['[VMS/initConvoProfile]', e], e);
+		console.error(['[VK Music Saver/initConvoProfile]', e], e);
 	}
 };
 
 start().catch(console.error);
 
 DOMContentLoaded(() => {
-	import('src/modules/manager').catch((e) => console.error('[VMS/manager]', e));
+	import('src/modules/manager').catch((e) => console.error('[VK Music Saver/manager]', e));
 
-	import('src/modules/topProfileMenuButtons').catch((e) => console.error('[VMS/topProfileMenuButtons]', e));
+	import('src/modules/topProfileMenuButtons').catch((e) =>
+		console.error('[VK Music Saver/topProfileMenuButtons]', e)
+	);
 
 	// preload
 	import('src/services/getVMSConfig').then(({ getVMSConfig }) => {
@@ -68,11 +70,11 @@ DOMContentLoaded(() => {
 });
 
 onDocumentComplete(() => {
-	import('src/modules/settingsInLeftMenu').catch((e) => console.error('[VMS/settingsInLeftMenu]', e));
-	import('src/modules/settingsHint').catch((e) => console.error('[VMS/settingsHint]', e));
+	import('src/modules/settingsInLeftMenu').catch((e) => console.error('[VK Music Saver/settingsInLeftMenu]', e));
+	import('src/modules/settingsHint').catch((e) => console.error('[VK Music Saver/settingsHint]', e));
 
-	import('src/modules/ratingAlert').catch((e) => console.error('[VMS/ratingAlert]', e));
-	import('src/modules/donutAlert').catch((e) => console.error('[VMS/donutAlert]', e));
-	import('src/modules/vmpOnboarding').catch((e) => console.error('[VMS/vmpOnboarding]', e));
-	import('src/modules/subscribeAlert').catch((e) => console.error('[VMS/subscribeAlert]', e));
+	import('src/modules/ratingAlert').catch((e) => console.error('[VK Music Saver/ratingAlert]', e));
+	import('src/modules/donutAlert').catch((e) => console.error('[VK Music Saver/donutAlert]', e));
+	import('src/modules/vmpOnboarding').catch((e) => console.error('[VK Music Saver/vmpOnboarding]', e));
+	import('src/modules/subscribeAlert').catch((e) => console.error('[VK Music Saver/subscribeAlert]', e));
 });

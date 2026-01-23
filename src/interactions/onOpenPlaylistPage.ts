@@ -35,7 +35,7 @@ const onOpenPlaylistPage = (callback: CallbackFunc) => {
 	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info('[VMS/interactions/onOpenPlaylistPage] count: ' + registry.listeners.length, registry);
+		console.info('[VK Music Saver/interactions/onOpenPlaylistPage] count: ' + registry.listeners.length, registry);
 	}
 
 	onDocumentComplete(() => {
