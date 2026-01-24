@@ -178,7 +178,7 @@ const ACTIONS_NEW_SELECTOR = [
 
 const injectToAudioPlaylistPageNew = async (retry = 0) => {
 	if (retry > 10) {
-		throw new Error('[VMS/audioPlaylist] Failed to inject');
+		throw new Error('[VK Music Saver/audioPlaylist] Failed to inject');
 	}
 
 	const spaRoot = document.getElementById('spa_root');

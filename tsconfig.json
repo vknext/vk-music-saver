@@ -1,7 +1,6 @@
 {
 	"transpileOnly": false,
 	"compilerOptions": {
-		"plugins": [{ "name": "typescript-plugin-css-modules" }],
 		"outDir": "./dist/",
 		"sourceMap": true,
 		"noImplicitAny": true,
@@ -30,5 +29,5 @@
 			"@vkontakte/vkui": ["./node_modules/@vkontakte/vkui/dist/cssm"]
 		}
 	},
-	"include": ["src", "plugins"]
+	"include": ["src", "plugins", "webpack.config.ts"]
 }

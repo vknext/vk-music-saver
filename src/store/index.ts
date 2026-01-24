@@ -11,5 +11,5 @@ export const useDownloadTasks = () => useDownloadStore((state) => state.tasks);
 export const useDownloadTaskHandlers = (id: string) => useDownloadStore((state) => state.getTaskHandlersById)(id);
 
 if (process.env.NODE_ENV === 'development') {
-	useDownloadStore.subscribe((state) => console.info('[VMS/store] updated', state));
+	useDownloadStore.subscribe((state) => console.info('[VK Music Saver/store] updated', state));
 }

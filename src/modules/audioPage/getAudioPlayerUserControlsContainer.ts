@@ -2,7 +2,7 @@ import { delay } from '@vknext/shared/utils/delay';
 
 const getAudioPlayerUserControlsContainer = async (root: HTMLElement, retryCount = 0): Promise<HTMLElement> => {
 	if (retryCount === 5) {
-		throw new Error('[VMS/audio hooks] users controls not found');
+		throw new Error('[VK Music Saver/audio hooks] users controls not found');
 	}
 
 	const container = root.querySelector<HTMLElement>(

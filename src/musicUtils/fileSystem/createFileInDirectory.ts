@@ -46,7 +46,6 @@ const writeFileToDirectory = async (
 		}
 	} catch (error) {
 		console.error(`[VK Music Saver] Failed to write file "${name}":`, error);
-		throw error;
 	}
 };
 
