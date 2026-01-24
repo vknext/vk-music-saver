@@ -73,8 +73,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	const { signal } = controller;
 	const lastModified = new Date();
 
-	const playlistFolderName = formatPlaylistName(playlist);
-	const filename = `${playlistFolderName}.zip`;
+	const playlistFolderName = sanitizeFolderName(formatPlaylistName(playlist));
+	const zipFileName = `${playlistFolderName}.zip`;
 
 	const taskId = `playlist${playlistFullId}`;
 
@@ -86,7 +86,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 	const { setProgress, finish, setExtraText } = startDownload({
 		id: taskId,
-		title: fsDirHandle ? sanitizeFolderName(playlistFolderName) : `${playlistFolderName}.zip`,
+		title: fsDirHandle ? playlistFolderName : zipFileName,
 		type: DownloadType.PLAYLIST,
 		onCancel: () => controller.abort(),
 		photoUrl: getAlbumThumbUrl(playlist) || undefined,
@@ -171,7 +171,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 
 		const zipStream = makeZip(trackGenerator());
 
-		const fileStream = streamSaver.createWriteStream(filename, {
+		const fileStream = streamSaver.createWriteStream(zipFileName, {
 			size: Math.round(playlist.audios.reduce((acc, audio) => acc + audio.duration, 0) * 40152),
 		});
 
