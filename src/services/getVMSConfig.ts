@@ -27,7 +27,7 @@ export const getVMSConfig = () => {
 			const response = await vknextApi.call<VMSGetConfigResponse>('vms.getConfig', {});
 
 			if ('error' in response) {
-				console.error('[VMS/getVMSConfig]', response.error);
+				console.error('[VK Music Saver/getVMSConfig]', response.error);
 
 				resolve(configMock);
 			} else {

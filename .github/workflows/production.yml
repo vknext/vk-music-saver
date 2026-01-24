@@ -1,6 +1,8 @@
-name: Build VK Music Saver
+name: Upload VK Music Saver to released
 
-on: workflow_dispatch
+on:
+    release:
+        types: [released]
 
 jobs:
     build:
@@ -37,8 +39,22 @@ jobs:
             - name: Build for Firefox
               run: yarn build:firefox
 
-            - name: Upload ext to artifact
-              uses: actions/upload-artifact@v4
+            - name: Upload chrome version to release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  name: VKMusicSaver_ext.zip
-                  path: build/*.zip
+                  upload_url: ${{ github.event.release.upload_url }}
+                  asset_path: build/VKMusicSaver_chrome.zip
+                  asset_name: VKMusicSaver_chrome.zip
+                  asset_content_type: application/zip
+
+            - name: Upload firefox version to release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ github.event.release.upload_url }}
+                  asset_path: build/VKMusicSaver_firefox.zip
+                  asset_name: VKMusicSaver_firefox.zip
+                  asset_content_type: application/zip

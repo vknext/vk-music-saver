@@ -37,7 +37,7 @@ const registry = new ListenerRegistry<CallbackFunc>();
 
 const onCallback = async (el: HTMLElement) => {
 	if (process.env.NODE_ENV === 'development') {
-		console.info('[VMS/interactions/onAddWallPost]', el);
+		console.info('[VK Music Saver/interactions/onAddWallPost]', el);
 	}
 
 	// элемент удалили из дома, например при переходе в другой раздел
@@ -214,7 +214,7 @@ const onAddWallPost = (callback: CallbackFunc) => {
 	const listener = registry.addListener(callback);
 
 	if (process.env.NODE_ENV === 'development') {
-		console.info(`[VMS/interactions/onAddWallPost] count: ${registry.listeners.length}`, registry);
+		console.info(`[VK Music Saver/interactions/onAddWallPost] count: ${registry.listeners.length}`, registry);
 	}
 
 	DOMContentLoaded(async () => {

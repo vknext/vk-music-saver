@@ -24,7 +24,11 @@ class ObservedHTMLElementsCleaner {
 					delete el[key];
 
 					if (process.env.NODE_ENV === 'development') {
-						console.info(`[VMS/ObservedHTMLElementsCleaner] remove observer`, { el, key, observer });
+						console.info(`[VK Music Saver/ObservedHTMLElementsCleaner] remove observer`, {
+							el,
+							key,
+							observer,
+						});
 					}
 				}
 			}
