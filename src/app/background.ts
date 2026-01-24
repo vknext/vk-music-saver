@@ -16,8 +16,13 @@ runtime.setUninstallURL(getUninstallUrl());
 
 runtime.onInstalled.addListener(async ({ reason }) => {
 	if (reason === 'install') {
-		const url = runtime.getURL('installed.html');
+		const { version } = runtime.getManifest();
 
-		await tabs.create({ url, active: true });
+		const url = new URL('https://vknext.net/installed/vk-music-saver');
+
+		url.searchParams.set('version', version);
+		url.searchParams.set('id', runtime.id);
+
+		await tabs.create({ url: url.toString(), active: true });
 	}
 });
