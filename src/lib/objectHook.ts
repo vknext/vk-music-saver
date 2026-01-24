@@ -5,8 +5,8 @@
  */
 const objectHook = (obj: any, name: string, onChange: (variable: any) => void) => {
 	if (!(name in obj)) {
-		console.warn(`[VMS/objectHook]:`, obj, obj[name]);
-		throw new Error(`[VMS/objectHook]: object "${name}" not found`);
+		console.warn(`[VK Music Saver/objectHook]:`, obj, obj[name]);
+		throw new Error(`[VK Music Saver/objectHook]: object "${name}" not found`);
 	}
 
 	let oldVariable = obj[name];
@@ -23,7 +23,7 @@ const objectHook = (obj: any, name: string, onChange: (variable: any) => void) =
 		},
 		set(v) {
 			if (process.env.NODE_ENV === 'development') {
-				console.log(`[VMS/objectHook]: Новое значение "${name}"`, v);
+				console.log(`[VK Music Saver/objectHook]: Новое значение "${name}"`, v);
 			}
 
 			oldVariable = v;

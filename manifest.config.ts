@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import packageJson from './package.json';
 const { version } = packageJson;
 
@@ -61,7 +62,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.manifest_version = 2;
 
 		manifest.background = {
-			scripts: ['background.vms.js'],
+			scripts: ['js/background.vms.js'],
 		};
 
 		manifest.browser_specific_settings = {
@@ -96,7 +97,7 @@ const getManifest = ({ isFirefox, isDev }: GetManifestOptions) => {
 		manifest.action = browser_action;
 
 		manifest.background = {
-			service_worker: 'background.vms.js',
+			service_worker: 'js/background.vms.js',
 		};
 	}
 
