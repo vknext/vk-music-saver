@@ -23,7 +23,7 @@ const files = ['.svg', '.ttf', '.ts', '.tsx', '.css', '.scss', '.json', '.js'];
 const DEFAULT_PUBLIC_PATH = '/';
 
 const getEntry = (isDev: boolean, port: number | string) => {
-	const entriesForHotReload = ['popup', 'installed'];
+	const entriesForHotReload = ['popup'];
 
 	type Entry = EntryObject | string;
 
@@ -56,7 +56,6 @@ const getEntry = (isDev: boolean, port: number | string) => {
 			chunkLoading: false,
 		},
 		popup: path.resolve('./', 'src', 'app', 'popup', 'index.ts'),
-		installed: path.resolve('./', 'src', 'app', 'installed', 'index.tsx'),
 		streamSaverMitm: {
 			import: path.resolve('./', 'src', 'app', 'streamSaverMitm', 'index.ts'),
 			publicPath: './',
@@ -330,14 +329,6 @@ const config = (env: EnvParams): Configuration => {
 				template: path.resolve('./', 'src', 'app', 'popup', 'index.html'),
 				filename: 'popup.html',
 				chunks: ['popup'],
-				inject: true,
-				hash: true,
-				title: packageJson.name,
-			}),
-			new HtmlWebpackPlugin({
-				template: path.resolve('./', 'src', 'app', 'installed', 'index.html'),
-				filename: 'installed.html',
-				chunks: ['installed'],
 				inject: true,
 				hash: true,
 				title: packageJson.name,
