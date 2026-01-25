@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Қате",
   vms_download_cover: "Мұқабаны жүктеп алу",
   vms_download_playlist: "Плейлистті жүктеп алу",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Жүктелуде...",
   vms_playlist_is_empty: "Плейлист бос.",
   vms_playlist_not_found: "Плейлист табылмады",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Трек нөмірлерін алдыңғы нөлдермен пішімдеу",
   vms_sett_add_leading_zeros_desc: "Мысалы: 1, 2, 3 орнына 01, 02, 03 …",
   vms_concurrent_downloads_recommendation: "Бір уақытта екі плейлисттен артық жүктемеңіз, әйтпесе браузер қатып қалуы мүмкін",
-  vms_settings_need_reload_page: "Өзгерістер күшіне енуі үшін парақшаны қайта жүктеңіз"
+  vms_settings_need_reload_page: "Өзгерістер күшіне енуі үшін парақшаны қайта жүктеңіз",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
