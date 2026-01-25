@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Eroare",
   vms_download_cover: "Descarcă coperta",
   vms_download_playlist: "Descarcă playlist",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Se descarcă...",
   vms_playlist_is_empty: "Playlist-ul este gol.",
   vms_playlist_not_found: "Playlist-ul nu a fost găsit",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Adaugă zero în fața numerelor",
   vms_sett_add_leading_zeros_desc: "Exemplu: 01, 02… în loc de 1, 2",
   vms_concurrent_downloads_recommendation: "Nu descărcați mai mult de două playlist-uri simultan, browserul se poate bloca",
-  vms_settings_need_reload_page: "Reîncărcați pagina pentru aplicarea setărilor"
+  vms_settings_need_reload_page: "Reîncărcați pagina pentru aplicarea setărilor",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
