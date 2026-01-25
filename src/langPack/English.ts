@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Error",
   vms_download_cover: "Download cover",
   vms_download_playlist: "Download playlist",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Downloading...",
   vms_playlist_is_empty: "Playlist is empty.",
   vms_playlist_not_found: "Playlist not found",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Format track numbers with leading zeros",
   vms_sett_add_leading_zeros_desc: "Example: 01, 02, 03 … instead of 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Do not download more than two playlists at once, otherwise the browser may freeze",
-  vms_settings_need_reload_page: "Reload the page for changes to take effect"
+  vms_settings_need_reload_page: "Reload the page for changes to take effect",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
