@@ -1,4 +1,4 @@
-name: Build VK Music Saver
+name: Upload VK Music Saver to released
 
 on:
     release:
