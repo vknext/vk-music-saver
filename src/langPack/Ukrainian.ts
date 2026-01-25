@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Помилка",
   vms_download_cover: "Завантажити обкладинку",
   vms_download_playlist: "Завантажити плейлист",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Завантажується...",
   vms_playlist_is_empty: "Плейлист порожній.",
   vms_playlist_not_found: "Плейлист не знайдено",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Форматувати номери треків із ведучими нулями",
   vms_sett_add_leading_zeros_desc: "Наприклад: 01, 02, 03 ... замість 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Завантажуйте не більше двох плейлистів одночасно, інакше браузер може зависнути",
-  vms_settings_need_reload_page: "Перезавантажте сторінку, щоб зміни набули чинності"
+  vms_settings_need_reload_page: "Перезавантажте сторінку, щоб зміни набули чинності",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
