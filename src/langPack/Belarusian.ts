@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Памылка",
   vms_download_cover: "Спампаваць вокладку",
   vms_download_playlist: "Спампаваць плэйліст",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Спампоўваецца...",
   vms_playlist_is_empty: "Плэйліст пусты.",
   vms_playlist_not_found: "Плэйліст не знойдзены",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Фарматаваць нумары трэкаў з вядучымі нулямі",
   vms_sett_add_leading_zeros_desc: "Напрыклад: 01, 02, 03 … замест 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Спампоўвайце не больш за два плэйлісты адразу, інакш браўзер можа завіснуць",
-  vms_settings_need_reload_page: "Перазагрузіце старонку, каб змены ўступілі ў сілу"
+  vms_settings_need_reload_page: "Перазагрузіце старонку, каб змены ўступілі ў сілу",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
