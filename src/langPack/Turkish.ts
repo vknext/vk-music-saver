@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Hata",
   vms_download_cover: "Kapağı indir",
   vms_download_playlist: "Çalma listesini indir",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "İndiriliyor...",
   vms_playlist_is_empty: "Çalma listesi boş.",
   vms_playlist_not_found: "Çalma listesi bulunamadı",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Parça numaralarına başında sıfır ekle",
   vms_sett_add_leading_zeros_desc: "Örnek: 1, 2 yerine 01, 02…",
   vms_concurrent_downloads_recommendation: "Aynı anda ikiden fazla liste indirmeyin, tarayıcı donabilir",
-  vms_settings_need_reload_page: "Değişiklikler için sayfayı yenileyin"
+  vms_settings_need_reload_page: "Değişiklikler için sayfayı yenileyin",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
