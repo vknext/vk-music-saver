@@ -54,7 +54,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		);
 	}
 
-	const { setProgress, finish, setExtraText } = startDownload({
+	const { setProgress, finish, setExtraText, cancel } = startDownload({
 		id: `playlist${playlistFullId}`,
 		title: fsDirHandle ? playlistFolderName : zipFileName,
 		type: DownloadType.PLAYLIST,
@@ -71,6 +71,8 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	]);
 
 	if (playlistStream.total === 0) {
+		cancel();
+
 		return await showSnackbar({
 			type: 'error',
 			text: 'VK Music Saver',
