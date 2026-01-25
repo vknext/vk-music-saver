@@ -1,28 +1,22 @@
 import lang from 'src/lang';
 import { streamSaver } from 'src/lib/streamSaver';
 import showSnackbar from 'src/react/showSnackbar';
-import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
+import { PlaylistSource } from 'src/sources/PlaylistSource';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
 import { formatPlaylistName } from './downloadPlaylist/formatPlaylistName';
 
 export const downloadPlaylistTracklist = async (playlistFullId: string) => {
-	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
+	showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_preparing_tracklist') }).catch(console.error);
 
-	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_preparing_tracklist') });
+	const playlist = PlaylistSource.fromRawId(playlistFullId);
 
-	const [playlist, playlistIsReverse, isNumTracks] = await Promise.all([
-		getAudioPlaylistById({
-			owner_id: parseInt(ownerId),
-			playlist_id: parseInt(playlistId),
-			access_key: playlistAccessKey,
-			withTracks: true,
-		}),
+	const [playlistMeta, playlistIsReverse] = await Promise.all([
+		playlist.getMeta(),
 		GlobalStorage.getValue('download_playlist_in_reverse', false),
-		GlobalStorage.getValue('num_tracks_in_playlist', true),
 	]);
 
-	if (!playlist) {
+	if (!playlistMeta) {
 		return await showSnackbar({
 			type: 'error',
 			text: 'VK Music Saver',
@@ -30,15 +24,18 @@ export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 		});
 	}
 
-	if (playlist?.error?.error_msg) {
-		return await showSnackbar({
-			type: 'error',
-			text: 'VK Music Saver',
-			subtitle: playlist.error.error_msg,
-		});
-	}
+	const playlistFolderName = formatPlaylistName(playlistMeta);
 
-	if (!playlist.audios?.length) {
+	const fileStream = streamSaver.createWriteStream(`${playlistFolderName}.txt`);
+
+	const [playlistStream, isNumTracks] = await Promise.all([
+		playlist.getStream({ reverse: playlistIsReverse }),
+		GlobalStorage.getValue('num_tracks_in_playlist', true),
+	]);
+
+	if (playlistStream.total === 0) {
+		fileStream.abort();
+
 		return await showSnackbar({
 			type: 'error',
 			text: 'VK Music Saver',
@@ -46,33 +43,28 @@ export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 		});
 	}
 
-	if (playlistIsReverse) {
-		playlist.audios.reverse();
-	}
-
-	const playlistFolderName = formatPlaylistName(playlist);
-	const filename = `${playlistFolderName}.txt`;
-
-	const fileStream = streamSaver.createWriteStream(filename);
-
 	const writer = fileStream.getWriter();
 	const encoder = new TextEncoder();
 
 	let index = 1;
-	const totalAudios = playlist.audios.length;
-	for (const audio of playlist.audios) {
-		const isLastLine = index === playlist.audios.length;
 
-		const trackName = await formatDownloadedTrackName({
-			isPlaylist: true,
-			audio,
-			index: isNumTracks ? index : undefined,
-			totalAudios,
-		});
+	for await (const audio of playlistStream.items) {
+		try {
+			const isLastLine = index === playlistStream.total;
 
-		const line = trackName + (isLastLine ? '' : '\n');
+			const trackName = await formatDownloadedTrackName({
+				isPlaylist: true,
+				audio,
+				index: isNumTracks ? index : undefined,
+				totalAudios: playlistStream.total,
+			});
 
-		await writer.write(encoder.encode(line));
+			const line = trackName + (isLastLine ? '' : '\n');
+
+			await writer.write(encoder.encode(line));
+		} catch (e) {
+			console.error(e);
+		}
 
 		index++;
 	}

@@ -1,10 +1,11 @@
 import { audioUnmaskSource } from '@vknext/shared/vkcom/audio/audioUnmaskSource';
 import { convertTrackToStream } from '@vknext/shared/vkcom/audio/convertTrackToStream';
 import type { AudioObject } from '@vknext/shared/vkcom/types';
+import { OwnedIdentity } from 'src/lib/OwnedIdentity';
 import type { AudioAudio, AudioPlaylist } from 'src/schemas/objects';
-import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
-import getAlbumId from './getAlbumId';
+import { PlaylistSource } from 'src/sources/PlaylistSource';
 import { AudioConvertMethod } from 'src/storages/enums';
+import getAlbumId from './getAlbumId';
 
 interface PrepareTrackStreamOptions {
 	audio: AudioAudio | AudioObject;
@@ -25,13 +26,12 @@ const resolvePlaylist = async (
 	const [ownerId, albumId, albumAccessKey] = getAlbumId(audio);
 	if (!ownerId || !albumId) return null;
 
+	const identity = new OwnedIdentity({ id: albumId, ownerId, accessKey: albumAccessKey });
+
+	const playlist = new PlaylistSource(identity);
+
 	try {
-		return await getAudioPlaylistById({
-			owner_id: ownerId,
-			playlist_id: albumId,
-			access_key: albumAccessKey,
-			withTracks: false,
-		});
+		return await playlist.getMeta();
 	} catch (error) {
 		console.warn('[VK Music Saver/prepareTrackStream] Failed to fetch playlist for tags:', error);
 		return null;
