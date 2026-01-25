@@ -1,7 +1,6 @@
 import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import { vknextApi } from 'src/api';
 import lang from 'src/lang';
-import { padWithZeros } from 'src/lib/padWithZeros';
 import { streamSaver } from 'src/lib/streamSaver';
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
@@ -83,26 +82,18 @@ const downloadUserAudio = async (ownerId: number) => {
 		});
 	}
 
-	const [
-		fsDirHandle,
-		{ subFolderName, photoUrl },
-		isNumTracks,
-		isAddLeadingZeros,
-		convertMethod,
-		embedTags,
-		enableLyricsTags,
-	] = await Promise.all([
-		getFSDirectoryHandle({
-			id: `user_music_${ownerId}`,
-			startIn: 'music',
-		}),
-		getUserDetails(ownerId),
-		GlobalStorage.getValue('num_tracks_in_playlist', true),
-		GlobalStorage.getValue('add_leading_zeros', false),
-		GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
-		GlobalStorage.getValue('audio_write_id3_tags', true),
-		GlobalStorage.getValue('audio_write_genius_lyrics', true),
-	]);
+	const [fsDirHandle, { subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] =
+		await Promise.all([
+			getFSDirectoryHandle({
+				id: `user_music_${ownerId}`,
+				startIn: 'music',
+			}),
+			getUserDetails(ownerId),
+			GlobalStorage.getValue('num_tracks_in_playlist', true),
+			GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+			GlobalStorage.getValue('audio_write_id3_tags', true),
+			GlobalStorage.getValue('audio_write_genius_lyrics', true),
+		]);
 
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
@@ -146,7 +137,8 @@ const downloadUserAudio = async (ownerId: number) => {
 		const trackName = await formatDownloadedTrackName({
 			isPlaylist: true,
 			audio,
-			index: isNumTracks ? (isAddLeadingZeros ? padWithZeros(index, totalAudios) : index) : undefined,
+			index: isNumTracks ? index : undefined,
+			totalAudios,
 		});
 
 		const zipFile: ClientZipFile = {

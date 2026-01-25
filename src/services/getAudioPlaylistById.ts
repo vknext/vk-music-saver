@@ -126,7 +126,7 @@ interface GetPlaylistByIdParams extends Pick<AudioGetPlaylistByIdParams, 'playli
 
 const cachedPlaylists = new Map<string, ReturnType<typeof getBasePlaylist>>();
 
-const getPlaylistById = async ({
+const getAudioPlaylistById = async ({
 	playlist_id,
 	owner_id,
 	access_key,
@@ -180,4 +180,4 @@ const getPlaylistById = async ({
 	return playlist;
 };
 
-export default getPlaylistById;
+export default getAudioPlaylistById;
