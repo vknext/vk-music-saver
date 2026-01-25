@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Error",
   vms_download_cover: "Descargar portada",
   vms_download_playlist: "Descargar lista de reproducción",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Descargando...",
   vms_playlist_is_empty: "La lista está vacía.",
   vms_playlist_not_found: "Lista no encontrada",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Añadir ceros a los números de pista",
   vms_sett_add_leading_zeros_desc: "Ejemplo: 01, 02… en lugar de 1, 2",
   vms_concurrent_downloads_recommendation: "No descargues más de dos listas a la vez o el navegador podría congelarse",
-  vms_settings_need_reload_page: "Recarga la página para aplicar cambios"
+  vms_settings_need_reload_page: "Recarga la página para aplicar cambios",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
