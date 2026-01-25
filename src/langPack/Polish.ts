@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Błąd",
   vms_download_cover: "Pobierz okładkę",
   vms_download_playlist: "Pobierz playlistę",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Pobieranie...",
   vms_playlist_is_empty: "Playlista jest pusta.",
   vms_playlist_not_found: "Nie znaleziono playlisty",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "Formatuj numery utworów z zerami wiodącymi",
   vms_sett_add_leading_zeros_desc: "Na przykład: 01, 02, 03 … zamiast 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Nie pobieraj więcej niż dwie playlisty jednocześnie, w przeciwnym razie przeglądarka może się zawiesić",
-  vms_settings_need_reload_page: "Odśwież stronę, aby zmiany weszły w życie"
+  vms_settings_need_reload_page: "Odśwież stronę, aby zmiany weszły w życie",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
