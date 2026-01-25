@@ -4,6 +4,7 @@ const lang = {
   vms_error: "त्रुटि",
   vms_download_cover: "कवर डाउनलोड करें",
   vms_download_playlist: "प्लेलिस्ट डाउनलोड करें",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "डाउनलोड हो रहा है...",
   vms_playlist_is_empty: "प्लेलिस्ट खाली है.",
   vms_playlist_not_found: "प्लेलिस्ट नहीं मिली",
@@ -75,6 +76,7 @@ const lang = {
   vms_sett_add_leading_zeros: "ट्रैक नंबरों को लीडिंग ज़ीरो के साथ फॉर्मेट करें",
   vms_sett_add_leading_zeros_desc: "उदाहरण: 1, 2, 3 के बजाय 01, 02, 03 …",
   vms_concurrent_downloads_recommendation: "एक साथ दो से अधिक प्लेलिस्ट डाउनलोड न करें, अन्यथा ब्राउज़र फ्रीज हो सकता है",
-  vms_settings_need_reload_page: "बदलावों को लागू करने के लिए पेज को रीलोड करें"
+  vms_settings_need_reload_page: "बदलावों को लागू करने के लिए पेज को रीलोड करें",
+  vms_preparing_tracklist: 'Получаем список треков...'
 };
 export default lang;
