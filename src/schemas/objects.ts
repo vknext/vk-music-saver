@@ -1,3 +1,5 @@
+import * as Enums from './enums';
+
 /* eslint-disable */
 export type BaseBoolInt = 0 | 1;
 
@@ -435,7 +437,7 @@ export interface AudioPlaylist {
 	/**
 	 * Playlist type
 	 */
-	type: number;
+	type: Enums.AudioPlaylistType;
 	/**
 	 * Playlist title
 	 */

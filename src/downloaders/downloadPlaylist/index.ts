@@ -9,6 +9,7 @@ import sanitizeFolderName from 'src/musicUtils/fileSystem/sanitizeFolderName';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
 import { prepareTrackStream } from 'src/musicUtils/prepareTrackStream';
 import showSnackbar from 'src/react/showSnackbar';
+import { AudioPlaylistType } from 'src/schemas/enums';
 import type { AudioAudio } from 'src/schemas/objects';
 import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
 import { AUDIO_CONVERT_METHOD_DEFAULT_VALUE } from 'src/storages/constants';
@@ -129,10 +130,12 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		setProgress({ current: progress, total: totalAudios });
 	};
 
+	const isUGCPlaylist = playlist.type === AudioPlaylistType.UGC;
+
 	const downloadTrack = async (audio: AudioAudio, index: number): Promise<ClientZipFile | null> => {
 		const stream = prepareTrackStream({
 			audio,
-			playlist,
+			playlist: isUGCPlaylist ? null : playlist,
 			embedTags,
 			enableLyricsTags,
 			convertMethod,

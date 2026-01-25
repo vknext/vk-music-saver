@@ -1,4 +1,5 @@
 import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
+import { AudioPlaylistType } from 'src/schemas/enums';
 import type { AudioPlaylist } from 'src/schemas/objects';
 import type { AudioGetPlaylistByIdParams } from 'src/schemas/params';
 import type { AudioGetAudioIdsBySourceResponse, AudioGetByIdResponse, AudioGetResponse } from 'src/schemas/responses';
@@ -96,7 +97,7 @@ const getBasePlaylist = async (params: AudioGetPlaylistByIdParams): Promise<Audi
 			owner_id: playlist.ownerId,
 			title: playlist.title,
 			description: playlist.rawDescription,
-			type: 0,
+			type: AudioPlaylistType.UGC,
 			count: playlist.totalCount || playlist.list?.length || 0,
 			followers: 0,
 			no_discover: Boolean(playlist.noDiscover),
