@@ -18,6 +18,8 @@ import { incrementDownloadedPlaylistsCount } from '../utils';
 import formatDownloadedTrackName from './formatDownloadedTrackName';
 import { formatPlaylistName } from './formatPlaylistName';
 
+const AVERAGE_TRACK_SIZE = 150 * 40152;
+
 const downloadPlaylist = async (playlistFullId: string) => {
 	showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') }).catch(console.error);
 
@@ -155,7 +157,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 		const zipStream = makeZip(trackGenerator());
 
 		const fileStream = streamSaver.createWriteStream(zipFileName, {
-			size: Math.round(playlistStream.total * 150 * 40152),
+			size: Math.round(playlistStream.total * AVERAGE_TRACK_SIZE),
 		});
 
 		await zipStream.pipeTo(fileStream, { signal });

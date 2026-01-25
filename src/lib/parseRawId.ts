@@ -17,8 +17,8 @@ export const parseRawId = (rawId: string): RawIdResult => {
 	}
 
 	const parts = rawId.split('_');
-	const ownerId = parts[0] ? parseInt(parts[0], 10) : NaN;
-	const id = parts[1] ? parseInt(parts[1], 10) : NaN;
+	const ownerId = parseInt(parts[0], 10);
+	const id = parseInt(parts[1], 10);
 	const accessKey = parts[2];
 
 	if (!isNumber(ownerId) || !isNumber(id)) {
