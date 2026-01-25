@@ -4,19 +4,14 @@ import saveFileAs from 'src/lib/saveFileAs';
 import unescapeHTML from 'src/lib/unescapeHTML';
 import { getAlbumThumbUrl } from 'src/musicUtils/getAlbumThumbnail';
 import showSnackbar from 'src/react/showSnackbar';
-import getAudioPlaylistById from 'src/services/getAudioPlaylistById';
+import { PlaylistSource } from 'src/sources/PlaylistSource';
 
 const downloadPlaylistCover = async (playlistFullId: string) => {
-	const [ownerId, playlistId, playlistAccessKey] = playlistFullId.split('_');
+	const playlist = PlaylistSource.fromRawId(playlistFullId);
 
-	const playlist = await getAudioPlaylistById({
-		owner_id: parseInt(ownerId),
-		playlist_id: parseInt(playlistId),
-		access_key: playlistAccessKey,
-		withTracks: false,
-	});
+	const playlistMeta = await playlist.getMeta();
 
-	if (!playlist) {
+	if (!playlistMeta) {
 		return await showSnackbar({
 			type: 'error',
 			text: 'VK Music Saver',
@@ -24,7 +19,7 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 		});
 	}
 
-	const albumThumbUrl = getAlbumThumbUrl(playlist);
+	const albumThumbUrl = getAlbumThumbUrl(playlistMeta);
 
 	if (!albumThumbUrl) {
 		return await showSnackbar({
@@ -34,7 +29,7 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 		});
 	}
 
-	const albumArtists = (playlist.main_artists || []).map((performer) => performer.name);
+	const albumArtists = (playlistMeta.main_artists || []).map((performer) => performer.name);
 
 	const nameChunks = [];
 
@@ -42,8 +37,8 @@ const downloadPlaylistCover = async (playlistFullId: string) => {
 		nameChunks.push(`${albumArtists.join(', ')} - `);
 	}
 
-	if (playlist.title) {
-		nameChunks.push(playlist.title);
+	if (playlistMeta.title) {
+		nameChunks.push(playlistMeta.title);
 	} else {
 		nameChunks.push('playlist');
 	}
