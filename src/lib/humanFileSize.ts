@@ -1,23 +1,33 @@
-const THRESHOLD = 1024;
-const UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+interface HumanFileSizeOptions {
+	decimals?: number;
+	units: readonly string[];
+	threshold?: number;
+	separator?: string;
+}
 
-const humanFileSize = (bytes: number, decimalPlaces = 1): string => {
-	if (Math.abs(bytes) < THRESHOLD) {
-		return `${bytes.toFixed(decimalPlaces)} ${UNITS[0]}`;
+const humanFileSize = (bytes: number, options: HumanFileSizeOptions): string => {
+	const { decimals = 1, units, threshold = 1024, separator = ' ' } = options;
+
+	if (!Number.isFinite(bytes) || bytes === 0) return `0${separator}${units[0]}`;
+
+	const isNegative = bytes < 0;
+	let value = Math.abs(bytes);
+	let unitIndex = 0;
+
+	while (value >= threshold && unitIndex < units.length - 1) {
+		value /= threshold;
+		unitIndex++;
 	}
 
-	let unitIndex = 0;
-	const roundingFactor = 10 ** decimalPlaces;
+	const actualDecimals = unitIndex === 0 ? 0 : decimals;
+	let formattedValue = value.toFixed(actualDecimals);
 
-	do {
-		bytes /= THRESHOLD;
+	if (parseFloat(formattedValue) >= threshold && unitIndex < units.length - 1) {
+		formattedValue = (1).toFixed(actualDecimals);
 		unitIndex++;
-	} while (
-		Math.round(Math.abs(bytes) * roundingFactor) / roundingFactor >= THRESHOLD &&
-		unitIndex < UNITS.length - 1
-	);
+	}
 
-	return `${bytes.toFixed(decimalPlaces)} ${UNITS[unitIndex]}`;
+	return `${isNegative ? '-' : ''}${formattedValue}${separator}${units[unitIndex]}`;
 };
 
 export default humanFileSize;

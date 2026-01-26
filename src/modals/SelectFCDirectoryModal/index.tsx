@@ -10,8 +10,9 @@ import { DownloadFilesMethod } from 'src/storages/enums';
 import styles from './index.module.scss';
 
 interface SelectFCDirectoryModalProps {
-	onSelect: (value: FileSystemDirectoryHandle | null) => void;
-	onShowPicker: () => Promise<FileSystemDirectoryHandle>;
+	onSelect: (value: FileSystemDirectoryHandle | FileSystemFileHandle | null) => void;
+	onShowDirectoryPicker: () => Promise<FileSystemDirectoryHandle>;
+	onShowSaveFilePicker: () => Promise<FileSystemFileHandle>;
 	showNumTracks?: boolean;
 }
 
@@ -35,7 +36,7 @@ const SettSaveMethodSelection = ({ value, setValue }: SettSaveMethodSelectionPro
 	);
 };
 
-const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
+const Content = ({ onSelect, onShowDirectoryPicker, onShowSaveFilePicker }: SelectFCDirectoryModalProps) => {
 	const { closeModal } = useCustomModalControl();
 	const lang = useLang();
 	const [errorSelectFolder, setErrorSelectFolder] = useState<string | null>(null);
@@ -45,7 +46,7 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 		setErrorSelectFolder(null);
 
 		try {
-			const dirHandle = await onShowPicker();
+			const dirHandle = await onShowDirectoryPicker();
 
 			onSelect(dirHandle);
 
@@ -62,13 +63,21 @@ const Content = ({ onSelect, onShowPicker }: SelectFCDirectoryModalProps) => {
 	};
 
 	const onSelectZip = async () => {
-		onSelect(null);
+		try {
+			const fileHandle = await onShowSaveFilePicker();
 
-		if (saveMethodSelection) {
-			await GlobalStorage.setValue('download_files_method', DownloadFilesMethod.DIRECTORY);
+			onSelect(fileHandle);
+
+			if (saveMethodSelection) {
+				await GlobalStorage.setValue('download_files_method', DownloadFilesMethod.ZIP);
+			}
+
+			closeModal();
+		} catch (error) {
+			console.error(error);
+
+			setErrorSelectFolder(error.message);
 		}
-
-		closeModal();
 	};
 
 	return (
@@ -129,7 +138,13 @@ const SelectFCDirectoryModal = (props: SelectFCDirectoryModalProps) => {
 	const lang = useLang();
 
 	return (
-		<CustomModalPage size={600} header={<ModalPageHeader>{lang.use('vms_fs_method_selection')}</ModalPageHeader>}>
+		<CustomModalPage
+			disableOpenAnimation
+			disableCloseAnimation
+			settlingHeight={100}
+			size={600}
+			header={<ModalPageHeader>{lang.use('vms_fs_method_selection')}</ModalPageHeader>}
+		>
 			<Content {...props} />
 		</CustomModalPage>
 	);

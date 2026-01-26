@@ -139,7 +139,12 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 		if (result?.size) {
 			size = result.size;
 
-			setText(humanFileSize(result.size, 2));
+			setText(
+				humanFileSize(result.size, {
+					decimals: 2,
+					units: lang.use('vms_size_units', null, 'raw') as unknown as string[],
+				})
+			);
 		} else {
 			setText('');
 		}

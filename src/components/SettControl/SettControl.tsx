@@ -1,10 +1,9 @@
 import { SimpleCell, Skeleton } from '@vkontakte/vkui';
-import useStorageValue from 'src/hooks/useStorageValue';
-import type { GlobalStorageBooleanKeys, GlobalStorageBooleanValues } from 'src/storages/types';
 import AndroidSwitch from 'src/components/AndroidSwitch/AndroidSwitch';
-import styles from './SettControl.module.scss';
-import showSnackbar from 'src/react/showSnackbar';
 import useLang from 'src/hooks/useLang';
+import useStorageValue from 'src/hooks/useStorageValue';
+import showSnackbar from 'src/react/showSnackbar';
+import type { GlobalStorageBooleanKeys, GlobalStorageBooleanValues } from 'src/storages/types';
 
 interface SettControlProps<Key extends GlobalStorageBooleanKeys> {
 	option: Key;
@@ -43,11 +42,7 @@ const SettControl = <Key extends GlobalStorageBooleanKeys>({
 			Component="label"
 			after={
 				isLoading ? (
-					<Skeleton
-						width={'var(--vkui--size_switch_width--compact)'}
-						height={'var(--vkui--size_switch_height--compact)'}
-						className={styles.SettControl__skeleton}
-					/>
+					<Skeleton width={32} height={20} borderRadius={9999} />
 				) : (
 					<AndroidSwitch disabled={disabled} checked={value} onChange={onChange} />
 				)

@@ -2,17 +2,25 @@ import { createPromise } from '@vknext/shared/utils/createPromise';
 import showReactModal from 'src/react/showReactModal';
 
 interface selectFSDirectoryProps {
-	onShowPicker: () => Promise<FileSystemDirectoryHandle>;
+	onShowDirectoryPicker: () => Promise<FileSystemDirectoryHandle>;
+	onShowSaveFilePicker: () => Promise<FileSystemFileHandle>;
 }
 
-const selectFSDirectory = async ({ onShowPicker }: selectFSDirectoryProps) => {
+const selectFSDirectory = async ({ onShowDirectoryPicker, onShowSaveFilePicker }: selectFSDirectoryProps) => {
 	const { default: Modal } = await import('./SelectFCDirectoryModal');
 
-	const { promise, resolve } = createPromise<FileSystemDirectoryHandle | null>();
+	const { promise, resolve } = createPromise<FileSystemDirectoryHandle | FileSystemFileHandle | null>();
 
-	showReactModal(<Modal onSelect={resolve} onShowPicker={onShowPicker} />, {
-		zIndex: 1100,
-	});
+	showReactModal(
+		<Modal
+			onSelect={resolve}
+			onShowDirectoryPicker={onShowDirectoryPicker}
+			onShowSaveFilePicker={onShowSaveFilePicker}
+		/>,
+		{
+			zIndex: 1100,
+		}
+	);
 
 	return await promise;
 };

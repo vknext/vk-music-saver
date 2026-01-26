@@ -39,6 +39,7 @@ const lang = {
 	vms_playlist_track_download_completed: '{trackName} — завершено',
 	vms_playlist_download_completed: `Скачано {total}`,
 	vms_tracks_plurals: ['трек', 'трека', 'треков'],
+	vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
 	vms_sett_audio_convert_mode_title: 'Метод конвертации треков',
 	vms_sett_audio_convert_mode_ffmpeg_desc: 'На старых системах может не работать.',
 	vms_sett_audio_convert_mode_desc:
@@ -86,6 +87,10 @@ const lang = {
 		'Скачивайте не больше двух плейлистов сразу, иначе браузер может зависнуть',
 	vms_settings_need_reload_page: 'Перезагрузите страницу, чтобы изменения вступили в силу',
 	vms_preparing_tracklist: 'Получаем список треков...',
+	vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+	vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+	vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+	vms_eta_almost_done: 'около секунды',
 };
 
 export default lang;

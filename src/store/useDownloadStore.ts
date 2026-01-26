@@ -1,3 +1,4 @@
+import type { OnProgressTrackerCallback, ProgressTrackerStats } from 'src/lib/ProgressTracker';
 import { create } from 'zustand';
 import type { DownloadType } from './constants';
 import { DownloadStatus } from './constants';
@@ -17,6 +18,7 @@ export interface DownloadTask {
 	title: string;
 	type: DownloadType;
 	progress: Progress;
+	stats: ProgressTrackerStats;
 	status: DownloadStatus;
 	photoUrl?: string;
 	extraText?: string;
@@ -47,6 +49,7 @@ export interface DownloadTaskFinishProps {
 interface DownloadTaskHandlers {
 	setTitle: (title: string) => void;
 	setProgress: (progress: Progress) => void;
+	setStats: OnProgressTrackerCallback;
 	setPhotoUrl: (photoUrl: string) => void;
 	/**
 	 * Отображается после "title", но над прогрессом
@@ -97,6 +100,22 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 
 		set(() => {
 			tasks.set(id, { ...task, progress, status: DownloadStatus.DOWNLOADING });
+
+			return { tasks };
+		});
+	};
+
+	const setStatsById = (id: string, stats: ProgressTrackerStats) => {
+		const task = getTaskById(id);
+
+		const tasks = new Map(get().tasks);
+
+		if (task.status === DownloadStatus.FINISHED) {
+			return;
+		}
+
+		set(() => {
+			tasks.set(id, { ...task, stats });
 
 			return { tasks };
 		});
@@ -211,6 +230,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 			setPhotoUrl: (photoUrl) => setPhotoUrlById(id, photoUrl),
 			setTitle: (title) => setTitleById(id, title),
 			setProgress: (progress) => setProgressById(id, progress),
+			setStats: (stats) => setStatsById(id, stats),
 			finish: (callbacks) => finishTaskById(id, callbacks),
 			cancel: () => cancelDownloadById(id),
 			remove: () => removeDownloadById(id),
@@ -225,6 +245,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 				...props,
 				id,
 				progress: { current: undefined, total: undefined },
+				stats: { loaded: 0, total: undefined, speed: 0, eta: undefined },
 				status: DownloadStatus.PREPARING,
 				onCancel: new Set(onCancel ? [onCancel] : []),
 				onRemove: new Set(),

@@ -1,8 +1,7 @@
 import { arrayUnFlat } from '@vknext/shared/utils/arrayUnFlat';
 import { vknextApi } from 'src/api';
 import lang from 'src/lang';
-import { streamSaver } from 'src/lib/streamSaver';
-import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
+import { Downloader } from 'src/lib/Downloader';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import { prepareTrackStream } from 'src/musicUtils/prepareTrackStream';
 import showSnackbar from 'src/react/showSnackbar';
@@ -74,7 +73,7 @@ const getUserDetails = async (ownerId: number) => {
 };
 
 const downloadUserAudio = async (ownerId: number) => {
-	if (window.vk.id === 0) {
+	if (window.vk?.id === 0) {
 		return await showSnackbar({
 			type: 'warning',
 			text: 'VK Music Saver',
@@ -82,32 +81,31 @@ const downloadUserAudio = async (ownerId: number) => {
 		});
 	}
 
-	const [fsDirHandle, { subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] =
-		await Promise.all([
-			getFSDirectoryHandle({
-				id: `user_music_${ownerId}`,
-				startIn: 'music',
-			}),
-			getUserDetails(ownerId),
-			GlobalStorage.getValue('num_tracks_in_playlist', true),
-			GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
-			GlobalStorage.getValue('audio_write_id3_tags', true),
-			GlobalStorage.getValue('audio_write_genius_lyrics', true),
-		]);
+	const [{ subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] = await Promise.all([
+		getUserDetails(ownerId),
+		GlobalStorage.getValue('num_tracks_in_playlist', true),
+		GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+		GlobalStorage.getValue('audio_write_id3_tags', true),
+		GlobalStorage.getValue('audio_write_genius_lyrics', true),
+	]);
 
-	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
+	const zipFileName = `${subFolderName}.zip`;
 
-	const filename = `${subFolderName}.zip`;
+	const fsDirHandle = await getFSDirectoryHandle({
+		id: `user_music_${ownerId}`,
+		startIn: 'music',
+		suggestedFileName: zipFileName,
+		fileTypes: [{ description: 'ZIP Archive', accept: { 'application/zip': ['.zip'] } }],
+	});
+
+	showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') }).catch(console.error);
 
 	const controller = new AbortController();
-	const { signal } = controller;
 	const lastModified = new Date();
 
-	const taskId = `music${ownerId}`;
-
-	const { setProgress, finish, setExtraText } = startDownload({
-		id: taskId,
-		title: fsDirHandle ? subFolderName : filename,
+	const { setProgress, finish, setStats, setExtraText } = startDownload({
+		id: `music${ownerId}_${crypto.randomUUID()}`,
+		title: fsDirHandle ? subFolderName : zipFileName,
 		type: DownloadType.OWNER_MUSIC,
 		onCancel: () => controller.abort(),
 		photoUrl: photoUrl,
@@ -117,7 +115,7 @@ const downloadUserAudio = async (ownerId: number) => {
 	let totalAudios = 0;
 
 	const updateProgress = () => {
-		if (signal.aborted) return;
+		if (controller.signal.aborted) return;
 
 		progress++;
 
@@ -151,14 +149,14 @@ const downloadUserAudio = async (ownerId: number) => {
 	};
 
 	async function* trackGenerator() {
-		const audios = await getAudios(ownerId, signal);
+		const audios = await getAudios(ownerId, controller.signal);
 
 		totalAudios = audios.length;
 
 		let index = 1;
 
 		for (const audio of audios) {
-			if (signal.aborted) throw new Error('Aborted');
+			if (controller.signal.aborted) throw new Error('Aborted');
 
 			const item = await downloadTrack(audio, index++);
 
@@ -171,32 +169,28 @@ const downloadUserAudio = async (ownerId: number) => {
 		}
 	}
 
-	if (fsDirHandle) {
-		for await (const zipFile of trackGenerator()) {
-			await createFileInDirectory({
-				zipFile,
-				subFolderName,
-				dirHandle: fsDirHandle,
-				signal,
-			});
-		}
+	const downloader = new Downloader(trackGenerator(), {
+		signal: controller.signal,
+		onProgress: (stats) => setStats(stats),
+	});
 
+	try {
+		await downloader.save(fsDirHandle, { name: subFolderName });
+	} catch (err) {
+		showSnackbar({ text: 'VK Music Saver', subtitle: err.message }).catch(console.error);
+
+		throw err;
+	}
+
+	if (controller.signal.aborted) return;
+
+	if (fsDirHandle) {
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_done'),
 			subtitle: subFolderName,
 		});
-	} else {
-		const { makeZip } = await import('client-zip');
-
-		const zipStream = makeZip(trackGenerator());
-
-		const fileStream = streamSaver.createWriteStream(filename);
-
-		await zipStream.pipeTo(fileStream, { signal });
 	}
-
-	if (signal.aborted) return;
 
 	finish();
 
