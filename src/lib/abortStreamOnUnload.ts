@@ -3,9 +3,13 @@ interface AbortableStream {
 	abort(reason?: any): void | Promise<void>;
 }
 
-export const abortStreamOnUnload = (stream: AbortableStream): (() => void) => {
+export const abortStreamOnUnload = (stream?: AbortableStream): (() => void) => {
 	const onUnload = () => {
-		stream.abort('Page unloaded by user');
+		if (stream) {
+			stream.abort('Page unloaded by user');
+		} else {
+			console.warn('[VK Music Saver/abortStreamOnUnload] stream is not defined');
+		}
 	};
 
 	const onBeforeUnload = (event: BeforeUnloadEvent) => {

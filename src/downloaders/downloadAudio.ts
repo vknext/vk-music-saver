@@ -48,26 +48,37 @@ const downloadAudio = async ({ audioObject, onProgress, size }: DownloadAudioPar
 
 	const cleanup = abortStreamOnUnload(fileStream);
 
-	const stream = prepareTrackStream({
-		audio,
-		embedTags,
-		enableLyricsTags,
-		convertMethod,
-		onProgress: (current, total) => {
-			onProgress?.(current, total);
-		},
-	});
+	try {
+		const stream = prepareTrackStream({
+			audio,
+			embedTags,
+			enableLyricsTags,
+			convertMethod,
+			onProgress: (current, total) => {
+				onProgress?.(current, total);
+			},
+		});
 
-	if (!stream) {
-		await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_url_not_found') });
-		return;
+		if (!stream) {
+			fileStream.abort();
+			cleanup();
+
+			await showSnackbar({
+				type: 'error',
+				text: 'VK Music Saver',
+				subtitle: lang.use('vms_audio_url_not_found'),
+			});
+			return;
+		}
+
+		await stream.pipeTo(fileStream);
+
+		await Promise.all([incrementDownloadedTracksCount(), vknextApi.call('vms.stat', { type: 'a', data: 1 })]);
+	} catch (e) {
+		console.error(`[VK Music Saver/downloadAudio] Error:`, e);
+	} finally {
+		cleanup();
 	}
-
-	await stream.pipeTo(fileStream);
-
-	cleanup();
-
-	await Promise.all([incrementDownloadedTracksCount(), vknextApi.call('vms.stat', { type: 'a', data: 1 })]);
 };
 
 export default downloadAudio;

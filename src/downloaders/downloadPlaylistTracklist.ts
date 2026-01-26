@@ -1,4 +1,5 @@
 import lang from 'src/lang';
+import { abortStreamOnUnload } from 'src/lib/abortStreamOnUnload';
 import { streamSaver } from 'src/lib/streamSaver';
 import showSnackbar from 'src/react/showSnackbar';
 import { PlaylistSource } from 'src/sources/PlaylistSource';
@@ -27,6 +28,7 @@ export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 	const playlistFolderName = formatPlaylistName(playlistMeta);
 
 	const fileStream = streamSaver.createWriteStream(`${playlistFolderName}.txt`);
+	const cleanup = abortStreamOnUnload(fileStream);
 
 	const [playlistStream, isNumTracks] = await Promise.all([
 		playlist.getStream({ reverse: playlistIsReverse }),
@@ -35,6 +37,7 @@ export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 
 	if (playlistStream.total === 0) {
 		fileStream.abort();
+		cleanup();
 
 		return await showSnackbar({
 			type: 'error',
@@ -48,26 +51,32 @@ export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 
 	let index = 1;
 
-	for await (const audio of playlistStream.items) {
-		try {
-			const isLastLine = index === playlistStream.total;
+	try {
+		for await (const audio of playlistStream.items) {
+			try {
+				const isLastLine = index === playlistStream.total;
 
-			const trackName = await formatDownloadedTrackName({
-				isPlaylist: true,
-				audio,
-				index: isNumTracks ? index : undefined,
-				totalAudios: playlistStream.total,
-			});
+				const trackName = await formatDownloadedTrackName({
+					isPlaylist: true,
+					audio,
+					index: isNumTracks ? index : undefined,
+					totalAudios: playlistStream.total,
+				});
 
-			const line = trackName + (isLastLine ? '' : '\n');
+				const line = trackName + (isLastLine ? '' : '\n');
 
-			await writer.write(encoder.encode(line));
-		} catch (e) {
-			console.error(e);
+				await writer.write(encoder.encode(line));
+			} catch (e) {
+				console.error('VK Music Saver/downloadPlaylistTracklist', e);
+			}
+
+			index++;
 		}
 
-		index++;
+		await writer.close();
+	} catch (e) {
+		console.error('VK Music Saver/downloadPlaylistTracklist', e);
+	} finally {
+		cleanup();
 	}
-
-	await writer.close();
 };
