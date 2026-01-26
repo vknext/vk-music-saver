@@ -324,7 +324,10 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 		musicCell.vms_down_inj = true;
 
 		let controller: AbortController | null = null;
-		const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
+		const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({
+			iconSize: 24,
+			cancelable: true,
+		});
 
 		let size: number | undefined = undefined;
 
