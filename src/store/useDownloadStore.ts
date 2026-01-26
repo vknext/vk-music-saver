@@ -111,7 +111,7 @@ export const useDownloadStore = create<DownloadStore>((set, get) => {
 		const tasks = new Map(get().tasks);
 
 		if (task.status === DownloadStatus.FINISHED) {
-			throw new DownloadTaskAlreadyFinishedError(id);
+			return;
 		}
 
 		set(() => {

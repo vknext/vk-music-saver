@@ -65,7 +65,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 	}
 
 	const { setProgress, finish, setStats, setExtraText, cancel } = startDownload({
-		id: `playlist${playlistFullId}_${Math.random()}`,
+		id: `playlist${playlistFullId}_${crypto.randomUUID()}`,
 		title: fsDirHandle ? playlistFolderName : zipFileName,
 		type: DownloadType.PLAYLIST,
 		onCancel: () => controller.abort(),

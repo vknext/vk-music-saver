@@ -92,8 +92,6 @@ const getChatDetails = async (peerId: number) => {
 };
 
 const downloadChatMusic = async (peerId: number) => {
-	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
-
 	const [{ subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] = await Promise.all([
 		getChatDetails(peerId),
 		GlobalStorage.getValue('num_tracks_in_playlist', true),
@@ -111,11 +109,13 @@ const downloadChatMusic = async (peerId: number) => {
 		fileTypes: [{ description: 'ZIP Archive', accept: { 'application/zip': ['.zip'] } }],
 	});
 
+	showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') }).catch(console.error);
+
 	const controller = new AbortController();
 	const lastModified = new Date();
 
 	const { setProgress, finish, setStats, setExtraText } = startDownload({
-		id: `convo_music${peerId}_${Math.random()}`,
+		id: `convo_music${peerId}_${crypto.randomUUID()}`,
 		title: fsDirHandle ? subFolderName : zipFileName,
 		type: DownloadType.CONVO,
 		onCancel: () => controller.abort(),

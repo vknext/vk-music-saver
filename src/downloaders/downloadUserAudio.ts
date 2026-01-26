@@ -104,7 +104,7 @@ const downloadUserAudio = async (ownerId: number) => {
 	const lastModified = new Date();
 
 	const { setProgress, finish, setStats, setExtraText } = startDownload({
-		id: `music${ownerId}_${Math.random()}`,
+		id: `music${ownerId}_${crypto.randomUUID()}`,
 		title: fsDirHandle ? subFolderName : zipFileName,
 		type: DownloadType.OWNER_MUSIC,
 		onCancel: () => controller.abort(),
