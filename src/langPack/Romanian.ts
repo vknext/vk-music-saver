@@ -37,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: "{trackName} — finalizat",
   vms_playlist_download_completed: `Descărcat {total}`,
   vms_tracks_plurals: ["piesă", "piese", "piese"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "Metodă conversie",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Posibil să nu funcționeze pe sisteme vechi.",
   vms_sett_audio_convert_mode_desc: "VK oferă piese în m3u8, extensia le convertește în mp3.",
@@ -77,6 +78,10 @@ const lang = {
   vms_sett_add_leading_zeros_desc: "Exemplu: 01, 02… în loc de 1, 2",
   vms_concurrent_downloads_recommendation: "Nu descărcați mai mult de două playlist-uri simultan, browserul se poate bloca",
   vms_settings_need_reload_page: "Reîncărcați pagina pentru aplicarea setărilor",
-  vms_preparing_tracklist: 'Получаем список треков...'
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;
