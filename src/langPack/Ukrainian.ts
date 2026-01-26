@@ -37,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: '{trackName} — завершено',
   vms_playlist_download_completed: `Завантажено {total}`,
   vms_tracks_plurals: ['трек', "треки", "треків"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "Метод конвертації треків",
   vms_sett_audio_convert_mode_ffmpeg_desc: "На старих системах може не працювати.",
   vms_sett_audio_convert_mode_desc: "ВКонтакте віддає треки у форматі m3u8, а додаток конвертує у звичний mp3",
@@ -77,6 +78,10 @@ const lang = {
   vms_sett_add_leading_zeros_desc: "Наприклад: 01, 02, 03 ... замість 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Завантажуйте не більше двох плейлистів одночасно, інакше браузер може зависнути",
   vms_settings_need_reload_page: "Перезавантажте сторінку, щоб зміни набули чинності",
-  vms_preparing_tracklist: 'Получаем список треков...'
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;
