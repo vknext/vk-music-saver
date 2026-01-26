@@ -34,7 +34,7 @@ jobs:
                       ${{ runner.os }}-webpack-
 
             - name: Build for Chrome
-              run: yarn build:firefox
+              run: yarn build
 
             - name: Upload chrome version to release
               uses: actions/upload-release-asset@v1
