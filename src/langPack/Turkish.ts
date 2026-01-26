@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Hata",
   vms_download_cover: "Kapağı indir",
   vms_download_playlist: "Çalma listesini indir",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "İndiriliyor...",
   vms_playlist_is_empty: "Çalma listesi boş.",
   vms_playlist_not_found: "Çalma listesi bulunamadı",
@@ -36,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: "{trackName} — tamamlandı",
   vms_playlist_download_completed: `İndirilen {total}`,
   vms_tracks_plurals: ["parça", "parça", "parça"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "Dönüştürme yöntemi",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Eski sistemlerde çalışmayabilir.",
   vms_sett_audio_convert_mode_desc: "VK parçaları m3u8 formatında verir, uzantı mp3'e dönüştürür.",
@@ -75,6 +77,11 @@ const lang = {
   vms_sett_add_leading_zeros: "Parça numaralarına başında sıfır ekle",
   vms_sett_add_leading_zeros_desc: "Örnek: 1, 2 yerine 01, 02…",
   vms_concurrent_downloads_recommendation: "Aynı anda ikiden fazla liste indirmeyin, tarayıcı donabilir",
-  vms_settings_need_reload_page: "Değişiklikler için sayfayı yenileyin"
+  vms_settings_need_reload_page: "Değişiklikler için sayfayı yenileyin",
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;

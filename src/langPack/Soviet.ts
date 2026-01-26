@@ -4,6 +4,7 @@ const lang = {
   vms_error: 'Ошибка',
   vms_download_cover: 'Скачать обложку',
   vms_download_playlist: 'Скачать плейлист',
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: 'Скачивается...',
   vms_playlist_is_empty: 'Плейлист пуст.',
   vms_playlist_not_found: 'Плейлист не найден',
@@ -36,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: '{trackName} — завершено',
   vms_playlist_download_completed: `Скачано {total}`,
   vms_tracks_plurals: ['трек', 'трека', 'треков'],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: 'Метод конвертации треков',
   vms_sett_audio_convert_mode_ffmpeg_desc: 'На старых системах может не работать.',
   vms_sett_audio_convert_mode_desc: 'ВКонтакте отдает треки в формате m3u8, а расширение конвертирует в привычный mp3',
@@ -75,6 +77,11 @@ const lang = {
   vms_sett_add_leading_zeros: 'Форматировать номера треков с ведущими нулями',
   vms_sett_add_leading_zeros_desc: 'Например: 01, 02, 03 … вместо 1, 2, 3',
   vms_concurrent_downloads_recommendation: 'Скачивайте не больше двух плейлистов сразу, иначе браузер может зависнуть',
-  vms_settings_need_reload_page: 'Перезагрузите страницу, чтобы изменения вступили в силу'
+  vms_settings_need_reload_page: 'Перезагрузите страницу, чтобы изменения вступили в силу',
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;

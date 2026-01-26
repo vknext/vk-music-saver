@@ -4,6 +4,7 @@ const lang = {
   vms_error: "Fehler",
   vms_download_cover: "Cover herunterladen",
   vms_download_playlist: "Playlist herunterladen",
+  vms_download_tracklist: 'Скачать список треков (.txt)',
   vms_downloading: "Wird heruntergeladen...",
   vms_playlist_is_empty: "Die Playlist ist leer.",
   vms_playlist_not_found: "Playlist nicht gefunden",
@@ -36,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: "{trackName} — abgeschlossen",
   vms_playlist_download_completed: `{total} heruntergeladen`,
   vms_tracks_plurals: ["Titel", "Titel", "Titel"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "Konvertierungsmethode",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Funktioniert möglicherweise nicht auf älteren Systemen.",
   vms_sett_audio_convert_mode_desc: "VK liefert Titel im m3u8-Format, die Erweiterung konvertiert sie in das gewohnte MP3-Format",
@@ -75,6 +77,11 @@ const lang = {
   vms_sett_add_leading_zeros: "Titelnummern mit führenden Nullen formatieren",
   vms_sett_add_leading_zeros_desc: "Beispiel: 01, 02, 03 … statt 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Laden Sie nicht mehr als zwei Playlists gleichzeitig herunter, da der Browser sonst einfrieren kann",
-  vms_settings_need_reload_page: "Laden Sie die Seite neu, damit die Änderungen wirksam werden"
+  vms_settings_need_reload_page: "Laden Sie die Seite neu, damit die Änderungen wirksam werden",
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;
