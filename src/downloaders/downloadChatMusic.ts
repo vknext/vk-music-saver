@@ -2,8 +2,7 @@ import { Ranges } from '@vknext/shared/lib/Ranges';
 import { waitVKApi } from '@vknext/shared/vkcom/globalVars/waitVKApi';
 import { vknextApi } from 'src/api';
 import lang from 'src/lang';
-import { streamSaver } from 'src/lib/streamSaver';
-import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
+import { Downloader } from 'src/lib/Downloader';
 import getFSDirectoryHandle from 'src/musicUtils/fileSystem/getFSDirectoryHandle';
 import { prepareTrackStream } from 'src/musicUtils/prepareTrackStream';
 import showSnackbar from 'src/react/showSnackbar';
@@ -95,30 +94,29 @@ const getChatDetails = async (peerId: number) => {
 const downloadChatMusic = async (peerId: number) => {
 	await showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_downloading') });
 
-	const [fsDirHandle, { subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] =
-		await Promise.all([
-			await getFSDirectoryHandle({
-				id: `chat_music_${peerId}`,
-				startIn: 'music',
-			}),
-			getChatDetails(peerId),
-			GlobalStorage.getValue('num_tracks_in_playlist', true),
-			GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
-			GlobalStorage.getValue('audio_write_id3_tags', true),
-			GlobalStorage.getValue('audio_write_genius_lyrics', true),
-		]);
+	const [{ subFolderName, photoUrl }, isNumTracks, convertMethod, embedTags, enableLyricsTags] = await Promise.all([
+		getChatDetails(peerId),
+		GlobalStorage.getValue('num_tracks_in_playlist', true),
+		GlobalStorage.getValue('audio_convert_method', AUDIO_CONVERT_METHOD_DEFAULT_VALUE),
+		GlobalStorage.getValue('audio_write_id3_tags', true),
+		GlobalStorage.getValue('audio_write_genius_lyrics', true),
+	]);
 
-	const filename = `${subFolderName}.zip`;
+	const zipFileName = `${subFolderName}.zip`;
+
+	const fsDirHandle = await getFSDirectoryHandle({
+		id: `chat_music_${peerId}`,
+		startIn: 'music',
+		suggestedFileName: zipFileName,
+		fileTypes: [{ description: 'ZIP Archive', accept: { 'application/zip': ['.zip'] } }],
+	});
 
 	const controller = new AbortController();
-	const { signal } = controller;
 	const lastModified = new Date();
 
-	const taskId = `convo_music${peerId}`;
-
-	const { setProgress, finish, setExtraText } = startDownload({
-		id: taskId,
-		title: fsDirHandle ? subFolderName : filename,
+	const { setProgress, finish, setStats, setExtraText } = startDownload({
+		id: `convo_music${peerId}_${Math.random()}`,
+		title: fsDirHandle ? subFolderName : zipFileName,
 		type: DownloadType.CONVO,
 		onCancel: () => controller.abort(),
 		photoUrl: photoUrl,
@@ -128,7 +126,7 @@ const downloadChatMusic = async (peerId: number) => {
 	let totalAudios = 0;
 
 	const updateProgress = () => {
-		if (signal.aborted) return;
+		if (controller.signal.aborted) return;
 
 		progress++;
 
@@ -164,13 +162,13 @@ const downloadChatMusic = async (peerId: number) => {
 	async function* trackGenerator() {
 		let index = 1;
 
-		for await (const { items } of getAudios(peerId, signal)) {
-			if (signal.aborted) return;
+		for await (const { items } of getAudios(peerId, controller.signal)) {
+			if (controller.signal.aborted) return;
 
 			totalAudios += items.length;
 
 			for (const { attachment } of items) {
-				if (signal.aborted) return;
+				if (controller.signal.aborted) return;
 
 				if (attachment?.type !== 'audio') continue;
 
@@ -188,32 +186,25 @@ const downloadChatMusic = async (peerId: number) => {
 		}
 	}
 
-	if (fsDirHandle) {
-		for await (const zipFile of trackGenerator()) {
-			await createFileInDirectory({
-				zipFile,
-				subFolderName,
-				dirHandle: fsDirHandle,
-				signal,
-			});
-		}
+	const downloader = new Downloader(trackGenerator(), { signal: controller.signal, onProgress: setStats });
 
+	try {
+		await downloader.save(fsDirHandle, { name: subFolderName });
+	} catch (err) {
+		showSnackbar({ text: 'VK Music Saver', subtitle: err.message }).catch(console.error);
+
+		throw err;
+	}
+
+	if (controller.signal.aborted) return;
+
+	if (fsDirHandle) {
 		await showSnackbar({
 			type: 'done',
 			text: lang.use('vms_fs_music_done'),
 			subtitle: subFolderName,
 		});
-	} else {
-		const { makeZip } = await import('client-zip');
-
-		const zipStream = makeZip(trackGenerator());
-
-		const fileStream = streamSaver.createWriteStream(filename);
-
-		await zipStream.pipeTo(fileStream, { signal });
 	}
-
-	if (signal.aborted) return;
 
 	finish();
 

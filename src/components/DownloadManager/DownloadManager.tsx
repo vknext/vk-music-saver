@@ -1,27 +1,41 @@
 import { Icon28LogoMiniVkMusicSaverColor } from '@vknext/icons';
 import { classNames, Header } from '@vkontakte/vkui';
 import { useState } from 'react';
-import useLang from 'src/hooks/useLang';
-import { useDownloadTasks } from 'src/store';
-import { DownloadStatus } from 'src/store/constants';
 import PopoverReforged from 'src/components/PopoverReforged/PopoverReforged';
+import useLang from 'src/hooks/useLang';
+import { useDownloadStore } from 'src/store';
+import { DownloadStatus } from 'src/store/constants';
+import { useShallow } from 'zustand/react/shallow';
 import styles from './DownloadManager.module.scss';
 import DownloadTaskCell from './DownloadTaskCell/DownloadTaskCell';
 
 const DownloadManager = () => {
 	const lang = useLang();
 	const [isShown, setIsShown] = useState(true);
-	const tasks = useDownloadTasks();
 
-	const activeTasks = Array.from(tasks.values())
-		.filter((task) => task.status !== DownloadStatus.FINISHED)
-		.reverse();
+	const activeTasksIds = useDownloadStore(
+		useShallow((state) => {
+			const tasks = Array.from(state.tasks.values());
 
-	const finishedTasks = Array.from(tasks.values())
-		.filter((task) => task.status === DownloadStatus.FINISHED)
-		.reverse();
+			return tasks
+				.filter((task) => task.status === DownloadStatus.FINISHED)
+				.map((task) => task.id)
+				.reverse();
+		})
+	);
 
-	const isDisabled = activeTasks.length === 0 && finishedTasks.length === 0;
+	const finishedTasksIds = useDownloadStore(
+		useShallow((state) => {
+			const tasks = Array.from(state.tasks.values());
+
+			return tasks
+				.filter((task) => task.status !== DownloadStatus.FINISHED)
+				.map((task) => task.id)
+				.reverse();
+		})
+	);
+
+	const isDisabled = activeTasksIds.length === 0 && finishedTasksIds.length === 0;
 
 	if (isDisabled) {
 		return null;
@@ -31,23 +45,23 @@ const DownloadManager = () => {
 		<PopoverReforged
 			content={
 				<>
-					{activeTasks.length > 0 && (
+					{activeTasksIds.length > 0 && (
 						<>
-							<Header size="m" indicator={activeTasks.length}>
+							<Header size="m" indicator={activeTasksIds.length}>
 								{lang.use('vms_download_manager_active_tasks')}
 							</Header>
-							{activeTasks.map((task) => (
-								<DownloadTaskCell key={task.id} task={task} />
+							{activeTasksIds.map((taskId) => (
+								<DownloadTaskCell key={taskId} taskId={taskId} />
 							))}
 						</>
 					)}
-					{finishedTasks.length > 0 && (
+					{finishedTasksIds.length > 0 && (
 						<>
-							<Header size="m" indicator={finishedTasks.length}>
+							<Header size="m" indicator={finishedTasksIds.length}>
 								{lang.use('vms_download_manager_finished_tasks')}
 							</Header>
-							{finishedTasks.map((task) => (
-								<DownloadTaskCell key={task.id} task={task} />
+							{finishedTasksIds.map((taskId) => (
+								<DownloadTaskCell key={taskId} taskId={taskId} />
 							))}
 						</>
 					)}

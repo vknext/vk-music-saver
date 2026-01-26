@@ -3,6 +3,7 @@ export const LOGICAL_CPU_CORES = globalThis.navigator.hardwareConcurrency || 1;
 export const MAX_PARALLEL_AUDIO_CONVERSION = 3;
 
 export const IS_DIRECTORY_PICKER_SUPPORTED = 'showDirectoryPicker' in globalThis;
+export const IS_SAVE_FILE_PICKER_SUPPORTED = 'showSaveFilePicker' in globalThis;
 
 export const IS_FIREFOX = /firefox|fxios/i.test(globalThis.navigator.userAgent);
 

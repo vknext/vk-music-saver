@@ -15,6 +15,8 @@ const SettingsModal = () => {
 
 	return (
 		<CustomModalPage
+			disableOpenAnimation
+			disableCloseAnimation
 			size={500}
 			header={
 				<ModalPageHeader>

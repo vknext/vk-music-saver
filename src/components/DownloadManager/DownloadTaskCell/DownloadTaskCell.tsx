@@ -1,113 +1,38 @@
-import { Icon24Cancel, Icon24DeleteOutline, Icon24DownloadOutline } from '@vkontakte/icons';
-import { Avatar, Flex, Footnote, Headline, IconButton, Image, Progress, Subhead, Tooltip } from '@vkontakte/vkui';
-import normalizeProgressValue from 'src/lib/normalizeProgressValue';
-import useLang from 'src/hooks/useLang';
-import { DownloadStatus, DownloadType, useDownloadTaskHandlers, type DownloadTask } from 'src/store';
+import { memo } from 'react';
+import { After } from './components/After';
+import { Before } from './components/Before';
+import { TaskIdProvider } from './context';
+import { TaskDownloadingRow } from './components/DownloadingRow';
 import styles from './DownloadTaskCell.module.scss';
-import FallbackIcon from './FallbackIcon';
+import { TaskExtraText } from './components/ExtraText';
+import { TaskProgress } from './components/Progress';
+import { TaskStats } from './components/Stats';
+import { TaskTitle } from './components/Title';
 
 interface DownloadTaskCellProps {
-	task: DownloadTask;
+	taskId: string;
 }
 
-const DownloadTaskCell = ({ task }: DownloadTaskCellProps) => {
-	const lang = useLang();
-	const { cancel, remove } = useDownloadTaskHandlers(task.id);
-
-	const { progress, status, photoUrl } = task;
-
-	const isShownProgress = (() => {
-		if (task.type === DownloadType.TRACK && progress.current) {
-			return true;
-		}
-
-		return !!progress.current && !!progress.total;
-	})();
-
-	const isPreparing = status === DownloadStatus.PREPARING;
-	const isDownloading = status === DownloadStatus.DOWNLOADING;
-	const isFinished = status === DownloadStatus.FINISHED;
-
+const DownloadTaskCell = memo(({ taskId }: DownloadTaskCellProps) => {
 	return (
-		<div className={styles.DownloadTaskCell}>
-			<div className={styles.DownloadTaskCell__before}>
-				{task.type === DownloadType.CONVO ? (
-					<Avatar size={48} src={photoUrl} fallbackIcon={<FallbackIcon type={task.type} />} />
-				) : (
-					<Image size={48} src={photoUrl} fallbackIcon={<FallbackIcon type={task.type} />} />
-				)}
+		<TaskIdProvider value={taskId}>
+			<div className={styles.DownloadTaskCell}>
+				<div className={styles.DownloadTaskCell__before}>
+					<Before />
+				</div>
+				<div className={styles.DownloadTaskCell__middle}>
+					<TaskTitle />
+					<TaskExtraText />
+					<TaskDownloadingRow />
+					<TaskProgress />
+					<TaskStats />
+				</div>
+				<div className={styles.DownloadTaskCell__after}>
+					<After />
+				</div>
 			</div>
-			<div className={styles.DownloadTaskCell__middle}>
-				<Headline className={styles.DownloadTaskCell__children} Component="span" weight="3">
-					{task.title}
-				</Headline>
-				{!!task.extraText && (
-					<Footnote className={styles.DownloadTaskCell__subtitle}>{task.extraText}</Footnote>
-				)}
-				{(isPreparing || (isDownloading && !isShownProgress)) && (
-					<Footnote normalize={false} className={styles.DownloadTaskCell__subtitle}>
-						{lang.use('vms_downloading')}
-					</Footnote>
-				)}
-				{isDownloading && isShownProgress && (
-					<Flex align="center" gap={[0, 12]} className={styles.DownloadTaskCellProgress}>
-						{progress.current && progress.total && (
-							<Progress
-								className={styles.DownloadTaskCellProgress__progress}
-								value={normalizeProgressValue(progress.current, 0, progress.total)}
-							/>
-						)}
-						<Subhead className={styles.DownloadTaskCellProgress__label}>
-							{progress.current && progress.total
-								? `${progress.current}/${progress.total}`
-								: progress.current}
-							{task.type === DownloadType.TRACK ? '%' : ''}
-						</Subhead>
-					</Flex>
-				)}
-			</div>
-			<div className={styles.DownloadTaskCell__after}>
-				{isFinished && (
-					<>
-						{task.onSave && (
-							<Tooltip
-								usePortal={document.body}
-								disableTriggerOnFocus
-								placement="top"
-								description={lang.use('vms_download_manager_save')}
-							>
-								<IconButton onClick={task.onSave} aria-label={lang.use('vms_download_manager_save')}>
-									<Icon24DownloadOutline />
-								</IconButton>
-							</Tooltip>
-						)}
-						<Tooltip
-							usePortal={document.body}
-							disableTriggerOnFocus
-							placement="top"
-							description={lang.use('vms_download_manager_remove')}
-						>
-							<IconButton onClick={remove} aria-label={lang.use('vms_download_manager_remove')}>
-								<Icon24DeleteOutline color="var(--vkui--color_icon_negative)" />
-							</IconButton>
-						</Tooltip>
-					</>
-				)}
-				{!isFinished && (
-					<Tooltip
-						usePortal={document.body}
-						disableTriggerOnFocus
-						placement="top"
-						description={lang.use('vms_download_manager_cancel')}
-					>
-						<IconButton onClick={cancel} aria-label={lang.use('vms_download_manager_cancel')}>
-							<Icon24Cancel color="var(--vkui--color_icon_secondary)" />
-						</IconButton>
-					</Tooltip>
-				)}
-			</div>
-		</div>
+		</TaskIdProvider>
 	);
-};
+});
 
 export default DownloadTaskCell;

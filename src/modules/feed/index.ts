@@ -55,7 +55,12 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 		if (result?.size) {
 			size = result.size;
 
-			text.push(humanFileSize(result.size, 2));
+			text.push(
+				humanFileSize(result.size, {
+					decimals: 2,
+					units: lang.use('vms_size_units', null, 'raw') as unknown as string[],
+				})
+			);
 		}
 
 		setText(text.join('\n'));
@@ -306,7 +311,12 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 			if (result?.size) {
 				size = result.size;
 
-				text.push(humanFileSize(result.size, 2));
+				text.push(
+					humanFileSize(result.size, {
+						decimals: 2,
+						units: lang.use('vms_size_units', null, 'raw') as unknown as string[],
+					})
+				);
 			}
 
 			setText(text.join('\n'));
