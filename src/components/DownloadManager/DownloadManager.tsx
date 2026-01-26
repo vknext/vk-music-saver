@@ -18,7 +18,7 @@ const DownloadManager = () => {
 			const tasks = Array.from(state.tasks.values());
 
 			return tasks
-				.filter((task) => task.status === DownloadStatus.FINISHED)
+				.filter((task) => task.status !== DownloadStatus.FINISHED)
 				.map((task) => task.id)
 				.reverse();
 		})
@@ -29,7 +29,7 @@ const DownloadManager = () => {
 			const tasks = Array.from(state.tasks.values());
 
 			return tasks
-				.filter((task) => task.status !== DownloadStatus.FINISHED)
+				.filter((task) => task.status === DownloadStatus.FINISHED)
 				.map((task) => task.id)
 				.reverse();
 		})
