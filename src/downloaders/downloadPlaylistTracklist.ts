@@ -6,6 +6,7 @@ import { PlaylistSource } from 'src/sources/PlaylistSource';
 import GlobalStorage from 'src/storages/GlobalStorage';
 import formatDownloadedTrackName from './downloadPlaylist/formatDownloadedTrackName';
 import { formatPlaylistName } from './downloadPlaylist/formatPlaylistName';
+import { vknextApi } from 'src/api';
 
 export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 	showSnackbar({ text: 'VK Music Saver', subtitle: lang.use('vms_preparing_tracklist') }).catch(console.error);
@@ -74,6 +75,8 @@ export const downloadPlaylistTracklist = async (playlistFullId: string) => {
 		}
 
 		await writer.close();
+
+		await vknextApi.call('vms.stat', { type: 'apt', data: 1 });
 	} catch (e) {
 		console.error('VK Music Saver/downloadPlaylistTracklist', e);
 	} finally {
