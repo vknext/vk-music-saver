@@ -37,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: "{trackName} — concluído",
   vms_playlist_download_completed: `Baixado {total}`,
   vms_tracks_plurals: ["faixa", "faixas", "faixas"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "Método de conversão de faixas",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Pode não funcionar em sistemas antigos.",
   vms_sett_audio_convert_mode_desc: "O VK entrega faixas no formato m3u8, e a extensão converte para o habitual mp3",
@@ -77,6 +78,10 @@ const lang = {
   vms_sett_add_leading_zeros_desc: "Por exemplo: 01, 02, 03 … em vez de 1, 2, 3",
   vms_concurrent_downloads_recommendation: "Não baixe mais de duas playlists de uma vez, caso contrário o navegador pode travar",
   vms_settings_need_reload_page: "Recarregue a página para que as alterações entrem em vigor",
-  vms_preparing_tracklist: 'Получаем список треков...'
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;
