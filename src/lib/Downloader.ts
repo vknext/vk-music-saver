@@ -1,6 +1,7 @@
 import createFileInDirectory from 'src/musicUtils/fileSystem/createFileInDirectory';
 import type { ClientZipFile } from 'src/types';
 import { ProgressTracker, type OnProgressTrackerCallback } from './ProgressTracker';
+import { abortStreamOnUnload } from './abortStreamOnUnload';
 
 interface DownloaderParams {
 	signal?: AbortSignal;
@@ -46,21 +47,31 @@ export class Downloader {
 	}
 
 	private async saveAsFolder(dirHandle: FileSystemDirectoryHandle, { name }: DownloaderSaveOptions): Promise<void> {
-		for await (const file of this.generator) {
-			if (this.signal?.aborted) throw new Error('[VK Music Saver/Downloader/fileSystem] Aborted');
+		const cleanup = abortStreamOnUnload();
 
-			const trackedFile = this.attachTrackerToZipFile(file);
+		try {
+			for await (const file of this.generator) {
+				if (this.signal?.aborted) throw new Error('[VK Music Saver/Downloader/fileSystem] Aborted');
 
-			try {
-				await createFileInDirectory({
-					dirHandle,
-					subFolderName: name,
-					zipFile: trackedFile,
-					signal: this.signal,
-				});
-			} catch (err) {
-				console.error(`[VK Music Saver/Downloader/fileSystem] Failed to write file ${file.name}`, err);
+				const trackedFile = this.attachTrackerToZipFile(file);
+
+				try {
+					await createFileInDirectory({
+						dirHandle,
+						subFolderName: name,
+						zipFile: trackedFile,
+						signal: this.signal,
+					});
+				} catch (err) {
+					console.error(`[VK Music Saver/Downloader/fileSystem] Failed to write file ${file.name}`, err);
+				}
 			}
+		} catch (error) {
+			console.error('[VK Music Saver/Downloader/fileSystem] failed:', error);
+
+			throw error;
+		} finally {
+			cleanup();
 		}
 	}
 
@@ -71,11 +82,9 @@ export class Downloader {
 
 		const writable = await this.createZipWritable(handle, options);
 
-		const tracker = this.tracker;
+		const cleanup = abortStreamOnUnload(writable);
 
-		if (!tracker) {
-			return zipStream.pipeTo(writable, { signal: this.signal });
-		}
+		const tracker = this.tracker;
 
 		const progressStream = new TransformStream<Uint8Array, Uint8Array>({
 			transform(chunk, controller) {
@@ -87,8 +96,16 @@ export class Downloader {
 			},
 		});
 
-		// источник -> счетчик -> диск
-		await zipStream.pipeThrough(progressStream).pipeTo(writable, { signal: this.signal });
+		try {
+			// источник -> счетчик -> диск
+			await zipStream.pipeThrough(progressStream).pipeTo(writable, { signal: this.signal });
+		} catch (error) {
+			console.error('[VK Music Saver/Downloader/saveAsZip] failed:', error);
+
+			throw error;
+		} finally {
+			cleanup();
+		}
 	}
 
 	private async createZipWritable(
