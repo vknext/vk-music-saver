@@ -37,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: "{trackName} — аяқталды",
   vms_playlist_download_completed: `Жүктелді {total}`,
   vms_tracks_plurals: ['трек', "трек", "трек"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "Тректерді түрлендіру әдісі",
   vms_sett_audio_convert_mode_ffmpeg_desc: "Ескі жүйелерде жұмыс істемеуі мүмкін.",
   vms_sett_audio_convert_mode_desc: "ВКонтакте тректерді m3u8 форматында береді, ал кеңейтім оларды үйреншікті mp3-ке түрлендіреді",
@@ -77,6 +78,10 @@ const lang = {
   vms_sett_add_leading_zeros_desc: "Мысалы: 1, 2, 3 орнына 01, 02, 03 …",
   vms_concurrent_downloads_recommendation: "Бір уақытта екі плейлисттен артық жүктемеңіз, әйтпесе браузер қатып қалуы мүмкін",
   vms_settings_need_reload_page: "Өзгерістер күшіне енуі үшін парақшаны қайта жүктеңіз",
-  vms_preparing_tracklist: 'Получаем список треков...'
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;
