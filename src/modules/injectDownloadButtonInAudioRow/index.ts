@@ -27,7 +27,9 @@ const createDownloadButton = (
 	audio: AudioAudio | AudioObject,
 	iconSize?: CreateDownloadAudioButtonParams['iconSize']
 ) => {
-	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize });
+	let controller: AbortController | null = null;
+
+	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize, cancelable: true });
 
 	let size: number | undefined = undefined;
 
@@ -50,7 +52,17 @@ const createDownloadButton = (
 	element.addEventListener('click', (event) => {
 		cancelEvent(event);
 
-		if (getIsLoading()) return;
+		if (getIsLoading()) {
+			if (controller) {
+				controller.abort();
+				controller = null;
+			}
+			return;
+		}
+
+		if (!controller || controller.signal.aborted) {
+			controller = new AbortController();
+		}
 
 		setIsLoading(true);
 		setText(lang.use('vms_loading'));
@@ -61,6 +73,7 @@ const createDownloadButton = (
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},
+			signal: controller.signal,
 		}).finally(() => {
 			setIsLoading(false);
 

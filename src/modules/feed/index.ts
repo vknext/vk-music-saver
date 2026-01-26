@@ -39,7 +39,11 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 	);
 	if (!afterWrapper) return;
 
-	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
+	let controller: AbortController | null = null;
+	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({
+		iconSize: 24,
+		cancelable: true,
+	});
 
 	let size: number | undefined = undefined;
 
@@ -71,7 +75,17 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 	element.addEventListener('click', (event) => {
 		cancelEvent(event);
 
-		if (getIsLoading()) return;
+		if (getIsLoading()) {
+			if (controller) {
+				controller.abort();
+				controller = null;
+			}
+			return;
+		}
+
+		if (!controller || controller.signal.aborted) {
+			controller = new AbortController();
+		}
 
 		setIsLoading(true);
 		setText(lang.use('vms_loading'));
@@ -82,6 +96,7 @@ const onAddAttachAudio = async (attach: DownloadTargetElement, audioObject?: Aud
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},
+			signal: controller.signal,
 		}).finally(() => {
 			setIsLoading(false);
 
@@ -212,15 +227,27 @@ const onAddPrimaryAttach = async (attach: DownloadTargetElement) => {
 	if (attach.vms_down_inj) return;
 	attach.vms_down_inj = true;
 
+	let controller: AbortController | null = null;
 	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({
 		iconSize: 24,
 		enableDefaultText: false,
+		cancelable: true,
 	});
 
 	element.addEventListener('click', (event) => {
 		cancelEvent(event);
 
-		if (getIsLoading()) return;
+		if (getIsLoading()) {
+			if (controller) {
+				controller.abort();
+				controller = null;
+			}
+			return;
+		}
+
+		if (!controller || controller.signal.aborted) {
+			controller = new AbortController();
+		}
 
 		setIsLoading(true);
 		setText(lang.use('vms_loading'));
@@ -230,6 +257,7 @@ const onAddPrimaryAttach = async (attach: DownloadTargetElement) => {
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},
+			signal: controller.signal,
 		}).finally(() => {
 			setIsLoading(false);
 
@@ -295,7 +323,11 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 		if (musicCell.vms_down_inj) continue;
 		musicCell.vms_down_inj = true;
 
-		const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ iconSize: 24 });
+		let controller: AbortController | null = null;
+		const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({
+			iconSize: 24,
+			cancelable: true,
+		});
 
 		let size: number | undefined = undefined;
 
@@ -327,7 +359,17 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 		element.addEventListener('click', (event) => {
 			cancelEvent(event);
 
-			if (getIsLoading()) return;
+			if (getIsLoading()) {
+				if (controller) {
+					controller.abort();
+					controller = null;
+				}
+				return;
+			}
+
+			if (!controller || controller.signal.aborted) {
+				controller = new AbortController();
+			}
 
 			setIsLoading(true);
 			setText(lang.use('vms_loading'));
@@ -335,6 +377,7 @@ const onAddBoxNode = async (layoutNode: HTMLElement) => {
 			downloadAudio({
 				audioObject: apiAudio,
 				size,
+				signal: controller.signal,
 				onProgress: (progress) => {
 					setText(`${progress}%`);
 				},

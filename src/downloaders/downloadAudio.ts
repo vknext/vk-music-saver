@@ -16,9 +16,10 @@ interface DownloadAudioParams {
 	audioObject: AudioObject | AudioAudio;
 	onProgress?: (current: number, total: number) => void;
 	size?: number;
+	signal?: AbortSignal;
 }
 
-const downloadAudio = async ({ audioObject, onProgress, size }: DownloadAudioParams) => {
+const downloadAudio = async ({ audioObject, onProgress, size, signal }: DownloadAudioParams) => {
 	if (!audioObject) {
 		return await showSnackbar({ type: 'error', text: 'VK Music Saver', subtitle: lang.use('vms_audio_not_found') });
 	}
@@ -57,6 +58,7 @@ const downloadAudio = async ({ audioObject, onProgress, size }: DownloadAudioPar
 			onProgress: (current, total) => {
 				onProgress?.(current, total);
 			},
+			signal,
 		});
 
 		if (!stream) {
