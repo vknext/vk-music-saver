@@ -94,6 +94,7 @@
 }
 
 .DownloadAudioButton__icons {
+	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -104,8 +105,20 @@
 	display: block;
 }
 
-.DownloadAudioButton__icon--loading {
+.DownloadAudioButton__icon--spinner {
 	display: none;
+}
+
+.DownloadAudioButton__icon--cancel {
+	display: none;
+
+	position: absolute;
+	top: 0;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	transform: scale(0.5);
 }
 
 .DownloadAudioButton--loading {
@@ -113,10 +126,14 @@
 		display: none;
 	}
 
-	.DownloadAudioButton__icon--loading {
+	.DownloadAudioButton__icon--spinner {
 		display: block;
 		animation: rotate-animation 0.7s linear infinite;
 		transform-origin: calc(var(--icon-size) / 2) calc(var(--icon-size) / 2);
+	}
+
+	.DownloadAudioButton__icon--cancel {
+		display: flex;
 	}
 }
 
@@ -181,7 +198,9 @@
 		border: 0;
 		margin: 0;
 		padding: 0;
-		transition: background-color 0.15s ease-out, color 0.15s ease-out;
+		transition:
+			background-color 0.15s ease-out,
+			color 0.15s ease-out;
 		display: inline-block;
 		position: relative;
 		box-shadow: var(--vkui--elevation3);

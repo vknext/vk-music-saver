@@ -91,7 +91,9 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 	const container = await getAudioPlayerUserControlsContainer(playerWrap);
 	if (!container) return;
 
-	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton();
+	let controller: AbortController | null = null;
+
+	const { setIsLoading, setText, element, getIsLoading } = createDownloadAudioButton({ cancelable: true });
 
 	if (container.getElementsByClassName(element.className).length) return;
 
@@ -106,7 +108,17 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 	element.addEventListener('click', (event) => {
 		cancelEvent(event);
 
-		if (getIsLoading()) return;
+		if (getIsLoading()) {
+			if (controller) {
+				controller.abort();
+				controller = null;
+			}
+			return;
+		}
+
+		if (!controller || controller.signal.aborted) {
+			controller = new AbortController();
+		}
 
 		const audioObject = getCurrentAudioObject();
 		if (!audioObject) return;
@@ -120,6 +132,7 @@ const onAddPlayer = async (playerWrap: WrapElement) => {
 			onProgress: (progress) => {
 				setText(`${progress}%`);
 			},
+			signal: controller.signal,
 		}).finally(() => {
 			setIsLoading(false);
 			updateText().catch(console.error);

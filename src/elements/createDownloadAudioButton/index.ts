@@ -1,3 +1,5 @@
+import getIcon12Cancel from 'src/icons/getIcon12Cancel';
+import getIcon16Cancel from 'src/icons/getIcon16Cancel';
 import getIcon20DownloadOutline from 'src/icons/getIcon20DownloadOutline';
 import getIcon20Spinner from 'src/icons/getIcon20Spinner';
 import getIcon24DownloadOutline from 'src/icons/getIcon24DownloadOutline';
@@ -22,19 +24,27 @@ const DownloadOutlineIcons = {
 	24: getIcon24DownloadOutline,
 };
 
+const CancelIcons = {
+	20: getIcon12Cancel,
+	24: getIcon16Cancel,
+};
+
 export interface CreateDownloadAudioButtonParams {
 	iconSize?: keyof typeof SpinnerIcons;
 	enableDefaultText?: boolean;
+	cancelable?: boolean;
 }
 
 const createDownloadAudioButton = ({
 	iconSize = 20,
 	enableDefaultText = true,
+	cancelable = false,
 }: CreateDownloadAudioButtonParams = {}): DownloadAudioButtonResult => {
 	let isLoading = false;
 
 	const getIconSpinner = SpinnerIcons[iconSize];
 	const getIconDownloadOutline = DownloadOutlineIcons[iconSize];
+	const getIconCancel = CancelIcons[iconSize];
 
 	const downloadItem = document.createElement('button');
 	downloadItem.className = styles.DownloadAudioButton;
@@ -55,9 +65,16 @@ const createDownloadAudioButton = ({
 	downloadIcon.classList.add(styles['DownloadAudioButton__icon--download']);
 
 	const loadingIcon = getIconSpinner();
-	loadingIcon.classList.add(styles['DownloadAudioButton__icon--loading']);
+	loadingIcon.classList.add(styles['DownloadAudioButton__icon--spinner']);
 
 	iconsEl.append(downloadIcon, loadingIcon);
+
+	if (cancelable) {
+		const cancelIcon = getIconCancel();
+		cancelIcon.classList.add(styles['DownloadAudioButton__icon--cancel']);
+
+		iconsEl.appendChild(cancelIcon);
+	}
 
 	downloadItem.append(iconsEl, sizeEl);
 
