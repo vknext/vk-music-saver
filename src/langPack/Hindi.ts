@@ -37,6 +37,7 @@ const lang = {
   vms_playlist_track_download_completed: "{trackName} — पूरा हुआ",
   vms_playlist_download_completed: `डाउनलोड किया गया {total}`,
   vms_tracks_plurals: ["ट्रैक", "ट्रैक", "ट्रैक"],
+  vms_seconds_plurals: ['секунда', 'секунды', 'секунд'],
   vms_sett_audio_convert_mode_title: "ट्रैक कंवर्ज़न का तरीका",
   vms_sett_audio_convert_mode_ffmpeg_desc: "पुराने सिस्टम पर शायद काम न करे।",
   vms_sett_audio_convert_mode_desc: "VK ट्रैक m3u8 फॉर्मेट में देता है, और एक्सटेंशन उसे सामान्य mp3 में बदल देता है",
@@ -77,6 +78,10 @@ const lang = {
   vms_sett_add_leading_zeros_desc: "उदाहरण: 1, 2, 3 के बजाय 01, 02, 03 …",
   vms_concurrent_downloads_recommendation: "एक साथ दो से अधिक प्लेलिस्ट डाउनलोड न करें, अन्यथा ब्राउज़र फ्रीज हो सकता है",
   vms_settings_need_reload_page: "बदलावों को लागू करने के लिए पेज को रीलोड करें",
-  vms_preparing_tracklist: 'Получаем список треков...'
+  vms_preparing_tracklist: 'Получаем список треков...',
+  vms_download_manager_progress_full: '{loaded} из {total}, {speed}/с ({eta})',
+  vms_download_manager_progress_basic: '{loaded} из {total}, {speed}/с',
+  vms_size_units: ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'],
+  vms_eta_almost_done: 'около секунды'
 };
 export default lang;
