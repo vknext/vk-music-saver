@@ -139,6 +139,7 @@ const downloadChatMusic = async (peerId: number) => {
 			embedTags,
 			enableLyricsTags,
 			convertMethod,
+			ignoreStreamErrors: true,
 		});
 
 		if (!stream) return null;

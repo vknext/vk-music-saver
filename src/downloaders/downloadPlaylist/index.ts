@@ -111,6 +111,7 @@ const downloadPlaylist = async (playlistFullId: string) => {
 			embedTags,
 			enableLyricsTags,
 			convertMethod,
+			ignoreStreamErrors: true,
 		});
 
 		if (!stream) return null;

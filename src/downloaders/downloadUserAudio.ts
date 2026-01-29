@@ -128,6 +128,7 @@ const downloadUserAudio = async (ownerId: number) => {
 			embedTags,
 			enableLyricsTags,
 			convertMethod,
+			ignoreStreamErrors: true,
 		});
 
 		if (!stream) return null;

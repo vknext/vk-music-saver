@@ -15,6 +15,7 @@ interface PrepareTrackStreamOptions {
 	embedTags?: boolean;
 	enableLyricsTags?: boolean;
 	convertMethod?: AudioConvertMethod;
+	ignoreStreamErrors?: boolean;
 }
 
 const resolvePlaylist = async (
@@ -71,6 +72,7 @@ export const prepareTrackStream = ({
 	embedTags = true,
 	enableLyricsTags = true,
 	convertMethod = AudioConvertMethod.HLS,
+	ignoreStreamErrors = false,
 }: PrepareTrackStreamOptions): ReadableStream<Uint8Array> | null => {
 	if (!audio.url) return null;
 
@@ -123,7 +125,20 @@ export const prepareTrackStream = ({
 				controller.close();
 			} catch (error) {
 				if (!isCancelled) {
-					controller.error(error);
+					const errorMsg = error instanceof Error ? error.message : String(error);
+					console.warn(
+						`[VK Music Saver/prepareTrackStream/${ignoreStreamErrors ? 'Silent' : 'Strict'}] https://vk.ru/audio${audio.owner_id || audio.ownerId}/${audio.id}. Error: ${errorMsg}`
+					);
+
+					if (ignoreStreamErrors) {
+						try {
+							controller.close();
+						} catch {
+							// стрим уже закрыт
+						}
+					} else {
+						controller.error(error);
+					}
 				}
 			}
 		},
